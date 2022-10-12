@@ -1,12 +1,18 @@
 package org.pl.services;
 
+import org.pl.exceptions.RepositoryException;
 import org.pl.model.Address;
 import org.pl.model.Client;
+import org.pl.repositories.ClientRepository;
 
 public class ClientService {
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
-    public Client add(String firstName, String lastName, String phoneNumber, Address address) {
+    public ClientService(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
+
+    public Client add(String firstName, String lastName, String phoneNumber, Address address) throws RepositoryException {
         Client client = Client.builder()
                 .firstName(firstName)
                 .lastName(lastName)
@@ -17,7 +23,7 @@ public class ClientService {
         return client;
     }
 
-    public Client add(String firstName, String lastName, String phoneNumber, String city, String number, String street) {
+    public Client add(String firstName, String lastName, String phoneNumber, String city, String number, String street) throws RepositoryException {
         Address address = Address.builder()
                 .city(city)
                 .number(number)
@@ -33,31 +39,31 @@ public class ClientService {
         return client;
     }
 
-    public Client get(int ID) {
-        return clientRepository.get(ID);
+    public Client get(int id) throws RepositoryException {
+        return clientRepository.get(id);
     }
 
-    public int getArchiveSize() {
+    public int getArchiveSize() throws RepositoryException {
         return clientRepository.getSize(false);
     }
 
-    public float getClientBalance(int ID) {
-        return clientRepository.get(ID).getBalance();
+    public double getClientBalance(int id) throws RepositoryException {
+        return clientRepository.get(id).getBalance();
     }
 
-    public int getPresentSize() {
+    public int getPresentSize() throws RepositoryException {
         return clientRepository.getSize(true);
     }
 
-    public String getInfo(int ID) {
-        return clientRepository.get(ID).toString();
+    public String getInfo(int id) throws RepositoryException {
+        return clientRepository.get(id).toString();
     }
 
     public String getReport() {
         return clientRepository.toString();
     }
 
-    public void remove(int ID) {
-        clientRepository.archivise(ID);
+    public void remove(int id) throws RepositoryException {
+        clientRepository.archivise(id);
     }
 }
