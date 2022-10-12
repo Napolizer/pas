@@ -7,5 +7,5 @@ import org.pl.exceptions.HardwareException;
 public abstract class HardwareType {
     private Condition condition;
 
-    abstract double calculateRepairCost(int price) throws HardwareException;
+    public abstract double calculateRepairCost(int price) throws HardwareException;
 }
