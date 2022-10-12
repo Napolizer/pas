@@ -7,7 +7,7 @@ import static org.pl.model.Condition.FINE;
 
 @Data
 @Builder
-public class Hardware {
+public class Hardware implements TInterface {
     private int id;
     private boolean archive;
     private int price;
@@ -15,5 +15,15 @@ public class Hardware {
 
     public void repair() {
         hardwareType.setCondition(FINE);
+    }
+
+    @Override
+    public void setArchive(boolean archive) {
+        this.archive = archive;
+    }
+
+    @Override
+    public int getID() {
+        return id;
     }
 }
