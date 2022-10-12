@@ -6,7 +6,7 @@ import org.pl.exceptions.HardwareException;
 
 @Data
 @Builder
-public class Repair implements TInterface {
+public class Repair implements Entity {
     private int id;
     private boolean archive;
     Client client;

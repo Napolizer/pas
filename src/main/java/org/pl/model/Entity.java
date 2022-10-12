@@ -1,6 +1,6 @@
 package org.pl.model;
 
-public interface TInterface {
+public interface Entity {
     void setArchive(boolean archive);
     boolean isArchive();
     int getID();

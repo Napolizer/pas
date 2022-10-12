@@ -6,7 +6,7 @@ import org.pl.exceptions.ClientException;
 
 @Data
 @Builder
-public class Client implements TInterface {
+public class Client implements Entity {
     private boolean archive;
     private double balance;
     private String firstName;

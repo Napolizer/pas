@@ -7,7 +7,7 @@ import static org.pl.model.Condition.FINE;
 
 @Data
 @Builder
-public class Hardware implements TInterface {
+public class Hardware implements Entity {
     private int id;
     private boolean archive;
     private int price;

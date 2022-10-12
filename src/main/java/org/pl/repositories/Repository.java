@@ -2,12 +2,11 @@ package org.pl.repositories;
 
 import lombok.Data;
 import org.pl.exceptions.RepositoryException;
-import org.pl.model.TInterface;
+import org.pl.model.Entity;
 
 import java.util.ArrayList;
-//przetestować
 @Data
-public class Repository<T extends TInterface> {
+public class Repository<T extends Entity> {
     protected ArrayList<T> elements;
 
     public void add(T element) throws RepositoryException {
