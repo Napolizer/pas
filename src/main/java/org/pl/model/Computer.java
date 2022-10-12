@@ -1,10 +1,12 @@
 package org.pl.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.pl.exceptions.HardwareException;
 
 @Data
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Computer extends HardwareType {
     private Condition condition;
