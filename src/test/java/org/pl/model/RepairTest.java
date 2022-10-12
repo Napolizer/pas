@@ -12,12 +12,15 @@ class RepairTest {
     Repair repair;
     Client client;
     Hardware hardware;
+    Address address;
 
     @BeforeEach
     void setUp() {
+       address = new Address("Warsaw", "123", "White");
+
         client = Client.builder()
                 .clientType(new Premium())
-                .address(new Address())
+                .address(address)
                 .balance(300.0)
                 .firstName("John")
                 .lastName("Doe")
@@ -80,7 +83,7 @@ class RepairTest {
     void setClient() {
         Client newClient = Client.builder()
                 .clientType(new Vip())
-                .address(new Address())
+                .address(address)
                 .balance(300.0)
                 .firstName("John")
                 .lastName("Doe")
@@ -105,7 +108,7 @@ class RepairTest {
     void testEquals() {
         Client newClient = Client.builder()
                 .clientType(new Premium())
-                .address(new Address())
+                .address(address)
                 .balance(300.0)
                 .firstName("John")
                 .lastName("Doe")
