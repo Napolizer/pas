@@ -1,16 +1,20 @@
 package org.pl.services;
 
+import org.pl.exceptions.RepositoryException;
 import org.pl.exceptions.ServiceException;
-import org.pl.model.Condition;
-import org.pl.model.Hardware;
-import org.pl.model.HardwareType;
+import org.pl.model.*;
+import org.pl.repositories.HardwareRepository;
 
 public class HardwareService {
-    private HardwareRepository hardwareRepository;
+    private final HardwareRepository hardwareRepository;
 
-    public Hardware add(int price, HardwareType hardwareType) {
+    public HardwareService(HardwareRepository hardwareRepository) {
+        this.hardwareRepository = hardwareRepository;
+    }
+
+    public Hardware add(int price, HardwareType hardwareType) throws RepositoryException {
         Hardware hardware = Hardware.builder()
-                .id(hardwareRepository.getSize())
+                .id(hardwareRepository.getElements().size())
                 .price(price)
                 .hardwareType(hardwareType)
                 .build();
@@ -18,32 +22,31 @@ public class HardwareService {
         return hardware;
     }
 
-    public Hardware add(int price, String type, Condition condition) throws ServiceException {
-        HardwareType hardwareType = null;
+    public Hardware add(int price, String type, Condition condition) throws ServiceException, RepositoryException {
+        HardwareType hardwareType;
         type = type.toLowerCase();
 
-        if (type.equals("computer"))
-            hardwareType = HardwareType.builder()
+        switch (type) {
+            case "computer" -> hardwareType = Computer.builder()
                     .condition(condition)
                     .build();
-        else if (type.equals("console"))
-            hardwareType = HardwareType.builder()
+            case "console" -> hardwareType = Console.builder()
                     .condition(condition)
                     .build();
-        else if (type.equals("monitor"))
-            hardwareType = HardwareType.builder()
+            case "monitor" -> hardwareType = Monitor.builder()
                     .condition(condition)
                     .build();
-        else if (type.equals("phone"))
-            hardwareType = HardwareType.builder()
+            case "phone" -> hardwareType = Phone.builder()
                     .condition(condition)
                     .build();
+            default -> throw new ServiceException(ServiceException.HARDWARE_SERVICE_INVALID_HARDWARE_EXCEPTION);
+        }
 
         if (hardwareType == null)
             throw new ServiceException(ServiceException.HARDWARE_SERVICE_INVALID_HARDWARE_EXCEPTION);
 
         Hardware hardware = Hardware.builder()
-                .id(hardwareRepository.getSize())
+                .id(hardwareRepository.getElements().size())
                 .price(price)
                 .hardwareType(hardwareType)
                 .build();
@@ -51,71 +54,35 @@ public class HardwareService {
         return hardware;
     }
 
-    public Hardware add(int price, String type, String condition) throws ServiceException {
-        HardwareType hardwareType = null;
-        Condition conditionEnum = null;
+    public Hardware add(int price, String type, String condition) throws ServiceException, RepositoryException {
         condition = condition.toLowerCase();
 
-        if (condition.equals("unrepariable"))
-            conditionEnum = Condition.UNREPAIRABLE;
-        else if (condition.equals("verybad"))
-            conditionEnum = Condition.VERY_BAD;
-        else if (condition.equals("bad"))
-            conditionEnum = Condition.BAD;
-        else if (condition.equals("average"))
-            conditionEnum = Condition.AVERAGE;
-        else if (condition.equals("dusty"))
-            conditionEnum = Condition.DUSTY;
-        else if (condition.equals("fine"))
-            conditionEnum = Condition.FINE;
 
-        if (conditionEnum == null)
-            throw new ServiceException(ServiceException.HARDWARE_SERVICE_INVALID_CONDITION_EXCEPTION);
-
-        type = type.toLowerCase();
-
-        if (type.equals("computer"))
-            hardwareType = HardwareType.builder()
-                    .condition(conditionEnum)
-                    .build();
-        else if (type.equals("console"))
-            hardwareType = HardwareType.builder()
-                    .condition(conditionEnum)
-                    .build();
-        else if (type.equals("monitor"))
-            hardwareType = HardwareType.builder()
-                    .condition(conditionEnum)
-                    .build();
-        else if (type.equals("phone"))
-            hardwareType = HardwareType.builder()
-                    .condition(conditionEnum)
-                    .build();
-
-        if (hardwareType == null)
-            throw new ServiceException(ServiceException.HARDWARE_SERVICE_INVALID_HARDWARE_EXCEPTION);
-
-        Hardware hardware = Hardware.builder()
-                .id(hardwareRepository.getSize())
-                .price(price)
-                .hardwareType(hardwareType)
-                .build();
-        hardwareRepository.add(hardware);
-        return hardware;
+        Condition c = switch (condition) {
+            case "unrepairable" -> Condition.UNREPAIRABLE;
+            case "very_bad" -> Condition.VERY_BAD;
+            case "bad" -> Condition.BAD;
+            case "average" -> Condition.AVERAGE;
+            case "dusty" -> Condition.DUSTY;
+            case "fine" -> Condition.FINE;
+            default -> throw new ServiceException(ServiceException.HARDWARE_SERVICE_INVALID_CONDITION_EXCEPTION);
+        };
+        return add(price, type, c);
     }
 
-    public Hardware get(int ID) {
-        return hardwareRepository.get(ID);
+    public Hardware get(int id) throws RepositoryException {
+        return hardwareRepository.get(id);
     }
 
-    public int getArchiveSize() {
+    public int getArchiveSize() throws RepositoryException {
         return hardwareRepository.getSize(false);
     }
 
-    public String getInfo(int ID) {
-        return hardwareRepository.get(ID).toString();
+    public String getInfo(int id) throws RepositoryException {
+        return hardwareRepository.get(id).toString();
     }
 
-    public int getPresentSize() {
+    public int getPresentSize() throws RepositoryException {
         return hardwareRepository.getSize(true);
     }
 
@@ -123,7 +90,7 @@ public class HardwareService {
         return hardwareRepository.toString();
     }
 
-    public void remove(int ID) {
-        hardwareRepository.archivise(ID);
+    public void remove(int id) throws RepositoryException {
+        hardwareRepository.archivise(id);
     }
 }

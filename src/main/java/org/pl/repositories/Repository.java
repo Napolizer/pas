@@ -22,9 +22,9 @@ public class Repository<T extends Entity> {
         elements.add(element);
     }
 
-    public void archivise(int ID) throws RepositoryException {
+    public void archivise(int id) throws RepositoryException {
         for (T element : elements) {
-            if (element.getID() == ID && element.isArchive() == false) {
+            if (element.getID() == id && !element.isArchive()) {
                 element.setArchive(true);
                 return;
             }
@@ -32,22 +32,22 @@ public class Repository<T extends Entity> {
         throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
     }
 
-    T get(int ID) throws RepositoryException {
-        if (ID < 0) {
+    public T get(int id) throws RepositoryException {
+        if (id < 0) {
             throw new RepositoryException(RepositoryException.REPOSITORY_GET_INVALID_INPUT_EXCEPTION);
         }
-        if (elements.size() == 0) {
+        if (elements.isEmpty()) {
             throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
         }
         for (T element : elements) {
-            if (element.getID() == ID) {
+            if (element.getID() == id) {
                 return element;
             }
         }
         throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
     }
     
-    int getSize(boolean present) throws RepositoryException {
+    public int getSize(boolean present) throws RepositoryException {
         int output = 0;
         if (present) {
             for (int i = 0; i < elements.size(); i++) {
@@ -63,18 +63,18 @@ public class Repository<T extends Entity> {
         return output;
     }
 
-    public boolean isArchive(int ID) throws RepositoryException {
+    public boolean isArchive(int id) throws RepositoryException {
         for (T element : elements) {
-            if (element.getID() == ID) {
+            if (element.getID() == id) {
                 return element.isArchive();
             }
         }
         throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
     }
 
-    public void unarchivise(int ID) throws RepositoryException {
+    public void unarchivise(int id) throws RepositoryException {
         for (T element : elements) {
-            if (element.getID() == ID) {
+            if (element.getID() == id) {
                 element.setArchive(false);
                 return;
             }

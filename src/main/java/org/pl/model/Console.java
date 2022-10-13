@@ -1,10 +1,12 @@
 package org.pl.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.pl.exceptions.HardwareException;
 
 @Data
+@Builder
 @EqualsAndHashCode(callSuper = true)
 public class Console extends HardwareType {
     private Condition condition;
