@@ -132,8 +132,9 @@ class RepairTest {
     @Test
     void testToString() {
         assertEquals("Repair(id=1, archive=false, client=Client(" +
-                "archive=false, balance=300.0, firstName=John, lastName=Doe, personalId=2, phoneNumber=123-123-123, clientType=Premium(" +
-                "super=ClientType(factor=0.9, maxRepairs=5, typeName=Premium)), address=Address(city=null, number=null, street=null)), " +
-                "hardware=Hardware(id=1, archive=false, price=100, hardwareType=Computer(condition=DUSTY)))", repair.toString());
+                "archive=false, balance=300.0, firstName=John, lastName=Doe, personalId=2, phoneNumber=123-123-123" +
+                ", clientType=Premium(super=ClientType(factor=0.9, maxRepairs=5, typeName=Premium))," +
+                " address=Address(city=Warsaw, number=123, street=White)), hardware=Hardware(" +
+                "id=1, archive=false, price=100, hardwareType=Computer(condition=DUSTY)))", repair.toString());
     }
 }
