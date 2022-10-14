@@ -1,15 +1,23 @@
 package org.pl.services;
 
+import org.pl.exceptions.ClientException;
+import org.pl.exceptions.HardwareException;
+import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.model.Hardware;
 import org.pl.model.Repair;
+import org.pl.repositories.RepairRepository;
 
 public class RepairService {
-    private RepairRepository repairRepository;
+    private final RepairRepository repairRepository;
 
-    public Repair add(Client client, Hardware hardware) {
+    public RepairService(RepairRepository repairRepository) {
+        this.repairRepository = repairRepository;
+    }
+
+    public Repair add(Client client, Hardware hardware) throws RepositoryException {
         Repair repair = Repair.builder()
-                .id(repairRepository.getSize())
+                .id(repairRepository.getElements().size())
                 .client(client)
                 .hardware(hardware)
                 .build();
@@ -17,19 +25,19 @@ public class RepairService {
         return repair;
     }
 
-    public Repair get(int ID) {
-        return repairRepository.get(ID);
+    public Repair get(int id) throws RepositoryException {
+        return repairRepository.get(id);
     }
 
-    public int getArchiveSize() {
+    public int getArchiveSize() throws RepositoryException {
         return repairRepository.getSize(false);
     }
 
-    public String getInfo(int ID) {
-        return repairRepository.get(ID).toString();
+    public String getInfo(int id) throws RepositoryException {
+        return repairRepository.get(id).toString();
     }
 
-    public int getPresentSize() {
+    public int getPresentSize() throws RepositoryException {
         return repairRepository.getSize(true);
     }
 
@@ -37,7 +45,7 @@ public class RepairService {
         return repairRepository.toString();
     }
 
-    public void repair(int ID) {
-        repairRepository.repair(ID);
+    public void repair(int id) throws HardwareException, RepositoryException, ClientException {
+        repairRepository.repair(id);
     }
 }
