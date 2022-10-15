@@ -34,7 +34,7 @@ public class RepairReposioryTest {
                 .balance(300.0)
                 .firstName("John")
                 .lastName("Doe")
-                .personalId(2)
+                .personalId(0)
                 .phoneNumber("123-123-123")
                 .archive(false)
                 .build();
@@ -48,13 +48,13 @@ public class RepairReposioryTest {
                 .client(client)
                 .hardware(hardware)
                 .archive(true)
-                .id(1)
+                .id(0)
                 .build();
         entity2 = Repair.builder()
                 .client(client)
                 .hardware(hardware)
                 .archive(false)
-                .id(2)
+                .id(1)
                 .build();
         list = new ArrayList<Entity>();
         repository = RepairRepository.builder().elements(list).build();
