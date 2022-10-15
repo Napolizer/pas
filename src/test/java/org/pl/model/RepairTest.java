@@ -24,7 +24,7 @@ class RepairTest {
                 .balance(300.0)
                 .firstName("John")
                 .lastName("Doe")
-                .personalId(2)
+                .personalId("12345678901")
                 .phoneNumber("123-123-123")
                 .archive(false)
                 .build();
@@ -87,7 +87,7 @@ class RepairTest {
                 .balance(300.0)
                 .firstName("John")
                 .lastName("Doe")
-                .personalId(2)
+                .personalId("23456789012")
                 .phoneNumber("123-123-123")
                 .archive(false)
                 .build();
@@ -112,7 +112,7 @@ class RepairTest {
                 .balance(300.0)
                 .firstName("John")
                 .lastName("Doe")
-                .personalId(2)
+                .personalId("12345678901")
                 .phoneNumber("123-123-123")
                 .archive(false)
                 .build();

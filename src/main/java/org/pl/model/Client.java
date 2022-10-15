@@ -7,11 +7,12 @@ import org.pl.exceptions.ClientException;
 @Data
 @Builder
 public class Client {
+    private int ID;
     private boolean archive;
     private double balance;
     private String firstName;
     private String lastName;
-    private int personalId;
+    private String personalId;
     private String phoneNumber;
     private ClientType clientType;
     private Address address;
@@ -25,9 +26,5 @@ public class Client {
     }
     public void setArchive(boolean archive) {
         this.archive = archive;
-    }
-
-    public int getID() {
-        return personalId;
     }
 }

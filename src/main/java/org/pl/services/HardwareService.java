@@ -1,5 +1,6 @@
 package org.pl.services;
 
+import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.exceptions.ServiceException;
 import org.pl.model.*;
@@ -12,7 +13,10 @@ public class HardwareService {
         this.hardwareRepository = hardwareRepository;
     }
 
-    public Hardware add(int price, HardwareType hardwareType) throws RepositoryException {
+    public Hardware add(int price, HardwareType hardwareType) throws RepositoryException, HardwareException {
+        if (price <= 0)
+            throw new HardwareException(HardwareException.HARDWARE_PRICE_EXCEPTION);
+
         Hardware hardware = Hardware.builder()
                 .id(hardwareRepository.getElements().size())
                 .price(price)
@@ -22,7 +26,10 @@ public class HardwareService {
         return hardware;
     }
 
-    public Hardware add(int price, String type, Condition condition) throws ServiceException, RepositoryException {
+    public Hardware add(int price, String type, Condition condition) throws ServiceException, RepositoryException, HardwareException {
+        if (price <= 0)
+            throw new HardwareException(HardwareException.HARDWARE_PRICE_EXCEPTION);
+
         HardwareType hardwareType;
         type = type.toLowerCase();
 
@@ -54,7 +61,7 @@ public class HardwareService {
         return hardware;
     }
 
-    public Hardware add(int price, String type, String condition) throws ServiceException, RepositoryException {
+    public Hardware add(int price, String type, String condition) throws ServiceException, RepositoryException, HardwareException {
         condition = condition.toLowerCase();
 
 
@@ -84,10 +91,6 @@ public class HardwareService {
 
     public int getPresentSize() throws RepositoryException {
         return hardwareRepository.getSize(true);
-    }
-
-    public String getReport() {
-        return hardwareRepository.toString();
     }
 
     public void remove(int id) throws RepositoryException {
