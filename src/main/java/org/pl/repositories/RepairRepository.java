@@ -7,7 +7,13 @@ import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.model.Repair;
 
+import java.util.ArrayList;
+
 public class RepairRepository extends Repository<Repair>{
+
+    RepairRepository(ArrayList<Repair> elements) {
+        super(elements);
+    }
 
     public int getClientRepairs(Client client) {
         int counter = 0;
