@@ -64,109 +64,79 @@ public class RepairReposioryTest {
 
     @Test
     void getElementsTest() {
-        assertTrue(repository.getElements() != null);
+        assertNotNull(repository.getElements());
         assertEquals(0, repository.getElements().size());
     }
 
     @Test
-    void addTest() {
+    void addTest() throws RepositoryException {
         assertThrows(RepositoryException.class, () -> repository.add(null));
         assertEquals(0, repository.getElements().size());
-        try {
-            repository.add(repair1);
-            assertEquals(1, repository.getElements().size());
-            assertTrue(repository.getElements().get(0) != null);
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+        repository.add(repair1);
+        assertEquals(1, repository.getElements().size());
+        assertNotNull(repository.getElements().get(0));
     }
 
     @Test
-    void archiviseTest() {
-        try {
-            repository.add(repair1);
-            assertThrows(RepositoryException.class, () -> repository.archivise(repair1.getID()));
-            repository.add(repair2);
-            repository.archivise(repair2.getID());
-            assertTrue(repair2.isArchive());
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void archiviseTest() throws RepositoryException {
+        repository.add(repair1);
+        assertThrows(RepositoryException.class, () -> repository.archivise(repair1.getID()));
+        repository.add(repair2);
+        repository.archivise(repair2.getID());
+        assertTrue(repair2.isArchive());
     }
 
     @Test
-    void getTest() {
+    void getTest() throws RepositoryException {
         assertThrows(RepositoryException.class, () -> repository.get(-1));
         assertThrows(RepositoryException.class, () -> repository.get(repair1.getID()));
-        try {
-            repository.add(repair1);
-            assertEquals(repair1, repository.get(repair1.getID()));
-            assertThrows(RepositoryException.class, () -> repository.get(repair2.getID()));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+        repository.add(repair1);
+        assertEquals(repair1, repository.get(repair1.getID()));
+        assertThrows(RepositoryException.class, () -> repository.get(repair2.getID()));
     }
 
     @Test
-    void getSizeTest() {
-        try {
-            assertEquals(0, repository.getSize(true));
-            assertEquals(0, repository.getSize(false));
-            repository.add(repair1);
-            assertEquals(0, repository.getSize(true));
-            assertEquals(1, repository.getSize(false));
-            repository.add(repair2);
-            assertEquals(1, repository.getSize(true));
-            assertEquals(1, repository.getSize(false));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void getSizeTest() throws RepositoryException {
+        assertEquals(0, repository.getSize(true));
+        assertEquals(0, repository.getSize(false));
+        repository.add(repair1);
+        assertEquals(0, repository.getSize(true));
+        assertEquals(1, repository.getSize(false));
+        repository.add(repair2);
+        assertEquals(1, repository.getSize(true));
+        assertEquals(1, repository.getSize(false));
     }
 
     @Test
-    void isArchiveTest() {
-        try {
-            repository.add(repair1);
-            assertTrue(repository.isArchive(repair2.getID()));
-            assertThrows(RepositoryException.class, () -> repository.isArchive(repair2.getID()));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void isArchiveTest() throws RepositoryException {
+        repository.add(repair1);
+        assertTrue(repository.isArchive(repair1.getID()));
+        assertThrows(RepositoryException.class, () -> repository.isArchive(repair2.getID()));
+        repository.add(repair1);
+        assertTrue(repository.isArchive(repair2.getID()));
     }
 
     @Test
-    void unarchiviseTest() {
-        try {
-            repository.add(repair1);
-            repository.unarchivise(repair1.getID());
-            assertFalse(repository.isArchive(repair1.getID()));
-            assertThrows(RepositoryException.class, () -> repository.unarchivise(repair2.getID()));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void unarchiviseTest() throws RepositoryException {
+        repository.add(repair1);
+        repository.unarchivise(repair1.getID());
+        assertFalse(repository.isArchive(repair1.getID()));
+        assertThrows(RepositoryException.class, () -> repository.unarchivise(repair2.getID()));
     }
 
     @Test
-    void getClientRepairs() {
-        try {
-            assertEquals(0, repository.getClientRepairs(client));
-            repository.add(repair1);
-            assertEquals(1, repository.getClientRepairs(client));
-            repository.add(repair2);
-            assertEquals(2, repository.getClientRepairs(client));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void getClientRepairs() throws RepositoryException {
+        assertEquals(0, repository.getClientRepairs(client));
+        repository.add(repair1);
+        assertEquals(1, repository.getClientRepairs(client));
+        repository.add(repair2);
+        assertEquals(2, repository.getClientRepairs(client));
     }
 
     @Test
-    void repairTest() {
-        try {
-            repository.add(repair1);
-            repository.repair(0);
-            assertTrue(repository.get(0).isArchive());
-        } catch (RepositoryException | HardwareException | ClientException e) {
-            e.printStackTrace();
-        }
+    void repairTest() throws RepositoryException, HardwareException, ClientException {
+        repository.add(repair1);
+        repository.repair(0);
+        assertTrue(repository.get(0).isArchive());
     }
 }

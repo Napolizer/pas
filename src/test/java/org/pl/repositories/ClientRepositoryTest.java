@@ -51,85 +51,61 @@ public class ClientRepositoryTest {
 
     @Test
     void getElementsTest() {
-        assertTrue(repository.getElements() != null);
+        assertNotNull(repository.getElements());
         assertEquals(0, repository.getElements().size());
     }
 
     @Test
-    void addTest() {
+    void addTest() throws RepositoryException {
         assertThrows(RepositoryException.class, () -> repository.add(null));
         assertEquals(0, repository.getElements().size());
-        try {
-            repository.add(client1);
-            assertEquals(1, repository.getElements().size());
-            assertTrue(repository.getElements().get(0) != null);
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+        repository.add(client1);
+        assertEquals(1, repository.getElements().size());
+        assertNotNull(repository.getElements().get(0));
     }
 
     @Test
-    void archiviseTest() {
-        try {
-            repository.add(client1);
-            assertThrows(RepositoryException.class, () -> repository.archivise(client1.getID()));
-            repository.add(client2);
-            repository.archivise(client2.getID());
-            assertTrue(client2.isArchive());
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void archiviseTest() throws RepositoryException {
+        repository.add(client1);
+        assertThrows(RepositoryException.class, () -> repository.archivise(client1.getID()));
+        repository.add(client2);
+        repository.archivise(client2.getID());
+        assertTrue(client2.isArchive());
     }
 
     @Test
-    void getTest() {
+    void getTest() throws RepositoryException {
         assertThrows(RepositoryException.class, () -> repository.get(-1));
         assertThrows(RepositoryException.class, () -> repository.get(client1.getID()));
-        try {
-            repository.add(client1);
-            assertEquals(client1, repository.get(client1.getID()));
-            assertThrows(RepositoryException.class, () -> repository.get(client2.getID()));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+        repository.add(client1);
+        assertEquals(client1, repository.get(client1.getID()));
+        assertThrows(RepositoryException.class, () -> repository.get(client2.getID()));
     }
 
     @Test
-    void getSizeTest() {
-        try {
-            assertEquals(0, repository.getSize(true));
-            assertEquals(0, repository.getSize(false));
-            repository.add(client1);
-            assertEquals(0, repository.getSize(true));
-            assertEquals(1, repository.getSize(false));
-            repository.add(client2);
-            assertEquals(1, repository.getSize(true));
-            assertEquals(1, repository.getSize(false));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void getSizeTest() throws RepositoryException {
+        assertEquals(0, repository.getSize(true));
+        assertEquals(0, repository.getSize(false));
+        repository.add(client1);
+        assertEquals(0, repository.getSize(true));
+        assertEquals(1, repository.getSize(false));
+        repository.add(client2);
+        assertEquals(1, repository.getSize(true));
+        assertEquals(1, repository.getSize(false));
     }
 
     @Test
-    void isArchiveTest() {
-        try {
-            repository.add(client1);
-            assertTrue(repository.isArchive(client1.getID()));
-            assertThrows(RepositoryException.class, () -> repository.isArchive(client2.getID()));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void isArchiveTest() throws RepositoryException {
+        repository.add(client1);
+        assertTrue(repository.isArchive(client1.getID()));
+        assertThrows(RepositoryException.class, () -> repository.isArchive(client2.getID()));
     }
 
     @Test
-    void unarchiviseTest() {
-        try {
-            repository.add(client1);
-            repository.unarchivise(client1.getID());
-            assertFalse(repository.isArchive(client1.getID()));
-            assertThrows(RepositoryException.class, () -> repository.unarchivise(client2.getID()));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void unarchiviseTest() throws RepositoryException {
+        repository.add(client1);
+        repository.unarchivise(client1.getID());
+        assertFalse(repository.isArchive(client1.getID()));
+        assertThrows(RepositoryException.class, () -> repository.unarchivise(client2.getID()));
     }
 }

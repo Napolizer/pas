@@ -37,85 +37,61 @@ public class HardwareRepositoryTest {
 
     @Test
     void getElementsTest() {
-        assertTrue(repository.getElements() != null);
+        assertNotNull(repository.getElements());
         assertEquals(0, repository.getElements().size());
     }
 
     @Test
-    void addTest() {
+    void addTest() throws RepositoryException {
         assertThrows(RepositoryException.class, () -> repository.add(null));
         assertEquals(0, repository.getElements().size());
-        try {
-            repository.add(hardware1);
-            assertEquals(1, repository.getElements().size());
-            assertTrue(repository.getElements().get(0) instanceof Hardware);
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+        repository.add(hardware1);
+        assertEquals(1, repository.getElements().size());
+        assertNotNull(repository.getElements().get(0));
     }
 
     @Test
-    void archiviseTest() {
-        try {
-            repository.add(hardware1);
-            assertThrows(RepositoryException.class, () -> repository.archivise(hardware1.getID()));
-            repository.add(hardware2);
-            repository.archivise(hardware2.getID());
-            assertTrue(hardware2.isArchive());
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void archiviseTest() throws RepositoryException {
+        repository.add(hardware1);
+        assertThrows(RepositoryException.class, () -> repository.archivise(hardware1.getID()));
+        repository.add(hardware2);
+        repository.archivise(hardware2.getID());
+        assertTrue(hardware2.isArchive());
     }
 
     @Test
-    void getTest() {
+    void getTest() throws RepositoryException {
         assertThrows(RepositoryException.class, () -> repository.get(-1));
         assertThrows(RepositoryException.class, () -> repository.get(hardware1.getID()));
-        try {
-            repository.add(hardware1);
-            assertEquals(hardware1, repository.get(hardware1.getID()));
-            assertThrows(RepositoryException.class, () -> repository.get(hardware2.getID()));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+        repository.add(hardware1);
+        assertEquals(hardware1, repository.get(hardware1.getID()));
+        assertThrows(RepositoryException.class, () -> repository.get(hardware2.getID()));
     }
 
     @Test
-    void getSizeTest() {
-        try {
-            assertEquals(0, repository.getSize(true));
-            assertEquals(0, repository.getSize(false));
-            repository.add(hardware1);
-            assertEquals(0, repository.getSize(true));
-            assertEquals(1, repository.getSize(false));
-            repository.add(hardware2);
-            assertEquals(1, repository.getSize(true));
-            assertEquals(1, repository.getSize(false));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void getSizeTest() throws RepositoryException {
+        assertEquals(0, repository.getSize(true));
+        assertEquals(0, repository.getSize(false));
+        repository.add(hardware1);
+        assertEquals(0, repository.getSize(true));
+        assertEquals(1, repository.getSize(false));
+        repository.add(hardware2);
+        assertEquals(1, repository.getSize(true));
+        assertEquals(1, repository.getSize(false));
     }
 
     @Test
-    void isArchiveTest() {
-        try {
-            repository.add(hardware1);
-            assertTrue(repository.isArchive(hardware1.getID()));
-            assertThrows(RepositoryException.class, () -> repository.isArchive(hardware2.getID()));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void isArchiveTest() throws RepositoryException {
+        repository.add(hardware1);
+        assertTrue(repository.isArchive(hardware1.getID()));
+        assertThrows(RepositoryException.class, () -> repository.isArchive(hardware2.getID()));
     }
 
     @Test
-    void unarchiviseTest() {
-        try {
-            repository.add(hardware1);
-            repository.unarchivise(hardware1.getID());
-            assertFalse(repository.isArchive(hardware1.getID()));
-            assertThrows(RepositoryException.class, () -> repository.unarchivise(hardware2.getID()));
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        }
+    void unarchiviseTest() throws RepositoryException {
+        repository.add(hardware1);
+        repository.unarchivise(hardware1.getID());
+        assertFalse(repository.isArchive(hardware1.getID()));
+        assertThrows(RepositoryException.class, () -> repository.unarchivise(hardware2.getID()));
     }
 }
