@@ -112,8 +112,8 @@ public class RepairReposioryTest {
         repository.add(repair1);
         assertTrue(repository.isArchive(repair1.getID()));
         assertThrows(RepositoryException.class, () -> repository.isArchive(repair2.getID()));
-        repository.add(repair1);
-        assertTrue(repository.isArchive(repair2.getID()));
+        repository.add(repair2);
+        assertFalse(repository.isArchive(repair2.getID()));
     }
 
     @Test
