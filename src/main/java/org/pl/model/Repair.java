@@ -6,7 +6,7 @@ import org.pl.exceptions.HardwareException;
 
 @Data
 @Builder
-public class Repair implements Entity {
+public class Repair {
     private int id;
     private boolean archive;
     Client client;
@@ -16,12 +16,10 @@ public class Repair implements Entity {
         return getHardware().getHardwareType().calculateRepairCost(getHardware().getPrice());
     }
 
-    @Override
     public void setArchive(boolean archive) {
         this.archive = archive;
     }
 
-    @Override
     public int getID() {
         return id;
     }

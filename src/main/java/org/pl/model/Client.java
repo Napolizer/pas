@@ -6,12 +6,13 @@ import org.pl.exceptions.ClientException;
 
 @Data
 @Builder
-public class Client implements Entity {
+public class Client {
+    private int ID;
     private boolean archive;
     private double balance;
     private String firstName;
     private String lastName;
-    private int personalId;
+    private String personalId;
     private String phoneNumber;
     private ClientType clientType;
     private Address address;
@@ -23,14 +24,7 @@ public class Client implements Entity {
     public void changeBalance(double amount) {
         setBalance(getBalance() + amount);
     }
-
-    @Override
     public void setArchive(boolean archive) {
         this.archive = archive;
-    }
-
-    @Override
-    public int getID() {
-        return personalId;
     }
 }
