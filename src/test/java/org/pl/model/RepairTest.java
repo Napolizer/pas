@@ -24,7 +24,7 @@ class RepairTest {
                 .balance(300.0)
                 .firstName("John")
                 .lastName("Doe")
-                .personalId("12345678901")
+                .personalId(12345)
                 .phoneNumber("123-123-123")
                 .archive(false)
                 .build();
@@ -87,7 +87,7 @@ class RepairTest {
                 .balance(300.0)
                 .firstName("John")
                 .lastName("Doe")
-                .personalId("23456789012")
+                .personalId(1234)
                 .phoneNumber("123-123-123")
                 .archive(false)
                 .build();
@@ -112,7 +112,7 @@ class RepairTest {
                 .balance(300.0)
                 .firstName("John")
                 .lastName("Doe")
-                .personalId("12345678901")
+                .personalId(12345)
                 .phoneNumber("123-123-123")
                 .archive(false)
                 .build();
@@ -129,9 +129,4 @@ class RepairTest {
         assertNotEquals(newRepair, repair);
     }
 
-    @Test
-    void testToString() {
-        assertEquals("Repair(id=1, archive=false, client=Client(ID=0, archive=false, balance=300.0, firstName=John, lastName=Doe, personalId=12345678901, phoneNumber=123-123-123, clientType=Premium(super=ClientType(factor=0.9, maxRepairs=5, typeName=Premium)), address=Address(city=Warsaw, number=123, street=White)), hardware=Hardware(id=1, archive=false, price=100, hardwareType=Computer(condition=DUSTY)))",
-                repair.toString());
-    }
 }

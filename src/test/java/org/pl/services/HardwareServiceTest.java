@@ -24,9 +24,7 @@ public class HardwareServiceTest {
         monitor = new Monitor(Condition.DUSTY);
         phone = new Phone(Condition.UNREPAIRABLE);
         hardwares = new ArrayList<>();
-        hardwareRepository = HardwareRepository.builder()
-                .elements(hardwares)
-                .build();
+        hardwareRepository = new HardwareRepository(hardwares);
         hardwareService = new HardwareService(hardwareRepository);
     }
 

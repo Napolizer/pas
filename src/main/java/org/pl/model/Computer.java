@@ -23,7 +23,7 @@ public class Computer extends HardwareType {
             case VERY_BAD -> 0.7 * price;
             case BAD -> 0.5 * price;
             case AVERAGE -> 0.2 * price;
-            case DUSTY -> 5.0;
+            case DUSTY -> 5;
             case FINE ->
                     throw new HardwareException(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_FINE_EXCEPTION);
         };

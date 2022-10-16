@@ -23,7 +23,7 @@ public class Monitor extends HardwareType {
             case VERY_BAD -> 0.95 * price;
             case BAD -> 0.9 * price;
             case AVERAGE -> 0.8 * price;
-            case DUSTY -> 10.0;
+            case DUSTY -> 10;
             case FINE ->
                     throw new HardwareException(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_FINE_EXCEPTION);
         };

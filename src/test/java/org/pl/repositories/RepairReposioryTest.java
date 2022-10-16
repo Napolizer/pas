@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.pl.model.Condition.DUSTY;
 
-public class RepairReposioryTest {
+class RepairReposioryTest {
     Repository<Repair> repository;
     Address address;
     Client client;

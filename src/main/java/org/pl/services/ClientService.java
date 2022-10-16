@@ -25,7 +25,7 @@ public class ClientService {
         if (Objects.isNull(address))
             throw new ClientException(ClientException.CLIENT_ADDRESS_EXCEPTION);
         Client client = Client.builder()
-                .ID(clientRepository.getElements().size())
+                .personalId(clientRepository.getElements().size())
                 .firstName(firstName)
                 .lastName(lastName)
                 .phoneNumber(phoneNumber)
@@ -46,7 +46,7 @@ public class ClientService {
                 .lastName(lastName)
                 .phoneNumber(phoneNumber)
                 .address(address)
-                .ID(clientRepository.getElements().size())
+                .personalId(clientRepository.getElements().size())
                 .build();
         clientRepository.add(client);
         return client;

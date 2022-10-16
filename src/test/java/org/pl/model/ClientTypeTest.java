@@ -20,18 +20,7 @@ class ClientTypeTest {
         );
     }
 
-    @Test
-    void testToString() {
-        assertEquals(
-                "Basic(super=ClientType(factor=1.0, maxRepairs=2, typeName=Basic))",
-                clientTypeList.get(0).toString());
-        assertEquals(
-                "Premium(super=ClientType(factor=0.9, maxRepairs=5, typeName=Premium))",
-                clientTypeList.get(1).toString());
-        assertEquals(
-                "Vip(super=ClientType(factor=0.8, maxRepairs=10, typeName=Vip))",
-                clientTypeList.get(2).toString());
-    }
+
 
     @Test
     void testEquals() {

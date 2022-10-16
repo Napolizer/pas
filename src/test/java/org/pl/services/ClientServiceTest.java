@@ -26,7 +26,7 @@ public class ClientServiceTest {
                 .city("Lodz")
                 .build();
         clientsList = new ArrayList<>();
-        clientRepository = ClientRepository.builder().elements(clientsList).build();
+        clientRepository = new ClientRepository(clientsList);
         clientService = new ClientService(clientRepository);
     }
 
@@ -57,7 +57,7 @@ public class ClientServiceTest {
     @Test
     void clientServiceToStringTest() throws RepositoryException, ClientException {
         clientService.add("Pan", "Tadeusz", "280618349", address);
-        String expectedInfo = "Client(ID=0, archive=false, balance=0.0, firstName=Pan, lastName=Tadeusz, personalId=null, phoneNumber=280618349, clientType=null, address=Address(city=Lodz, number=123, street=White))";
+        String expectedInfo = "Client(archive=false, balance=0.0, firstName=Pan, lastName=Tadeusz, personalId=0, phoneNumber=280618349, clientType=null, address=Address(city=Lodz, number=123, street=White))";
         assertEquals(expectedInfo, clientService.getInfo(0));
     }
 

@@ -11,7 +11,7 @@ import org.pl.exceptions.HardwareException;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Console extends HardwareType {
-    private Condition condition;
+    public Condition condition;
 
     public double calculateRepairCost(int price) throws HardwareException {
         if (price < 0) {

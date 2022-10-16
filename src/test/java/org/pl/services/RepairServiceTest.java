@@ -12,7 +12,7 @@ import org.pl.repositories.RepairRepository;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RepairServiceTest {
+class RepairServiceTest {
     Address address1, address2;
     Client client1, client2;
     Hardware hardware1, hardware2;
@@ -34,7 +34,7 @@ public class RepairServiceTest {
                 .number("23")
                 .build();
         client1 = Client.builder()
-                .ID(1)
+                .personalId(1)
                 .firstName("Szymon")
                 .lastName("Kowalski")
                 .phoneNumber("123456789")
@@ -42,7 +42,7 @@ public class RepairServiceTest {
                 .clientType(new Premium())
                 .build();
         client2 = Client.builder()
-                .ID(2)
+                .personalId(2)
                 .firstName("Kacper")
                 .lastName("Jackowski")
                 .phoneNumber("987654321")
@@ -62,9 +62,7 @@ public class RepairServiceTest {
                 .hardwareType(monitor)
                 .build();
         repairs = new ArrayList<>();
-        repairRepository = RepairRepository.builder()
-                .elements(repairs)
-                .build();
+        repairRepository = new RepairRepository(repairs);
         repairService = new RepairService(repairRepository);
     }
 
@@ -89,7 +87,7 @@ public class RepairServiceTest {
     @Test
     void repairServiceGetInfoTest() throws RepositoryException, RepairException {
         repairService.add(client1, hardware1);
-        String expectedInfo = "Repair(id=0, archive=false, client=Client(ID=1, archive=false, balance=0.0, firstName=Szymon, lastName=Kowalski, personalId=null, phoneNumber=123456789, clientType=Premium(super=ClientType(factor=0.9, maxRepairs=5, typeName=Premium)), address=Address(city=Warszawa, number=34, street=Uliczna)), hardware=Hardware(id=1, archive=false, price=2000, hardwareType=Computer(condition=DUSTY)))";
+        String expectedInfo = "Repair(id=0, archive=false, client=Client(archive=false, balance=0.0, firstName=Szymon, lastName=Kowalski, personalId=1, phoneNumber=123456789, clientType=Premium(), address=Address(city=Warszawa, number=34, street=Uliczna)), hardware=Hardware(id=1, archive=false, price=2000, hardwareType=Computer(condition=DUSTY)))";
         assertEquals(expectedInfo, repairService.getInfo(0));
     }
 
