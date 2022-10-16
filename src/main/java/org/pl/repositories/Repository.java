@@ -1,13 +1,15 @@
 package org.pl.repositories;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Entity;
 
 import java.util.ArrayList;
 @Data
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Repository<T extends Entity> {
     protected ArrayList<T> elements;
 
