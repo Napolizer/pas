@@ -2,14 +2,13 @@ package org.pl.services;
 
 import org.pl.exceptions.ClientException;
 import org.pl.exceptions.HardwareException;
-import org.pl.exceptions.RepairException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.model.Hardware;
 import org.pl.model.Repair;
 import org.pl.repositories.RepairRepository;
 
-import java.util.Objects;
+import java.util.UUID;
 
 public class RepairService {
     private final RepairRepository repairRepository;
@@ -18,38 +17,42 @@ public class RepairService {
         this.repairRepository = repairRepository;
     }
 
-    public Repair add(Client client, Hardware hardware) throws RepositoryException, RepairException {
-        if (Objects.isNull(client))
-            throw new RepairException(RepairException.REPAIR_CLIENT_EXCEPTION);
-        if (Objects.isNull(hardware))
-            throw new RepairException(RepairException.REPAIR_HARDWARE_EXCEPTION);
-
-        Repair repair = Repair.builder()
-                .id(repairRepository.getElements().size())
-                .client(client)
-                .hardware(hardware)
-                .build();
-        repairRepository.add(repair);
-        return repair;
+    public Repair create(Client client, Hardware hardware) throws RepositoryException {
+        return repairRepository.create(
+                Repair.builder()
+                        .client(client)
+                        .hardware(hardware)
+                        .build());
     }
 
-    public Repair get(int id) throws RepositoryException {
-        return repairRepository.get(id);
+    public Repair create(Repair repair) throws RepositoryException {
+        return repairRepository.create(repair);
     }
 
-    public int getArchiveSize() throws RepositoryException {
-        return repairRepository.getSize(false);
+    public Repair update(Repair repair) throws RepositoryException {
+        return repairRepository.update(repair);
     }
 
-    public String getInfo(int id) throws RepositoryException {
-        return repairRepository.get(id).toString();
+    public Repair get(UUID id) throws RepositoryException {
+        return repairRepository.read(id);
     }
 
-    public int getPresentSize() throws RepositoryException {
-        return repairRepository.getSize(true);
+    public Repair archivize(UUID id) throws RepositoryException {
+        return repairRepository.delete(id);
     }
 
-    public void repair(int id) throws HardwareException, RepositoryException, ClientException {
-        repairRepository.repair(id);
+    public void repair(UUID id) throws HardwareException, RepositoryException, ClientException {
+        Repair repair = repairRepository.read(id);
+        if (repair.isArchive() || repair.getClient().isArchive() || repair.getHardware().isArchive()) {
+            throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+        }
+
+        repair.getHardware().setArchive(true);
+        repair.setArchive(true);
+
+        double price = repair.getHardware().getHardwareType().calculateRepairCost(repair.getHardware().getPrice());
+        repair.getClient().setBalance(
+                repair.getClient().getBalance() - price
+        );
     }
 }
