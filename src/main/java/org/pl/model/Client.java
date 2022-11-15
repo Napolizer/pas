@@ -1,19 +1,32 @@
 package org.pl.model;
 
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.pl.exceptions.ClientException;
 
+import java.util.UUID;
+
 @Data
 @Builder
 public class Client implements Entity {
-    private boolean archive;
-    private double balance;
+    @Id
+    private UUID id;
+    @NotNull
+    private Boolean archive;
+    @NotNull
+    private Double balance;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
-    private int personalId;
+    @NotBlank
     private String phoneNumber;
+    @NotNull
     private ClientType clientType;
+    @NotNull
     private Address address;
 
     public double calculateDiscount(int price) throws ClientException {
@@ -30,7 +43,12 @@ public class Client implements Entity {
     }
 
     @Override
-    public int getID() {
-        return personalId;
+    public boolean isArchive() {
+        return getArchive();
+    }
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 }

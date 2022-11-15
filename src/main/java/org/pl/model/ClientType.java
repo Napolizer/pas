@@ -1,12 +1,22 @@
 package org.pl.model;
 
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.pl.exceptions.ClientException;
 
+import java.util.UUID;
+
 @Data
 public abstract class ClientType {
-    protected float factor;
-    protected int maxRepairs;
+    @Id
+    private UUID id;
+    @NotNull
+    protected Float factor;
+    @NotNull
+    protected Integer maxRepairs;
+    @NotBlank
     protected String typeName;
 
     public double calculateDiscount(int price) throws ClientException {

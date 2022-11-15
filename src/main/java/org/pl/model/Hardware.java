@@ -1,16 +1,25 @@
 package org.pl.model;
 
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
+
+import java.util.UUID;
 
 import static org.pl.model.Condition.FINE;
 
 @Data
 @Builder
 public class Hardware implements Entity {
-    private int id;
-    private boolean archive;
-    private int price;
+    @Id
+    private UUID id;
+    @NotNull
+    private Boolean archive;
+    @NotNull
+    private Integer price;
+    @NotNull
     private HardwareType hardwareType;
 
     public void repair() {
@@ -23,7 +32,12 @@ public class Hardware implements Entity {
     }
 
     @Override
-    public int getID() {
+    public boolean isArchive() {
+        return getArchive();
+    }
+
+    @Override
+    public UUID getId() {
         return id;
     }
 }
