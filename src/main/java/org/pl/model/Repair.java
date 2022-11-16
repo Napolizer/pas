@@ -3,11 +3,13 @@ package org.pl.model;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.pl.exceptions.HardwareException;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,6 +25,10 @@ public class Repair implements Entity {
     private Client client;
     @NotNull
     private Hardware hardware;
+    @NotNull
+    private Date startDate;
+    @NotNull
+    private Date endDate;
 
     public double calculateRepairCost() throws HardwareException {
         return getHardware().getHardwareType().calculateRepairCost(getHardware().getPrice());
