@@ -8,6 +8,7 @@ import org.pl.model.Hardware;
 import org.pl.model.Repair;
 import org.pl.repositories.RepairRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 public class RepairService {
@@ -35,6 +36,10 @@ public class RepairService {
 
     public Repair get(UUID id) throws RepositoryException {
         return repairRepository.read(id);
+    }
+
+    public List<Repair> getAllClientRepairs(UUID clientId) {
+        return repairRepository.getClientRepairs(clientId);
     }
 
     public Repair archivize(UUID id) throws RepositoryException {
