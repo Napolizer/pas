@@ -1,12 +1,8 @@
 package org.pl.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -15,6 +11,10 @@ import static org.pl.model.Condition.FINE;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@jakarta.persistence.Entity
+@Access(AccessType.FIELD)
 public class Hardware implements Entity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -23,6 +23,7 @@ public class Hardware implements Entity {
     private Boolean archive;
     @NotNull
     private Integer price;
+    @ManyToOne
     @NotNull
     private HardwareType hardwareType;
 

@@ -1,8 +1,7 @@
 package org.pl.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -12,6 +11,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Data
+@Entity
+@Access(AccessType.FIELD)
 public abstract class ClientType {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
