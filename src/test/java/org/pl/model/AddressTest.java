@@ -6,6 +6,7 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,13 +46,14 @@ class AddressTest {
 
     @Test
     void fieldCityNegativeTest() {
-        List<String> invalidTowns = List.of(
+        List<String> invalidTowns = new ArrayList<>(List.of(
                 "a",
                 "",
                 "0",
                 "Warsaw0",
                 "1Lodz"
-        );
+        ));
+        invalidTowns.add(null);
         for (var city : invalidTowns) {
             validAddress.setCity(city);
             assertEquals(city, validAddress.getCity());
@@ -75,7 +77,7 @@ class AddressTest {
 
     @Test
     void fieldPhoneNumberNegativeTest() {
-        List<String> invalidPhoneNumbers = List.of(
+        List<String> invalidPhoneNumbers = new ArrayList<>(List.of(
                 " 123456789",
                 "987654321 ",
                 "abcdefghi",
@@ -83,7 +85,8 @@ class AddressTest {
                 "i12345678",
                 "         ",
                 ""
-        );
+        ));
+        invalidPhoneNumbers.add(null);
         for (var phoneNumber : invalidPhoneNumbers) {
             validAddress.setPhoneNumber(phoneNumber);
             assertEquals(phoneNumber, validAddress.getPhoneNumber());
@@ -107,11 +110,12 @@ class AddressTest {
 
     @Test
     void fieldStreetNegativeTest() {
-        List<String> invalidStreets = List.of(
+        List<String> invalidStreets = new ArrayList<>(List.of(
                 "",
                 " ",
                 "         "
-        );
+        ));
+        invalidStreets.add(null);
         for (var street : invalidStreets) {
             validAddress.setStreet(street);
             assertEquals(street, validAddress.getStreet());
