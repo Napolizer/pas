@@ -18,6 +18,8 @@ public class Client implements Entity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private UUID id;
+    @NotBlank
+    private String username;
     @NotNull
     private Boolean archive;
     @NotNull
