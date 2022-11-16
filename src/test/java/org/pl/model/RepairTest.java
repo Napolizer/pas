@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.pl.model.Condition.*;
 
 class RepairTest {
-
 //    Repair repair;
 //    Client client;
 //    Hardware hardware;

@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.pl.model.Condition.*;
 
 class HardwareTest {
-
 //    Hardware hardware;
 //
 //    @BeforeEach
