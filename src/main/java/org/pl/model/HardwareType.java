@@ -5,20 +5,22 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 import org.pl.exceptions.HardwareException;
 
 import java.util.Objects;
 import java.util.UUID;
 
 @Data
+@SuperBuilder
 public abstract class HardwareType {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
     @NotNull
     private Condition condition;
 
-    public abstract double calculateRepairCost(int price) throws HardwareException;
+    public abstract double calculateRepairCost(double price) throws HardwareException;
 
     @Override
     public boolean equals(Object o) {

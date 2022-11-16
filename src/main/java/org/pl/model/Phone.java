@@ -1,17 +1,15 @@
 package org.pl.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 import org.pl.exceptions.HardwareException;
 
 @Data
-@Builder
-@AllArgsConstructor
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class Phone extends HardwareType {
-    public double calculateRepairCost(int price) throws HardwareException {
+    public double calculateRepairCost(double price) throws HardwareException {
         if (price < 0) {
             throw new HardwareException(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_ZERO_EXCEPTION);
         }

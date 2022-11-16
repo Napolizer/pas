@@ -1,371 +1,355 @@
 package org.pl.model;
 
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.pl.exceptions.HardwareException;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.pl.model.Condition.*;
 
 class HardwareTypeTest {
+    ValidatorFactory validatorFactory;
+    Validator validator;
 
-//    @Nested
-//    @DisplayName("Computer Test")
-//    class ComputerTest {
-//        Computer computer;
-//
-//        @BeforeEach
-//        void setUp() {
-//            computer = new Computer(BAD);
-//        }
-//
-//        @Test
-//        void getCondition() {
-//            assertEquals(BAD, computer.getCondition());
-//        }
-//
-//        @Test
-//        void setCondition() {
-//            computer.setCondition(UNREPAIRABLE);
-//
-//            assertEquals(UNREPAIRABLE, computer.getCondition());
-//        }
-//
-//        @Test
-//        void testEquals() {
-//            assertNotEquals(null, computer);
-//            assertNotEquals(2, computer);
-//            assertNotEquals("123", computer);
-//            assertEquals(computer, computer);
-//
-//            List<HardwareType> hardwareTypeList = List.of(
-//                    new Monitor(FINE), new Console(DUSTY), new Phone(UNREPAIRABLE)
-//            );
-//
-//            for (HardwareType hardwareType : hardwareTypeList) {
-//                assertNotEquals(hardwareType, computer);
-//            }
-//
-//            assertEquals(new Computer(computer.getCondition()), computer);
-//        }
-//
-//        @Test
-//        void testToString() {
-//            assertEquals(String.format("Computer(condition=%s)", computer.getCondition()), computer.toString());
-//        }
-//
-//        @Nested
-//        @DisplayName("Calculate Repair Cost Test")
-//        class CalculateRepairCostTest {
-//
-//            @Test
-//            void priceBelowZero() {
-//                for (int price = -100; price < 0; price += 49) {
-//                    final int finalPrice = price;
-//                    HardwareException exception = assertThrows(HardwareException.class, () -> computer.calculateRepairCost(finalPrice));
-//                    assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_ZERO_EXCEPTION, exception.getMessage());
-//                }
-//            }
-//
-//            @Test
-//            void conditionUnrepairable() {
-//                computer.setCondition(UNREPAIRABLE);
-//                HardwareException exception = assertThrows(HardwareException.class, () -> computer.calculateRepairCost(100));
-//                assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_UNREPAIRABLE_EXCEPTION, exception.getMessage());
-//            }
-//
-//            @Test
-//            void conditionAccepted() throws HardwareException {
-//                computer.setCondition(VERY_BAD);
-//                assertEquals(70.0, computer.calculateRepairCost(100));
-//                computer.setCondition(BAD);
-//                assertEquals(50.0, computer.calculateRepairCost(100));
-//                computer.setCondition(AVERAGE);
-//                assertEquals(20.0, computer.calculateRepairCost(100));
-//
-//                computer.setCondition(DUSTY);
-//                assertEquals(5, computer.calculateRepairCost(1000));
-//                assertEquals(5, computer.calculateRepairCost(100));
-//                assertEquals(5, computer.calculateRepairCost(1));
-//            }
-//
-//            @Test
-//            void conditionFine() {
-//                computer.setCondition(FINE);
-//                HardwareException exception = assertThrows(HardwareException.class, () -> computer.calculateRepairCost(100));
-//                assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_FINE_EXCEPTION, exception.getMessage());
-//            }
-//        }
-//    }
-//
-//    @Nested
-//    @DisplayName("Monitor Test")
-//    class MonitorTest {
-//        Monitor monitor;
-//
-//        @BeforeEach
-//        void setUp() {
-//            monitor = new Monitor(FINE);
-//        }
-//
-//        @Test
-//        void getCondition() {
-//            assertEquals(FINE, monitor.getCondition());
-//        }
-//
-//        @Test
-//        void setCondition() {
-//            monitor.setCondition(UNREPAIRABLE);
-//
-//            assertEquals(UNREPAIRABLE, monitor.getCondition());
-//        }
-//
-//        @Test
-//        void testEquals() {
-//            assertNotEquals(null, monitor);
-//            assertNotEquals(2, monitor);
-//            assertNotEquals("123", monitor);
-//            assertEquals(monitor, monitor);
-//
-//            List<HardwareType> hardwareTypeList = List.of(
-//                    new Computer(FINE), new Console(DUSTY), new Phone(UNREPAIRABLE)
-//            );
-//
-//            for (HardwareType hardwareType : hardwareTypeList) {
-//                assertNotEquals(hardwareType, monitor);
-//            }
-//
-//            assertEquals(new Monitor(monitor.getCondition()), monitor);
-//        }
-//
-//        @Test
-//        void testToString() {
-//            assertEquals(String.format("Monitor(condition=%s)", monitor.getCondition()), monitor.toString());
-//        }
-//
-//        @Nested
-//        @DisplayName("Calculate Repair Cost Test")
-//        class CalculateRepairCostTest {
-//
-//            @Test
-//            void priceBelowZero() {
-//                for (int price = -100; price < 0; price += 49) {
-//                    final int finalPrice = price;
-//                    HardwareException exception = assertThrows(HardwareException.class, () -> monitor.calculateRepairCost(finalPrice));
-//                    assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_ZERO_EXCEPTION, exception.getMessage());
-//                }
-//            }
-//
-//            @Test
-//            void conditionUnrepairable() {
-//                monitor.setCondition(UNREPAIRABLE);
-//                HardwareException exception = assertThrows(HardwareException.class, () -> monitor.calculateRepairCost(100));
-//                assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_UNREPAIRABLE_EXCEPTION, exception.getMessage());
-//            }
-//
-//            @Test
-//            void conditionAccepted() throws HardwareException {
-//                monitor.setCondition(VERY_BAD);
-//                assertEquals(95.0, monitor.calculateRepairCost(100));
-//                monitor.setCondition(BAD);
-//                assertEquals(90.0, monitor.calculateRepairCost(100));
-//                monitor.setCondition(AVERAGE);
-//                assertEquals(80.0, monitor.calculateRepairCost(100));
-//
-//                monitor.setCondition(DUSTY);
-//                assertEquals(10, monitor.calculateRepairCost(1000));
-//                assertEquals(10, monitor.calculateRepairCost(100));
-//                assertEquals(10, monitor.calculateRepairCost(1));
-//            }
-//
-//            @Test
-//            void conditionFine() {
-//                monitor.setCondition(FINE);
-//                HardwareException exception = assertThrows(HardwareException.class, () -> monitor.calculateRepairCost(100));
-//                assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_FINE_EXCEPTION, exception.getMessage());
-//            }
-//        }
-//    }
-//
-//    @Nested
-//    @DisplayName("Console Test")
-//    class ConsoleTest {
-//        Console console;
-//
-//        @BeforeEach
-//        void setUp() {
-//            console = new Console(DUSTY);
-//        }
-//
-//        @Test
-//        void getCondition() {
-//            assertEquals(DUSTY, console.getCondition());
-//        }
-//
-//        @Test
-//        void setCondition() {
-//            console.setCondition(UNREPAIRABLE);
-//
-//            assertEquals(UNREPAIRABLE, console.getCondition());
-//        }
-//
-//        @Test
-//        void testEquals() {
-//            assertNotEquals(null, console);
-//            assertNotEquals(2, console);
-//            assertNotEquals("123", console);
-//            assertEquals(console, console);
-//
-//            List<HardwareType> hardwareTypeList = List.of(
-//                    new Monitor(FINE), new Computer(DUSTY), new Phone(UNREPAIRABLE)
-//            );
-//
-//            for (HardwareType hardwareType : hardwareTypeList) {
-//                assertNotEquals(hardwareType, console);
-//            }
-//
-//            assertEquals(new Console(console.getCondition()), console);
-//        }
-//
-//        @Test
-//        void testToString() {
-//            assertEquals(String.format("Console(condition=%s)", console.getCondition()), console.toString());
-//        }
-//
-//        @Nested
-//        @DisplayName("Calculate Repair Cost Test")
-//        class CalculateRepairCostTest {
-//
-//            @Test
-//            void priceBelowZero() {
-//                for (int price = -100; price < 0; price += 49) {
-//                    final int finalPrice = price;
-//                    HardwareException exception = assertThrows(HardwareException.class, () -> console.calculateRepairCost(finalPrice));
-//                    assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_ZERO_EXCEPTION, exception.getMessage());
-//                }
-//            }
-//
-//            @Test
-//            void conditionUnrepairable() {
-//                console.setCondition(UNREPAIRABLE);
-//                HardwareException exception = assertThrows(HardwareException.class, () -> console.calculateRepairCost(100));
-//                assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_UNREPAIRABLE_EXCEPTION, exception.getMessage());
-//            }
-//
-//            @Test
-//            void conditionAccepted() throws HardwareException {
-//                console.setCondition(VERY_BAD);
-//                assertEquals(90.0, console.calculateRepairCost(100));
-//                console.setCondition(BAD);
-//                assertEquals(80.0, console.calculateRepairCost(100));
-//                console.setCondition(AVERAGE);
-//                assertEquals(60.0, console.calculateRepairCost(100));
-//
-//                console.setCondition(DUSTY);
-//                assertEquals(100, console.calculateRepairCost(1000));
-//                assertEquals(100, console.calculateRepairCost(100));
-//                assertEquals(100, console.calculateRepairCost(1));
-//            }
-//
-//            @Test
-//            void conditionFine() {
-//                console.setCondition(FINE);
-//                HardwareException exception = assertThrows(HardwareException.class, () -> console.calculateRepairCost(100));
-//                assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_FINE_EXCEPTION, exception.getMessage());
-//            }
-//        }
-//    }
-//
-//    @Nested
-//    @DisplayName("Phone Test")
-//    class PhoneTest {
-//        Phone phone;
-//
-//        @BeforeEach
-//        void setUp() {
-//            phone = new Phone(UNREPAIRABLE);
-//        }
-//
-//        @Test
-//        void getCondition() {
-//            assertEquals(UNREPAIRABLE, phone.getCondition());
-//        }
-//
-//        @Test
-//        void setCondition() {
-//            phone.setCondition(FINE);
-//
-//            assertEquals(FINE, phone.getCondition());
-//        }
-//
-//        @Test
-//        void testEquals() {
-//            assertNotEquals(null, phone);
-//            assertNotEquals(2, phone);
-//            assertNotEquals("123", phone);
-//            assertEquals(phone, phone);
-//
-//            List<HardwareType> hardwareTypeList = List.of(
-//                    new Computer(FINE), new Console(DUSTY), new Monitor(UNREPAIRABLE)
-//            );
-//
-//            for (HardwareType hardwareType : hardwareTypeList) {
-//                assertNotEquals(hardwareType, phone);
-//            }
-//
-//            assertEquals(new Phone(phone.getCondition()), phone);
-//        }
-//
-//        @Test
-//        void testToString() {
-//            assertEquals(String.format("Phone(condition=%s)", phone.getCondition()), phone.toString());
-//        }
-//
-//        @Nested
-//        @DisplayName("Calculate Repair Cost Test")
-//        class CalculateRepairCostTest {
-//
-//            @Test
-//            void priceBelowZero() {
-//                for (int price = -100; price < 0; price += 49) {
-//                    final int finalPrice = price;
-//                    HardwareException exception = assertThrows(HardwareException.class, () -> phone.calculateRepairCost(finalPrice));
-//                    assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_ZERO_EXCEPTION, exception.getMessage());
-//                }
-//            }
-//
-//            @Test
-//            void conditionUnrepairable() {
-//                phone.setCondition(UNREPAIRABLE);
-//                HardwareException exception = assertThrows(HardwareException.class, () -> phone.calculateRepairCost(100));
-//                assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_UNREPAIRABLE_EXCEPTION, exception.getMessage());
-//            }
-//
-//            @Test
-//            void conditionAccepted() throws HardwareException {
-//                phone.setCondition(VERY_BAD);
-//                assertEquals(80.0, phone.calculateRepairCost(100));
-//                phone.setCondition(BAD);
-//                assertEquals(50.0, phone.calculateRepairCost(100));
-//                phone.setCondition(AVERAGE);
-//                assertEquals(20.0, phone.calculateRepairCost(100));
-//
-//                phone.setCondition(DUSTY);
-//                assertEquals(5, phone.calculateRepairCost(1000));
-//                assertEquals(5, phone.calculateRepairCost(100));
-//                assertEquals(5, phone.calculateRepairCost(1));
-//            }
-//
-//            @Test
-//            void conditionFine() {
-//                phone.setCondition(FINE);
-//                HardwareException exception = assertThrows(HardwareException.class, () -> phone.calculateRepairCost(100));
-//                assertEquals(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_FINE_EXCEPTION, exception.getMessage());
-//            }
-//        }
-//    }
+    UUID uuid;
+    Computer validComputer;
+    Console validConsole;
+    Monitor validMonitor;
+    Phone validPhone;
+    List<HardwareType> validHardwareTypes;
+
+    @BeforeEach
+    void setup() {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+
+        uuid = UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c");
+
+        validComputer = Computer.builder()
+                .condition(Condition.FINE)
+                .build();
+        validConsole = Console.builder()
+                .condition(Condition.BAD)
+                .build();
+        validMonitor = Monitor.builder()
+                .condition(Condition.DUSTY)
+                .build();
+        validPhone = Phone.builder()
+                .condition(Condition.AVERAGE)
+                .build();
+
+        validHardwareTypes = List.of(
+                validComputer,
+                validConsole,
+                validMonitor,
+                validPhone
+        );
+    }
+
+    @Test
+    void fieldConditionPositiveTest() {
+        List<Condition> validConditions = List.of(
+                Condition.UNREPAIRABLE,
+                Condition.VERY_BAD,
+                Condition.BAD,
+                Condition.AVERAGE,
+                Condition.DUSTY,
+                Condition.FINE
+        );
+        for (var condition : validConditions) {
+            for (HardwareType hardwareType : validHardwareTypes) {
+                hardwareType.setCondition(condition);
+                assertEquals(condition, hardwareType.getCondition());
+                assertTrue(validator.validate(hardwareType).isEmpty());
+            }
+        }
+    }
+
+    @Test
+    void fieldConditionNegativeTest() {
+        for (HardwareType hardwareType : validHardwareTypes) {
+            hardwareType.setCondition(null);
+            assertNull(hardwareType.getCondition());
+            assertFalse(validator.validate(hardwareType).isEmpty());
+        }
+    }
+
+    @Nested
+    class calculateRepairCostTests {
+        @Test
+        void negativePriceTest() {
+            for (HardwareType hardwareType : validHardwareTypes) {
+                assertThrows(HardwareException.class, () -> {
+                    hardwareType.calculateRepairCost(-0.01);
+                });
+            }
+        }
+
+        @Test
+        void UnrepairableConditionTest() {
+            for (HardwareType hardwareType : validHardwareTypes) {
+                hardwareType.setCondition(Condition.UNREPAIRABLE);
+                assertThrows(HardwareException.class, () -> {
+                    hardwareType.calculateRepairCost(10.0);
+                });
+            }
+        }
+
+        @Test
+        void FineConditionTest() {
+            for (HardwareType hardwareType : validHardwareTypes) {
+                hardwareType.setCondition(Condition.FINE);
+                assertThrows(HardwareException.class, () -> {
+                    hardwareType.calculateRepairCost(10.0);
+                });
+            }
+        }
+
+        @Nested
+        class ComputerRepairCosts {
+            @Test
+            void veryBadConditionTests() throws HardwareException {
+                validComputer.setCondition(Condition.VERY_BAD);
+                assertEquals(0.0, validComputer.calculateRepairCost(0.0), 0.001);
+                assertEquals(70.0, validComputer.calculateRepairCost(100.0), 0.001);
+                assertEquals(210.0, validComputer.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void badConditionTests() throws HardwareException {
+                validComputer.setCondition(Condition.BAD);
+                assertEquals(0.0, validComputer.calculateRepairCost(0.0), 0.001);
+                assertEquals(50.0, validComputer.calculateRepairCost(100.0), 0.001);
+                assertEquals(150.0, validComputer.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void averageConditionTests() throws HardwareException {
+                validComputer.setCondition(Condition.AVERAGE);
+                assertEquals(0.0, validComputer.calculateRepairCost(0.0), 0.001);
+                assertEquals(20.0, validComputer.calculateRepairCost(100.0), 0.001);
+                assertEquals(60.0, validComputer.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void dustyConditionTests() throws HardwareException {
+                validComputer.setCondition(Condition.DUSTY);
+                assertEquals(5.0, validComputer.calculateRepairCost(0.0), 0.001);
+                assertEquals(5.0, validComputer.calculateRepairCost(100.0), 0.001);
+                assertEquals(5.0, validComputer.calculateRepairCost(300.0), 0.001);
+            }
+        }
+
+        @Nested
+        class ConsoleRepairCosts {
+            @Test
+            void veryBadConditionTests() throws HardwareException {
+                validConsole.setCondition(Condition.VERY_BAD);
+                assertEquals(0.0, validConsole.calculateRepairCost(0.0), 0.001);
+                assertEquals(90.0, validConsole.calculateRepairCost(100.0), 0.001);
+                assertEquals(270.0, validConsole.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void badConditionTests() throws HardwareException {
+                validConsole.setCondition(Condition.BAD);
+                assertEquals(0.0, validConsole.calculateRepairCost(0.0), 0.001);
+                assertEquals(80.0, validConsole.calculateRepairCost(100.0), 0.001);
+                assertEquals(240.0, validConsole.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void averageConditionTests() throws HardwareException {
+                validConsole.setCondition(Condition.AVERAGE);
+                assertEquals(0.0, validConsole.calculateRepairCost(0.0), 0.001);
+                assertEquals(60.0, validConsole.calculateRepairCost(100.0), 0.001);
+                assertEquals(180.0, validConsole.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void dustyConditionTests() throws HardwareException {
+                validConsole.setCondition(Condition.DUSTY);
+                assertEquals(100.0, validConsole.calculateRepairCost(0.0), 0.001);
+                assertEquals(100.0, validConsole.calculateRepairCost(100.0), 0.001);
+                assertEquals(100.0, validConsole.calculateRepairCost(300.0), 0.001);
+            }
+        }
+
+        @Nested
+        class MonitorRepairCosts {
+            @Test
+            void veryBadConditionTests() throws HardwareException {
+                validMonitor.setCondition(Condition.VERY_BAD);
+                assertEquals(0.0, validMonitor.calculateRepairCost(0.0), 0.001);
+                assertEquals(95.0, validMonitor.calculateRepairCost(100.0), 0.001);
+                assertEquals(285.0, validMonitor.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void badConditionTests() throws HardwareException {
+                validMonitor.setCondition(Condition.BAD);
+                assertEquals(0.0, validMonitor.calculateRepairCost(0.0), 0.001);
+                assertEquals(90.0, validMonitor.calculateRepairCost(100.0), 0.001);
+                assertEquals(270.0, validMonitor.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void averageConditionTests() throws HardwareException {
+                validMonitor.setCondition(Condition.AVERAGE);
+                assertEquals(0.0, validMonitor.calculateRepairCost(0.0), 0.001);
+                assertEquals(80.0, validMonitor.calculateRepairCost(100.0), 0.001);
+                assertEquals(240.0, validMonitor.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void dustyConditionTests() throws HardwareException {
+                validMonitor.setCondition(Condition.DUSTY);
+                assertEquals(10.0, validMonitor.calculateRepairCost(0.0), 0.001);
+                assertEquals(10.0, validMonitor.calculateRepairCost(100.0), 0.001);
+                assertEquals(10.0, validMonitor.calculateRepairCost(300.0), 0.001);
+            }
+        }
+
+        @Nested
+        class PhoneRepairCosts {
+            @Test
+            void veryBadConditionTests() throws HardwareException {
+                validPhone.setCondition(Condition.VERY_BAD);
+                assertEquals(0.0, validPhone.calculateRepairCost(0.0), 0.001);
+                assertEquals(80.0, validPhone.calculateRepairCost(100.0), 0.001);
+                assertEquals(240.0, validPhone.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void badConditionTests() throws HardwareException {
+                validPhone.setCondition(Condition.BAD);
+                assertEquals(0.0, validPhone.calculateRepairCost(0.0), 0.001);
+                assertEquals(50.0, validPhone.calculateRepairCost(100.0), 0.001);
+                assertEquals(150.0, validPhone.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void averageConditionTests() throws HardwareException {
+                validPhone.setCondition(Condition.AVERAGE);
+                assertEquals(0.0, validPhone.calculateRepairCost(0.0), 0.001);
+                assertEquals(20.0, validPhone.calculateRepairCost(100.0), 0.001);
+                assertEquals(60.0, validPhone.calculateRepairCost(300.0), 0.001);
+            }
+
+            @Test
+            void dustyConditionTests() throws HardwareException {
+                validPhone.setCondition(Condition.DUSTY);
+                assertEquals(5.0, validPhone.calculateRepairCost(0.0), 0.001);
+                assertEquals(5.0, validPhone.calculateRepairCost(100.0), 0.001);
+                assertEquals(5.0, validPhone.calculateRepairCost(300.0), 0.001);
+            }
+        }
+    }
+
+    @Nested
+    class EqualsTests {
+        final UUID differentUuid = UUID.fromString("6fc03087-d265-11e7-b8c6-83e29cd24f4c");
+
+        @Test
+        void computerEqualsPositiveTest() {
+            Computer computer1 = Computer.builder()
+                    .id(uuid)
+                    .condition(Condition.DUSTY).build();
+            Computer computer2 = Computer.builder()
+                    .id(uuid)
+                    .condition(Condition.FINE).build();
+
+            assertEquals(computer1, computer2);
+        }
+
+        @Test
+        void computerEqualsNegativeTest() {
+            Computer computer1 = Computer.builder()
+                    .id(uuid)
+                    .condition(Condition.DUSTY).build();
+            Computer computer2 = Computer.builder()
+                    .id(differentUuid)
+                    .condition(Condition.FINE).build();
+
+            assertNotEquals(computer1, computer2);
+        }
+
+        @Test
+        void consoleEqualsPositiveTest() {
+            Console console1 = Console.builder()
+                    .id(uuid)
+                    .condition(Condition.DUSTY).build();
+            Console console2 = Console.builder()
+                    .id(uuid)
+                    .condition(Condition.FINE).build();
+
+            assertEquals(console1, console2);
+        }
+
+        @Test
+        void consoleEqualsNegativeTest() {
+            Console console1 = Console.builder()
+                    .id(uuid)
+                    .condition(Condition.DUSTY).build();
+            Console console2 = Console.builder()
+                    .id(differentUuid)
+                    .condition(Condition.FINE).build();
+
+            assertNotEquals(console1, console2);
+        }
+
+        @Test
+        void monitorEqualsPositiveTest() {
+            Monitor monitor1 = Monitor.builder()
+                    .id(uuid)
+                    .condition(Condition.DUSTY).build();
+            Monitor monitor2 = Monitor.builder()
+                    .id(uuid)
+                    .condition(Condition.FINE).build();
+
+            assertEquals(monitor1, monitor2);
+        }
+
+        @Test
+        void monitorEqualsNegativeTest() {
+            Monitor monitor1 = Monitor.builder()
+                    .id(uuid)
+                    .condition(Condition.DUSTY).build();
+            Monitor monitor2 = Monitor.builder()
+                    .id(differentUuid)
+                    .condition(Condition.FINE).build();
+
+            assertNotEquals(monitor1, monitor2);
+        }
+
+        @Test
+        void phoneEqualsPositiveTest() {
+            Phone phone1 = Phone.builder()
+                    .id(uuid)
+                    .condition(Condition.DUSTY).build();
+            Phone phone2 = Phone.builder()
+                    .id(uuid)
+                    .condition(Condition.FINE).build();
+
+            assertEquals(phone1, phone2);
+        }
+
+        @Test
+        void phoneEqualsNegativeTest() {
+            Phone phone1 = Phone.builder()
+                    .id(uuid)
+                    .condition(Condition.DUSTY).build();
+            Phone phone2 = Phone.builder()
+                    .id(differentUuid)
+                    .condition(Condition.FINE).build();
+
+            assertNotEquals(phone1, phone2);
+        }
+    }
 }
