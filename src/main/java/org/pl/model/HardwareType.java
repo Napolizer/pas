@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.pl.exceptions.HardwareException;
 
@@ -11,6 +12,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Data
+@SuperBuilder
+public abstract class HardwareType {
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Access(AccessType.FIELD)
@@ -27,7 +30,7 @@ public abstract class HardwareType {
     @Transient
     private Condition condition;
 
-    public abstract double calculateRepairCost(int price) throws HardwareException;
+    public abstract double calculateRepairCost(double price) throws HardwareException;
 
     @Override
     public boolean equals(Object o) {

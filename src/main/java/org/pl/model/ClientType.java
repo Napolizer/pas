@@ -1,5 +1,14 @@
 package org.pl.model;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Range;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +21,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Data
+@SuperBuilder
 @Entity
 @Access(AccessType.FIELD)
 public abstract class ClientType {
@@ -23,13 +33,19 @@ public abstract class ClientType {
     )
     private UUID id;
     @NotNull
+    @Range(min = 0, max = 1)
     protected Float factor;
     @NotNull
+    @Min(value = 1)
     protected Integer maxRepairs;
     @NotBlank
     protected String typeName;
 
-    public double calculateDiscount(int price) throws ClientException {
+    public ClientType() {
+
+    }
+
+    public double calculateDiscount(double price) throws ClientException {
         if (price < 0) {
             throw new ClientException(ClientException.CLIENT_TYPE_CALCULATE_DISCOUNT_EXCEPTION);
         }

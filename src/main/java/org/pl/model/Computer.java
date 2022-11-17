@@ -1,5 +1,9 @@
 package org.pl.model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
+import org.pl.exceptions.HardwareException;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +11,7 @@ import lombok.*;
 import org.pl.exceptions.HardwareException;
 
 @Data
+@SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity

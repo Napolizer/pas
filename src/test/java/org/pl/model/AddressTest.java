@@ -1,76 +1,163 @@
 package org.pl.model;
 
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AddressTest {
-//    Address address;
-//
-//    @BeforeEach
-//    void setUp() {
-//        address = Address.builder()
-//                .number("123")
-//                .street("White")
-//                .city("Lodz")
-//                .build();
-//    }
-//
-//    @Test
-//    void getCity() {
-//        assertEquals("Lodz", address.getCity());
-//    }
-//
-//    @Test
-//    void getNumber() {
-//        assertEquals("123", address.getNumber());
-//    }
-//
-//    @Test
-//    void getStreet() {
-//        assertEquals("White", address.getStreet());
-//    }
-//
-//    @Test
-//    void setCity() {
-//        address.setCity("Warsaw");
-//        assertEquals("Warsaw", address.getCity());
-//    }
-//
-//    @Test
-//    void setNumber() {
-//        address.setNumber("321");
-//        assertEquals("321", address.getNumber());
-//    }
-//
-//    @Test
-//    void setStreet() {
-//        address.setStreet("Black");
-//        assertEquals("Black", address.getStreet());
-//    }
-//
-//    @Test
-//    void testEquals() {
-//        Address newAddress = Address.builder()
-//                .number("123")
-//                .city("London")
-//                .street("Tower")
-//                .build();
-//
-//        Address sameAddress = Address.builder()
-//                .number("123")
-//                .street("White")
-//                .city("Lodz")
-//                .build();
-//
-//        assertEquals(address, address);
-//        assertEquals(address, sameAddress);
-//        assertNotEquals(newAddress, address);
-//    }
-//
-//    @Test
-//    void testToString() {
-//        assertEquals("Address(city=Lodz, number=123, street=White)", address.toString());
-//    }
+    ValidatorFactory validatorFactory;
+    Validator validator;
+
+    Address validAddress;
+
+    @BeforeEach
+    void setup() {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+
+        validAddress = Address.builder()
+                .city("Warsaw")
+                .phoneNumber("123456789")
+                .street("Street")
+                .build();
+    }
+
+    @Test
+    void fieldCityPositiveTest() {
+        List<String> validTowns = List.of(
+                "Warsaw",
+                "Lodz",
+                "IO"
+        );
+        for (var city : validTowns) {
+            validAddress.setCity(city);
+            assertEquals(city, validAddress.getCity());
+            assertTrue(validator.validate(validAddress).isEmpty());
+        }
+    }
+
+    @Test
+    void fieldCityNegativeTest() {
+        List<String> invalidTowns = new ArrayList<>(List.of(
+                "a",
+                "",
+                "0",
+                "Warsaw0",
+                "1Lodz"
+        ));
+        invalidTowns.add(null);
+        for (var city : invalidTowns) {
+            validAddress.setCity(city);
+            assertEquals(city, validAddress.getCity());
+            assertFalse(validator.validate(validAddress).isEmpty());
+        }
+    }
+
+    @Test
+    void fieldPhoneNumberPositiveTest() {
+        List<String> validPhoneNumbers = List.of(
+                "123456789",
+                "987654321",
+                "000000000"
+        );
+        for (var phoneNumber : validPhoneNumbers) {
+            validAddress.setPhoneNumber(phoneNumber);
+            assertEquals(phoneNumber, validAddress.getPhoneNumber());
+            assertTrue(validator.validate(validAddress).isEmpty());
+        }
+    }
+
+    @Test
+    void fieldPhoneNumberNegativeTest() {
+        List<String> invalidPhoneNumbers = new ArrayList<>(List.of(
+                " 123456789",
+                "987654321 ",
+                "abcdefghi",
+                "12345678i",
+                "i12345678",
+                "         ",
+                ""
+        ));
+        invalidPhoneNumbers.add(null);
+        for (var phoneNumber : invalidPhoneNumbers) {
+            validAddress.setPhoneNumber(phoneNumber);
+            assertEquals(phoneNumber, validAddress.getPhoneNumber());
+            assertFalse(validator.validate(validAddress).isEmpty());
+        }
+    }
+
+    @Test
+    void fieldStreetPositiveTest() {
+        List<String> validStreets = List.of(
+                "ValidStreet",
+                " --- ",
+                "     I am still valid    "
+        );
+        for (var street : validStreets) {
+            validAddress.setStreet(street);
+            assertEquals(street, validAddress.getStreet());
+            assertTrue(validator.validate(validAddress).isEmpty());
+        }
+    }
+
+    @Test
+    void fieldStreetNegativeTest() {
+        List<String> invalidStreets = new ArrayList<>(List.of(
+                "",
+                " ",
+                "         "
+        ));
+        invalidStreets.add(null);
+        for (var street : invalidStreets) {
+            validAddress.setStreet(street);
+            assertEquals(street, validAddress.getStreet());
+            assertFalse(validator.validate(validAddress).isEmpty());
+        }
+    }
+
+    @Test
+    void equalsPositiveTest() {
+        Address address = Address.builder()
+                .id(UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c"))
+                .city("Warsaw")
+                .phoneNumber("123456789")
+                .street("Street")
+                .build();
+         Address addressWithSameId = Address.builder()
+                .id(UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c"))
+                .city("Warsaw")
+                .phoneNumber("123456789")
+                .street("Street")
+                .build();
+
+         assertEquals(address, addressWithSameId);
+    }
+
+    @Test
+    void equalsNegativeTest() {
+        Address address = Address.builder()
+                .id(UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c"))
+                .city("Warsaw")
+                .phoneNumber("123456789")
+                .street("Street")
+                .build();
+
+        Address addressWithDifferentId = Address.builder()
+                .id(UUID.fromString("6fc03087-d265-11e7-b8c6-83e29cd24f4c"))
+                .city("Warsaw")
+                .phoneNumber("123456789")
+                .street("Street")
+                .build();
+
+        assertNotEquals(address, addressWithDifferentId);
+        assertNotEquals(address, null);
+    }
 }
