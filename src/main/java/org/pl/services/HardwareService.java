@@ -1,5 +1,7 @@
 package org.pl.services;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.*;
@@ -8,12 +10,10 @@ import org.pl.repositories.HardwareRepository;
 import java.util.Objects;
 import java.util.UUID;
 
+@ApplicationScoped
 public class HardwareService {
-    private final HardwareRepository hardwareRepository;
-
-    public HardwareService(HardwareRepository hardwareRepository) {
-        this.hardwareRepository = hardwareRepository;
-    }
+    @Inject
+    private HardwareRepository hardwareRepository;
 
     public Hardware add(Hardware hardware) throws RepositoryException, HardwareException {
         if (hardware.getPrice() < 0)

@@ -1,20 +1,22 @@
 package org.pl.services;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.pl.exceptions.ClientException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.repositories.ClientRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@ApplicationScoped
 public class ClientService {
-    private final ClientRepository clientRepository;
-
-    public ClientService(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
+    @Inject
+    private ClientRepository clientRepository;
 
     public Client add(Client client) throws RepositoryException, ClientException {
         if (Objects.equals(client.getFirstName(), ""))
@@ -47,6 +49,13 @@ public class ClientService {
     public void archive(UUID id) throws RepositoryException {
         clientRepository.deleteClient(id);
     }
+
+    public List<Client> getAllCLients() {
+        return clientRepository.getAllClients();
+    }
+
+    public Client getClientByUsername(String username) {
+        return clientRepository.getCLientByUsername(username);
 
     public int getPresentSize() {
         return clientRepository.getClients(false).size();

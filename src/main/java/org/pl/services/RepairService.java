@@ -1,5 +1,7 @@
 package org.pl.services;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.pl.exceptions.ClientException;
 import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepairException;
@@ -13,12 +15,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@ApplicationScoped
 public class RepairService {
-    private final RepairRepository repairRepository;
-
-    public RepairService(RepairRepository repairRepository) {
-        this.repairRepository = repairRepository;
-    }
+    @Inject
+    private RepairRepository repairRepository;
 
     public Repair add(Client client, Hardware hardware) throws RepositoryException, RepairException {
         if (Objects.equals(client, null))
@@ -49,8 +49,11 @@ public class RepairService {
         return repairRepository.getClientRepairs(clientId);
     }
 
-    public void archive(UUID id) throws RepositoryException {
-        repairRepository.deleteRepair(id);
+    public boolean isRepairArchive(UUID id) throws RepositoryException {
+        return repairRepository.getRepairById(id).isArchive();
+    }
+    public Repair archivize(UUID id) throws RepositoryException {
+        return repairRepository.deleteRepair(id);
     }
 
     public void repair(UUID id) throws HardwareException, RepositoryException, ClientException {

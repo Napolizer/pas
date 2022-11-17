@@ -1,15 +1,23 @@
 package org.pl.repositories;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
+import org.hibernate.NonUniqueObjectException;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.model.Client_;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
@@ -65,5 +73,35 @@ public class ClientRepository {
         TypedQuery<Client> query = entityManager.createQuery(criteriaQuery);
         clients = query.getResultList();
         return clients;
+    }
+
+    public List<Client> getAllClients() {
+        List<Client> clients = new ArrayList<>();
+        try (Session session = entityManager.unwrap(Session.class)) {
+            CriteriaBuilder criteriaBuilder = (CriteriaBuilder) session.getCriteriaBuilder();
+            CriteriaQuery<Client> criteriaQuery = criteriaBuilder.createQuery(Client.class);
+            Root<Client> root = criteriaQuery.from(Client.class);
+            criteriaQuery.select(root);
+            Query<Client> query = session.createQuery((CriteriaUpdate) criteriaQuery);
+            clients = query.getResultList();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return clients;
+    }
+
+    public Client getCLientByUsername(String username) {
+        Client client = new Client();
+        try (Session session = entityManager.unwrap(Session.class)) {
+            CriteriaBuilder criteriaBuilder = (CriteriaBuilder) session.getCriteriaBuilder();
+            CriteriaQuery<Client> criteriaQuery = criteriaBuilder.createQuery(Client.class);
+            Root<Client> root = criteriaQuery.from(Client.class);
+            criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("username"), username));
+            Query<Client> query = session.createQuery((CriteriaUpdate) criteriaQuery);
+            client = query.getSingleResult();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return client;
     }
 }
