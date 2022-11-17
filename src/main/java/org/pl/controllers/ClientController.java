@@ -82,9 +82,9 @@ public class ClientController {
             return Response.ok(client).build();
         } catch (IllegalArgumentException e) {
             return Response.status(400, "Invalid data in request").build();
-       } /*catch (RepositoryException e) {
+       } catch (RepositoryException e) {
             return Response.status(404, "Client does not exist").build();
-        }*/
+        }
     }
 
     @PUT

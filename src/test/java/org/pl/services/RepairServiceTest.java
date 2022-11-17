@@ -13,6 +13,8 @@ import org.pl.model.*;
 import org.pl.repositories.RepairRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RepairServiceTest {
@@ -50,7 +52,9 @@ class RepairServiceTest {
                 .address(address1)
                 .balance(100.0)
                 .archive(false)
+                .username("Janek")
                 .clientType(new Premium())
+                .clientAccessType(ClientAccessType.USER)
                 .build();
         client2 = Client.builder()
                 .firstName("Kacper")

@@ -33,6 +33,8 @@ public class RepairService {
                         .client(client)
                         .hardware(hardware)
                         .archive(false)
+                        .startDate(new Date())
+                        .endDate(null)
                         .build());
     }
 

@@ -1,24 +1,30 @@
 package org.pl.repositories;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.pl.exceptions.RepositoryException;
-import org.pl.model.Client;
-import org.pl.model.Client_;
 import org.pl.model.Hardware;
 import org.pl.model.Hardware_;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
+@ApplicationScoped
 public class HardwareRepository {
     private EntityManager entityManager;
+
+    HardwareRepository() {
+        var emf = Persistence.createEntityManagerFactory("POSTGRES_REPAIR_PU");
+        entityManager = emf.createEntityManager();
+    }
 
     public Hardware saveHardware(Hardware hardware) throws RepositoryException {
         if (!entityManager.contains(hardware)) {

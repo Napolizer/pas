@@ -27,7 +27,7 @@ public abstract class HardwareType {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    private UUID id;
+    protected UUID id;
     @NotNull
     @Transient
     public Condition condition;

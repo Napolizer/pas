@@ -16,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @ApplicationScoped
 public class HardwareService {
+    @Inject
     private HardwareRepository hardwareRepository;
 
     public Hardware add(Hardware hardware) throws RepositoryException, HardwareException {

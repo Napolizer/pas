@@ -9,6 +9,7 @@ import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -100,6 +101,7 @@ public class RepairRepository {
             throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
         }
         repair.getHardware().setArchive(true);
+        repair.setEndDate(new Date());
         repair.setArchive(true);
 
         double price = repair.getHardware().getHardwareType().calculateRepairCost(repair.getHardware().getPrice());
