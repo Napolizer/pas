@@ -7,6 +7,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.pl.exceptions.HardwareException;
+import org.pl.exceptions.RepairException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.*;
 
@@ -137,6 +139,30 @@ class RepairReposioryTest {
         assertNotNull(repairRepository.saveRepair(repair1));
         assertNotNull(repairRepository.saveRepair(repair2));
         assertEquals(2, repairRepository.getClientRepairs(client.getId()).size());
+    }
+
+    @Test
+    void updateRepairPositiveTest() throws RepositoryException {
+        assertNotNull(repairRepository.saveRepair(repair));
+        assertNotNull(repairRepository.updateRepair(repair.getId(), repair1));
+        assertEquals(repairRepository.getRepairById(repair.getId()).getId(), repair.getId());
+        assertEquals(repairRepository.getRepairById(repair.getId()).getClient(), repair1.getClient());
+        assertEquals(repairRepository.getRepairById(repair.getId()).getHardware(), repair1.getHardware());
+        assertEquals(repairRepository.getRepairById(repair.getId()).getArchive(), repair1.isArchive());
+    }
+
+    @Test
+    void updateRepairNegativeTest() {
+        assertThrows(RepositoryException.class, () -> repairRepository.updateRepair(repair.getId(), repair1));
+    }
+
+    @Test
+    void repairPositiveTest() throws RepositoryException, HardwareException {
+        assertNotNull(repairRepository.saveRepair(repair));
+        repairRepository.repair(repair.getId());
+        assertTrue(repair.isArchive());
+        assertTrue(repair.getHardware().isArchive());
+        assertEquals(295.0, repair.getClient().getBalance());
     }
 
     @AfterAll

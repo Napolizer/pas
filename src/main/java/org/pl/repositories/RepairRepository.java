@@ -5,11 +5,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import lombok.AllArgsConstructor;
+import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
-import org.pl.model.Client;
-import org.pl.model.Client_;
-import org.pl.model.Repair;
-import org.pl.model.Repair_;
+import org.pl.model.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,6 +39,21 @@ public class RepairRepository {
         return null;
     }
 
+    public Repair updateRepair(UUID id, Repair repair) throws RepositoryException {
+        try {
+            Repair repairToChange = entityManager.find(Repair.class, id);
+            repairToChange.setClient(repair.getClient());
+            repairToChange.setHardware(repair.getHardware());
+            repairToChange.setArchive(repair.isArchive());
+            entityManager.getTransaction().begin();
+            entityManager.merge(repairToChange);
+            entityManager.getTransaction().commit();
+            return repairToChange;
+        } catch (IllegalArgumentException ex) {
+            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+        }
+    }
+
     public void deleteRepair(UUID id) throws RepositoryException {
         try {
             Repair repair = entityManager.find(Repair.class, id);
@@ -67,5 +80,34 @@ public class RepairRepository {
         TypedQuery<Repair> query = entityManager.createQuery(criteriaQuery);
         repairs = query.getResultList();
         return repairs;
+    }
+
+    public List<Repair> getRepairs(boolean condition) {
+        List<Repair> repairs;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Repair> criteriaQuery = criteriaBuilder.createQuery(Repair.class);
+        Root<Repair> root = criteriaQuery.from(Repair.class);
+        criteriaQuery.where(criteriaBuilder.equal(root.get(Repair_.ARCHIVE), condition));
+        TypedQuery<Repair> query = entityManager.createQuery(criteriaQuery);
+        repairs = query.getResultList();
+        return repairs;
+    }
+
+    public void repair(UUID id) throws RepositoryException, HardwareException {
+        Repair repair = getRepairById(id);
+        if (repair.isArchive() || repair.getClient().isArchive() || repair.getHardware().isArchive()) {
+            throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+        }
+        repair.getHardware().setArchive(true);
+        repair.setArchive(true);
+
+        double price = repair.getHardware().getHardwareType().calculateRepairCost(repair.getHardware().getPrice());
+        repair.getClient().setBalance(
+                repair.getClient().getBalance() - price
+        );
+
+        entityManager.getTransaction().begin();
+        entityManager.merge(repair);
+        entityManager.getTransaction().commit();
     }
 }
