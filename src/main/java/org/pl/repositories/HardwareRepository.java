@@ -1,7 +1,9 @@
 package org.pl.repositories;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.model.Hardware;
@@ -10,6 +12,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @AllArgsConstructor
+@NoArgsConstructor
+@ApplicationScoped
 public class HardwareRepository {
     private EntityManager entityManager;
 
