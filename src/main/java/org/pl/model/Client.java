@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.pl.exceptions.ClientException;
 
 import java.util.Objects;
@@ -20,7 +21,11 @@ import java.util.UUID;
 @Access(AccessType.FIELD)
 public class Client implements Entity {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     private UUID id;
     @NotBlank
     private String username;
@@ -58,7 +63,7 @@ public class Client implements Entity {
 
     @Override
     public boolean isArchive() {
-        return getArchive();
+        return archive;
     }
 
     @Override

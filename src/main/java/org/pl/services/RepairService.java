@@ -38,8 +38,8 @@ public class RepairService {
         return repairRepository.getClientRepairs(clientId);
     }
 
-    public Repair archivize(UUID id) throws RepositoryException {
-        return repairRepository.deleteRepair(id);
+    public void archivize(UUID id) throws RepositoryException {
+        repairRepository.deleteRepair(id);
     }
 
     public void repair(UUID id) throws HardwareException, RepositoryException, ClientException {

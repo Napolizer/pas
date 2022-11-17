@@ -1,111 +1,124 @@
 package org.pl.repositories;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
+import org.junit.jupiter.api.*;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Address;
 import org.pl.model.Basic;
 import org.pl.model.Client;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ClientRepositoryTest {
-//    ClientRepository repository;
-//    Client client;
-//    Client client1;
-//    Address address;
-//    ArrayList<Client> list;
-//
-//    @BeforeEach
-//    void setUp() {
-//        address = Address.builder()
-//                .street("White")
-//                .number("123")
-//                .city("Lodz")
-//                .build();
-//        client = Client.builder()
-//                .archive(true)
-//                .clientType(new Basic())
-//                .phoneNumber("535-535-535")
-//                .balance(100)
-//                .firstName("John")
-//                .lastName("Doe")
-//                .personalId(0)
-//                .address(address)
-//                .build();
-//        client1 = Client.builder()
-//                .archive(false)
-//                .clientType(new Basic())
-//                .phoneNumber("535-535-535")
-//                .balance(100)
-//                .firstName("John")
-//                .lastName("Doe")
-//                .personalId(1)
-//                .address(address)
-//                .build();
-//        list = new ArrayList<>();
-//        repository = new ClientRepository(list);
-//    }
-//
-//    @Test
-//    void getElementsTest() {
-//        assertNotNull(repository.getElements());
-//        assertEquals(0, repository.getElements().size());
-//    }
-//
-//    @Test
-//    void addTest() throws RepositoryException {
-//        assertThrows(RepositoryException.class, () -> repository.add(null));
-//        assertEquals(0, repository.getElements().size());
-//        repository.add(client);
-//        assertEquals(1, repository.getElements().size());
-//        assertNotNull(repository.getElements().get(0));
-//    }
-//
-//    @Test
-//    void archiviseTest() throws RepositoryException {
-//        repository.add(client);
-//        assertThrows(RepositoryException.class, () -> repository.archivise(client.getID()));
-//        repository.add(client1);
-//        repository.archivise(client1.getID());
-//        assertTrue(client1.isArchive());
-//    }
-//
-//    @Test
-//    void getTest() throws RepositoryException {
-//        assertThrows(RepositoryException.class, () -> repository.get(-1));
-//        assertThrows(RepositoryException.class, () -> repository.get(client.getID()));
-//        repository.add(client);
-//        assertEquals(client, repository.get(client.getID()));
-//        assertThrows(RepositoryException.class, () -> repository.get(client1.getID()));
-//    }
-//
-//    @Test
-//    void getSizeTest() throws RepositoryException {
-//        assertEquals(0, repository.getSize(true));
-//        assertEquals(0, repository.getSize(false));
-//        repository.add(client);
-//        assertEquals(0, repository.getSize(true));
-//        assertEquals(1, repository.getSize(false));
-//        repository.add(client1);
-//        assertEquals(1, repository.getSize(true));
-//        assertEquals(1, repository.getSize(false));
-//    }
-//
-//    @Test
-//    void isArchiveTest() throws RepositoryException {
-//        repository.add(client);
-//        assertTrue(repository.isArchive(client.getID()));
-//        assertThrows(RepositoryException.class, () -> repository.isArchive(client1.getID()));
-//    }
-//
-//    @Test
-//    void unarchiviseTest() throws RepositoryException {
-//        repository.add(client);
-//        repository.unarchivise(client.getID());
-//        assertFalse(repository.isArchive(client.getID()));
-//        assertThrows(RepositoryException.class, () -> repository.unarchivise(client1.getID()));
-//    }
+    private ClientRepository repository;
+    private Client client;
+    private Client client1;
+    private Address address;
+    private static EntityManager em;
+    private static EntityManagerFactory emf;
+
+
+    @BeforeAll
+    static void beforeAll() {
+        emf = Persistence.createEntityManagerFactory("POSTGRES_REPAIR_PU");
+        em = emf.createEntityManager();
+    }
+    @BeforeEach
+    void setUp() {
+        address = Address.builder()
+                .street("White")
+                .number("123")
+                .city("Lodz")
+                .build();
+        client = Client.builder()
+                .archive(false)
+                .clientType(new Basic())
+                .phoneNumber("535-535-535")
+                .balance(100.0)
+                .firstName("John")
+                .lastName("Doe")
+                .address(address)
+                .build();
+        client1 = Client.builder()
+                .archive(true)
+                .clientType(new Basic())
+                .phoneNumber("535-535-535")
+                .balance(100.0)
+                .firstName("John")
+                .lastName("Doe")
+                .address(address)
+                .build();
+        repository = new ClientRepository(em);
+    }
+
+    @Test
+    void saveClientPositiveTest() throws RepositoryException {
+        em.getTransaction().begin();
+        assertEquals(repository.saveClient(client), client);
+        em.getTransaction().commit();
+        assertEquals(repository.getClientById(client.getId()), client);
+    }
+    @Test
+    void saveClientNegativeTest() throws RepositoryException {
+        em.getTransaction().begin();
+        assertNotNull(repository.saveClient(client));
+        em.getTransaction().commit();
+        em.getTransaction().begin();
+        assertThrows(RepositoryException.class, () -> repository.saveClient(client));
+        em.getTransaction().commit();
+    }
+    @Test
+    void checkClientIdCreatedByDatabaseTest() throws RepositoryException {
+        em.getTransaction().begin();
+        assertNotNull(repository.saveClient(client));
+        assertNotNull(repository.saveClient(client1));
+        em.getTransaction().commit();
+        assertNotEquals(client.getId(), client1.getId());
+        assertEquals(client.getId().getClass(), UUID.class);
+        assertEquals(client1.getId().getClass(), UUID.class);
+    }
+
+    @Test
+    void getClientByIdPositiveTest() throws RepositoryException {
+        em.getTransaction().begin();
+        assertNotNull(repository.saveClient(client));
+        em.getTransaction().commit();
+        assertNotNull(repository.getClientById(client.getId()));
+    }
+
+    @Test
+    void getClientByIdNegativeTest() {
+        assertThrows(RepositoryException.class, () -> repository.getClientById(client.getId()));
+    }
+
+    @Test
+    void deleteClientPositiveTest() throws RepositoryException {
+        em.getTransaction().begin();
+        assertNotNull(repository.saveClient(client));
+        repository.deleteClient(client.getId());
+        em.getTransaction().commit();
+        assertTrue(repository.getClientById(client.getId()).isArchive());
+    }
+
+    @Test
+    void deleteClientNegativeTest() throws RepositoryException {
+        assertThrows(RepositoryException.class, () -> repository.deleteClient(client.getId()));
+        em.getTransaction().begin();
+        assertNotNull(repository.saveClient(client1));
+        em.getTransaction().commit();
+        assertThrows(RepositoryException.class, () -> repository.deleteClient(client.getId()));
+        assertTrue(repository.getClientById(client1.getId()).isArchive());
+    }
+
+    @AfterAll
+    static void afterAll() {
+        if (emf != null)
+            emf.close();
+    }
 }

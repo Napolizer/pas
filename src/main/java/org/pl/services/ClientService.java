@@ -13,7 +13,7 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public Client add(Client client) {
+    public Client add(Client client) throws RepositoryException {
         return clientRepository.saveClient(client);
     }
 

@@ -11,35 +11,37 @@ import java.util.UUID;
 public class ClientRepository {
     private EntityManager entityManager;
 
-    public Client saveClient(Client client) {
+    public Client saveClient(Client client) throws RepositoryException {
         if (!entityManager.contains(client)) {
             entityManager.persist(client);
-        } else {
-            entityManager.merge(client);
+            return client;
         }
-        return client;
+        throw new RepositoryException(RepositoryException.REPOSITORY_ADD_EXCEPTION);
     }
 
     public Client getClientById(UUID uuid) throws RepositoryException {
-        Client client = entityManager.find(Client.class, uuid);
-        if (client != null) {
-            return client;
+        try {
+            Client client = entityManager.find(Client.class, uuid);
+            if (client != null) {
+                return client;
+            }
+        } catch (IllegalArgumentException ex) {
+            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
         }
-        throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+        return null;
     }
 
     public void deleteClient(UUID id) throws RepositoryException {
-        entityManager.getTransaction().begin();
-        Client client = entityManager.find(Client.class, id);
-        if (client != null) {
-            if (!client.isArchive()) {
-                entityManager.merge(client);
-                client.setArchive(true);
-                entityManager.getTransaction().commit();
-                return;
-            }
-            throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+        try {
+            Client client = entityManager.find(Client.class, id);
+                if (!client.isArchive()) {
+                    entityManager.merge(client);
+                    client.setArchive(true);
+                } else {
+                    throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+                }
+        } catch (IllegalArgumentException ex) {
+            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
         }
-        throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
     }
 }

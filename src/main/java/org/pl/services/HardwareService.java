@@ -15,7 +15,7 @@ public class HardwareService {
         this.hardwareRepository = hardwareRepository;
     }
 
-    public Hardware create(Hardware hardware) {
+    public Hardware create(Hardware hardware) throws RepositoryException {
         return hardwareRepository.saveHardware(hardware);
     }
 

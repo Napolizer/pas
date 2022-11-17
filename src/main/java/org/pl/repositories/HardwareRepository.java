@@ -13,35 +13,37 @@ import java.util.UUID;
 public class HardwareRepository {
     private EntityManager entityManager;
 
-    public Hardware saveHardware(Hardware hardware) {
+    public Hardware saveHardware(Hardware hardware) throws RepositoryException {
         if (!entityManager.contains(hardware)) {
             entityManager.persist(hardware);
-        } else {
-            entityManager.merge(hardware);
+            return hardware;
         }
-        return hardware;
+        throw new RepositoryException(RepositoryException.REPOSITORY_ADD_EXCEPTION);
     }
 
     public Hardware getHardwareById(UUID uuid) throws RepositoryException {
-        Hardware hardware = entityManager.find(Hardware.class, uuid);
-        if (hardware != null) {
-            return hardware;
+        try {
+            Hardware hardware = entityManager.find(Hardware.class, uuid);
+            if (hardware != null) {
+                return hardware;
+            }
+        } catch (IllegalArgumentException ex) {
+            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
         }
-        throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+        return null;
     }
 
-    public Hardware deleteHardware(UUID id) throws RepositoryException {
-        entityManager.getTransaction().begin();
-        Hardware hardware = entityManager.find(Hardware.class, id);
-        if (hardware != null) {
+    public void deleteHardware(UUID id) throws RepositoryException {
+        try {
+            Hardware hardware = entityManager.find(Hardware.class, id);
             if (!hardware.isArchive()) {
                 entityManager.merge(hardware);
                 hardware.setArchive(true);
-                entityManager.getTransaction().commit();
-                return hardware;
+            } else {
+                throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
             }
-            throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+        } catch (IllegalArgumentException ex) {
+            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
         }
-        throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
     }
 }
