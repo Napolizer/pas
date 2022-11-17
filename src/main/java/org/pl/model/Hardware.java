@@ -1,12 +1,9 @@
 package org.pl.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -15,14 +12,23 @@ import static org.pl.model.Condition.FINE;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@jakarta.persistence.Entity
+@Access(AccessType.FIELD)
 public class Hardware implements Entity {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     private UUID id;
     @NotNull
     private Boolean archive;
     @NotNull
     private Integer price;
+    @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
     private HardwareType hardwareType;
 

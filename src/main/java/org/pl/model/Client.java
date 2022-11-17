@@ -1,12 +1,13 @@
 package org.pl.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.pl.exceptions.ClientException;
 
 import java.util.Objects;
@@ -14,9 +15,17 @@ import java.util.UUID;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@jakarta.persistence.Entity
+@Access(AccessType.FIELD)
 public class Client implements Entity {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     private UUID id;
     @NotBlank
     private String username;
@@ -30,8 +39,10 @@ public class Client implements Entity {
     private String lastName;
     @NotBlank
     private String phoneNumber;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @NotNull
     private ClientType clientType;
+    @Embedded
     @NotNull
     private Address address;
     @NotNull
@@ -52,7 +63,7 @@ public class Client implements Entity {
 
     @Override
     public boolean isArchive() {
-        return getArchive();
+        return archive;
     }
 
     @Override

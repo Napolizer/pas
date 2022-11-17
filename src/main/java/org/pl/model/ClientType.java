@@ -9,6 +9,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Range;
+import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 import org.pl.exceptions.ClientException;
 
 import java.util.Objects;
@@ -16,9 +22,15 @@ import java.util.UUID;
 
 @Data
 @SuperBuilder
+@Entity
+@Access(AccessType.FIELD)
 public abstract class ClientType {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     private UUID id;
     @NotNull
     @Range(min = 0, max = 1)
