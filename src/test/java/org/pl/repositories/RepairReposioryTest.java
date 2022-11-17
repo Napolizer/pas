@@ -3,15 +3,14 @@ package org.pl.repositories;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import jakarta.persistence.Query;
+import org.junit.jupiter.api.*;
 import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepairException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.*;
 
+import java.util.Date;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,6 +56,8 @@ class RepairRepositoryTest {
                 .archive(false)
                 .build();
         client1 = Client.builder()
+                .username("JohnDoe")
+                .clientAccessType(ClientAccessType.EMPLOYEE)
                 .clientType(new Premium())
                 .address(address)
                 .balance(300.0)
@@ -78,6 +79,8 @@ class RepairRepositoryTest {
                 .archive(false)
                 .build();
         repair1 = Repair.builder()
+                .startDate(new Date())
+                .endDate(new Date())
                 .client(client)
                 .hardware(hardware)
                 .archive(true)
@@ -169,6 +172,27 @@ class RepairRepositoryTest {
         assertTrue(repair.isArchive());
         assertTrue(repair.getHardware().isArchive());
         assertEquals(295.0, repair.getClient().getBalance());
+    }
+
+    @Test
+    void getAllRepairsTest() throws RepositoryException {
+        assertEquals(0, repairRepository.getAllRepairs().size());
+        assertNotNull(repairRepository.saveRepair(repair));
+        assertEquals(1, repairRepository.getAllRepairs().size());
+        assertNotNull(repairRepository.saveRepair(repair1));
+        assertEquals(2, repairRepository.getAllRepairs().size());
+    }
+
+    @AfterEach
+    void afterEach() {
+        Query query1 = em.createQuery("DELETE FROM Repair ");
+        Query query2 = em.createQuery("DELETE FROM Client ");
+        Query query3 = em.createQuery("DELETE FROM Hardware ");
+        em.getTransaction().begin();
+        query1.executeUpdate();
+        query2.executeUpdate();
+        query3.executeUpdate();
+        em.getTransaction().commit();
     }
 
     @AfterAll

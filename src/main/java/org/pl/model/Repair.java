@@ -40,7 +40,6 @@ public class Repair implements Entity {
     private Hardware hardware;
     @NotNull
     private Date startDate;
-    @NotNull
     private Date endDate;
 
     public double calculateRepairCost() throws HardwareException {

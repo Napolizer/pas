@@ -38,6 +38,8 @@ public class ClientRepositoryTest {
                 .city("Lodz")
                 .build();
         client = Client.builder()
+                .username("JohnDoe")
+                .clientAccessType(ClientAccessType.USER)
                 .archive(false)
                 .clientType(new Basic())
                 .phoneNumber("535-535-535")
@@ -91,6 +93,23 @@ public class ClientRepositoryTest {
     }
 
     @Test
+    void updateClientPositiveTest() throws RepositoryException {
+        assertNotNull(repository.saveClient(client));
+        assertNotNull(repository.updateClient(client.getId(), client1));
+        assertEquals(repository.getClientById(client.getId()).getId(), client.getId());
+        assertEquals(repository.getClientById(client.getId()).getClientType().getFactor(), client1.getClientType().getFactor());
+        assertEquals(repository.getClientById(client.getId()).getClientType().getMaxRepairs(), client1.getClientType().getMaxRepairs());
+        assertEquals(repository.getClientById(client.getId()).getClientType().getTypeName(), client1.getClientType().getTypeName());
+        assertEquals(repository.getClientById(client.getId()).getBalance(), client1.getBalance());
+        assertEquals(repository.getClientById(client.getId()).getArchive(), client1.isArchive());
+        assertEquals(repository.getClientById(client.getId()).getFirstName(), client1.getFirstName());
+        assertEquals(repository.getClientById(client.getId()).getLastName(), client1.getLastName());
+        assertEquals(repository.getClientById(client.getId()).getPhoneNumber(), client1.getPhoneNumber());
+        assertEquals(repository.getClientById(client.getId()).getAddress(), client1.getAddress());
+        assertEquals(repository.getClientById(client.getId()).getClientAccessType(), client1.getClientAccessType());
+    }
+
+    @Test
     void deleteClientPositiveTest() throws RepositoryException {
         assertNotNull(repository.saveClient(client));
         repository.deleteClient(client.getId());
@@ -120,6 +139,48 @@ public class ClientRepositoryTest {
         assertEquals(0, repository.getClients(true).size());
         assertNotNull(repository.saveClient(client1));
         assertEquals(1, repository.getClients(true).size());
+    }
+
+    @Test
+    void getAllClientsTest() throws RepositoryException {
+        assertEquals(0, repository.getAllClients().size());
+        assertNotNull(repository.saveClient(client));
+        assertEquals(1, repository.getAllClients().size());
+        assertNotNull(repository.saveClient(client1));
+        assertEquals(2, repository.getAllClients().size());
+    }
+
+    @Test
+    void getClientByUsernamePositiveTest() throws RepositoryException {
+        assertNotNull(repository.saveClient(client));
+        assertEquals(repository.getClientByUsername(client.getUsername()), client);
+    }
+
+    @Test
+    void getClientByUsernameNegativeTest() {
+        assertThrows(RepositoryException.class, () -> repository.getClientByUsername(client.getUsername()));
+    }
+
+    @Test
+    void getClientsByUsernameTest() throws RepositoryException {
+        assertEquals(0, repository.getClientsByUsername("oh").size());
+        assertNotNull(repository.saveClient(client));
+        assertEquals(1, repository.getClientsByUsername("oh").size());
+        assertNotNull(repository.saveClient(client1));
+        assertEquals(2, repository.getClientsByUsername("oh").size());
+    }
+
+    @Test
+    void restoreClientPositiveTest() throws RepositoryException {
+        assertNotNull(repository.saveClient(client));
+        assertNotNull(repository.deleteClient(client.getId()));
+        assertNotNull(repository.restoreClient(client.getId()));
+        assertFalse(repository.getClientById(client.getId()).isArchive());
+    }
+
+    @Test
+    void restoreClientNegativeTest() {
+        assertThrows(RepositoryException.class, () -> repository.restoreClient(client.getId()));
     }
 
     @AfterEach

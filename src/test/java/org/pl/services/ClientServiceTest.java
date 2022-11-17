@@ -4,13 +4,17 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.*;
 import org.pl.exceptions.ClientException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Address;
 import org.pl.model.Basic;
 import org.pl.model.Client;
+import org.pl.model.ClientAccessType;
 import org.pl.repositories.ClientRepository;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,6 +48,8 @@ public class ClientServiceTest {
                 .number("34")
                 .build();
         client = Client.builder()
+                .username("JohnDoe")
+                .clientAccessType(ClientAccessType.USER)
                 .archive(false)
                 .clientType(new Basic())
                 .phoneNumber("535-535-535")
@@ -53,6 +59,8 @@ public class ClientServiceTest {
                 .address(address)
                 .build();
         client1 = Client.builder()
+                .username("doe")
+                .clientAccessType(ClientAccessType.EMPLOYEE)
                 .archive(true)
                 .clientType(new Basic())
                 .phoneNumber("535-535-535")
@@ -62,6 +70,8 @@ public class ClientServiceTest {
                 .address(address)
                 .build();
         client2 = Client.builder()
+                .username("johny")
+                .clientAccessType(ClientAccessType.ADMINISTRATOR)
                 .archive(false)
                 .clientType(new Basic())
                 .phoneNumber("535-535-535")
@@ -71,6 +81,8 @@ public class ClientServiceTest {
                 .address(address2)
                 .build();
         client3 = Client.builder()
+                .username("DoeJohn")
+                .clientAccessType(ClientAccessType.USER)
                 .archive(false)
                 .clientType(new Basic())
                 .phoneNumber("535-535-535")
@@ -105,14 +117,6 @@ public class ClientServiceTest {
                 ()-> clientService.add(Client.builder().phoneNumber("").build()));
         assertThrows(ClientException.class,
                 ()-> clientService.add(Client.builder().clientType(null).build()));
-    }
-
-    @Test
-    void clientServiceToStringTest() throws RepositoryException, ClientException {
-        clientService.add(client);
-        String idString = client.getId().toString();
-        String expectedInfo = "Client(id=" + idString + ", username=null, archive=false, balance=0.0, firstName=John, lastName=Doe, phoneNumber=535-535-535, clientType=Basic(), address=Address(city=Lodz, number=123, street=White), clientAccessType=null)";
-        assertEquals(expectedInfo, clientService.getInfo(client.getId()));
     }
 
     @Test
@@ -162,6 +166,28 @@ public class ClientServiceTest {
         assertEquals(0.0, clientService.getClientBalance(client.getId()));
         clientService.get(client.getId()).changeBalance(100);
         assertEquals(100.0, clientService.getClientBalance(client.getId()));
+    }
+
+    @Test
+    void getClientByUsernamePositiveTest() throws RepositoryException, ClientException {
+        clientService.add(client);
+        assertEquals(client, clientService.getClientByUsername(client.getUsername()));
+    }
+
+    @Test
+    void getClientByUsernameNegativeTest() {
+        assertThrows(RepositoryException.class, () -> clientService.getClientByUsername(client.getUsername()));
+    }
+
+    @Test
+    void getClientsByUsernameTest() throws RepositoryException, ClientException {
+        assertEquals(0, clientService.getClientsByUsername("oh").size());
+        clientService.add(client);
+        assertEquals(1, clientService.getClientsByUsername("oh").size());
+        clientService.add(client1);
+        assertEquals(1, clientService.getClientsByUsername("oh").size());
+        clientService.add(client2);
+        assertEquals(2, clientService.getClientsByUsername("oh").size());
     }
 
     @AfterEach

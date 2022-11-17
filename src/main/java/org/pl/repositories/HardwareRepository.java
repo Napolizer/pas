@@ -48,6 +48,22 @@ public class HardwareRepository {
         return null;
     }
 
+    public Hardware updateHardware(UUID id, @NotNull Hardware hardware) throws RepositoryException {
+        try {
+            Hardware hardwareToChange = entityManager.find(Hardware.class, id);
+            hardwareToChange.setHardwareType(hardware.getHardwareType());
+            hardwareToChange.setPrice(hardware.getPrice());
+            hardwareToChange.setArchive(hardware.isArchive());
+            hardwareToChange.getHardwareType().setCondition(hardware.getHardwareType().getCondition());
+            entityManager.getTransaction().begin();
+            entityManager.merge(hardwareToChange);
+            entityManager.getTransaction().commit();
+            return hardwareToChange;
+        } catch (IllegalArgumentException ex) {
+            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+        }
+    }
+
     public void deleteHardware(UUID id) throws RepositoryException {
         try {
             Hardware hardware = entityManager.find(Hardware.class, id);

@@ -77,11 +77,9 @@ public class HardwareServiceTest {
     }
 
     @Test
-    void hardwareServiceGetInfoTest() throws HardwareException, RepositoryException {
+    void isHardwareArchiveTest() throws RepositoryException, HardwareException {
         hardwareService.add(hardware);
-        String idString = hardware.getId().toString();
-        String expectedInfo = "Hardware(id=" + idString + ", archive=false, price=1000, hardwareType=Computer(condition=FINE))";
-        assertEquals(expectedInfo, hardwareService.getInfo(hardware.getId()));
+        assertFalse(hardwareService.isHardwareArchive(hardware.getId()));
     }
 
     @Test

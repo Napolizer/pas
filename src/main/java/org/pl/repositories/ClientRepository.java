@@ -43,6 +43,29 @@ public class ClientRepository {
         return null;
     }
 
+    public Client updateClient(UUID id, Client client) throws RepositoryException {
+        try {
+            Client clientToChange = entityManager.find(Client.class, id);
+            clientToChange.setFirstName(client.getFirstName());
+            clientToChange.setLastName(client.getLastName());
+            clientToChange.setBalance(client.getBalance());
+            clientToChange.setAddress(client.getAddress());
+            clientToChange.setPhoneNumber(client.getPhoneNumber());
+            clientToChange.setArchive(client.isArchive());
+            clientToChange.setUsername(client.getUsername());
+            clientToChange.getClientType().setTypeName(client.getClientType().getTypeName());
+            clientToChange.getClientType().setFactor(client.getClientType().getFactor());
+            clientToChange.getClientType().setMaxRepairs(client.getClientType().getMaxRepairs());
+            clientToChange.setClientAccessType(client.getClientAccessType());
+            entityManager.getTransaction().begin();
+            entityManager.merge(clientToChange);
+            entityManager.getTransaction().commit();
+            return clientToChange;
+        } catch (IllegalArgumentException ex) {
+            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+        }
+    }
+
     public void deleteClient(UUID id) throws RepositoryException {
         try {
             Client client = entityManager.find(Client.class, id);
@@ -94,8 +117,8 @@ public class ClientRepository {
         TypedQuery<Client> query = entityManager.createQuery(criteriaQuery);
         try {
             client = query.getSingleResult();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (NoResultException ex) {
+            throw new RepositoryException(RepositoryException.REPOSITORY_GET_BY_USERNAME_EXCEPTION);
         }
         return client;
     }

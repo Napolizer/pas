@@ -34,8 +34,8 @@ public class ClientController {
     @GET
     @Path("/username/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getClientByUsername(@PathParam("username")String username, @QueryParam("strict")String strict) {
-        //try {
+    public Response getClientByUsername(@PathParam("username")String username, @QueryParam("strict")String strict) throws RepositoryException {
+        try {
             if (Objects.equals(strict, "true")) {
                 Client client = clientService.getClientByUsername(username);
                 return Response.ok(client).build();

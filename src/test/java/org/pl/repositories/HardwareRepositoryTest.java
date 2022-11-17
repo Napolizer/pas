@@ -13,12 +13,14 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.pl.model.Condition.AVERAGE;
 import static org.pl.model.Condition.DUSTY;
 
 public class HardwareRepositoryTest {
     private HardwareRepository repository;
     private Hardware hardware;
     private Hardware hardware1;
+    private HardwareType computer, console;
     private static EntityManagerFactory emf;
     private static EntityManager em;
 
@@ -30,14 +32,16 @@ public class HardwareRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        computer = Computer.builder().condition(DUSTY).build();
+        console = Console.builder().condition(DUSTY).build();
         hardware = Hardware.builder()
                 .archive(false)
-                .hardwareType(Computer.builder().condition(DUSTY).build())
+                .hardwareType(computer)
                 .price(100)
                 .build();
         hardware1 = Hardware.builder()
                 .archive(true)
-                .hardwareType(new Console(DUSTY))
+                .hardwareType(console)
                 .price(200)
                 .build();
         repository = new HardwareRepository(em);
@@ -75,6 +79,16 @@ public class HardwareRepositoryTest {
         assertThrows(RepositoryException.class, () -> repository.getHardwareById(hardware.getId()));
     }
 
+//    @Test
+//    void updateHardwarePositiveTest() throws RepositoryException {
+//        assertNotNull(repository.saveHardware(hardware));
+//        assertNotNull(repository.updateHardware(hardware.getId(), hardware1));
+//        assertEquals(repository.getHardwareById(hardware.getId()).getId(), hardware1.getId());
+//        assertEquals(repository.getHardwareById(hardware.getId()).getPrice(), hardware1.getPrice());
+//        assertEquals(repository.getHardwareById(hardware.getId()).isArchive(), hardware1.isArchive());
+//        assertEquals(repository.getHardwareById(hardware.getId()).getHardwareType().getCondition(), hardware1.getHardwareType().getCondition());
+//    }
+
     @Test
     void deleteHardwarePositiveTest() throws RepositoryException {
         assertNotNull(repository.saveHardware(hardware));
@@ -109,9 +123,11 @@ public class HardwareRepositoryTest {
 
     @AfterEach
     void afterEach() {
-        Query query = em.createQuery("DELETE FROM Hardware ");
+        Query query1 = em.createQuery("DELETE FROM Hardware ");
+        Query query2 = em.createQuery("DELETE FROM HardwareType ");
         em.getTransaction().begin();
-        query.executeUpdate();
+        query1.executeUpdate();
+        query2.executeUpdate();
         em.getTransaction().commit();
     }
 

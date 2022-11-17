@@ -9,8 +9,6 @@ import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.repositories.ClientRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -57,7 +55,7 @@ public class ClientService {
         return clientRepository.getAllClients();
     }
 
-    public Client getClientByUsername(String username) {
+    public Client getClientByUsername(String username) throws RepositoryException {
         return clientRepository.getClientByUsername(username);
     }
 

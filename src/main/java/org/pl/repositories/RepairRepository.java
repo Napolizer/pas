@@ -84,6 +84,17 @@ public class RepairRepository {
         return repairs;
     }
 
+    public List<Repair> getAllRepairs() {
+        List<Repair> repairs;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Repair> criteriaQuery = criteriaBuilder.createQuery(Repair.class);
+        Root<Repair> root = criteriaQuery.from(Repair.class);
+        criteriaQuery.select(root);
+        TypedQuery<Repair> query = entityManager.createQuery(criteriaQuery);
+        repairs = query.getResultList();
+        return repairs;
+    }
+
     public List<Repair> getRepairs(boolean condition) {
         List<Repair> repairs;
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

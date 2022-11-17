@@ -57,6 +57,8 @@ class RepairServiceTest {
                 .clientAccessType(ClientAccessType.USER)
                 .build();
         client2 = Client.builder()
+                .username("kapi")
+                .clientAccessType(ClientAccessType.EMPLOYEE)
                 .firstName("Kacper")
                 .lastName("Jackowski")
                 .phoneNumber("987654321")
@@ -95,16 +97,6 @@ class RepairServiceTest {
                 ()-> repairService.add(null, hardware1));
         assertThrows(RepairException.class,
                 ()-> repairService.add(client1, null));
-    }
-
-    @Test
-    void repairServiceGetInfoTest() throws RepositoryException, RepairException {
-        Repair createdRepair = repairService.add(client1, hardware1);
-        String repairIdString = createdRepair.getId().toString();
-        String clientIdString = createdRepair.getClient().getId().toString();
-        String hardwareIdString = createdRepair.getHardware().getId().toString();
-        String expectedInfo = "Repair(id=" + repairIdString + ", archive=false, client=Client(id=" + clientIdString + ", username=null, archive=false, balance=null, firstName=Szymon, lastName=Kowalski, phoneNumber=123456789, clientType=Premium(), address=Address(city=Warszawa, number=34, street=Uliczna), clientAccessType=null), hardware=Hardware(id=" + hardwareIdString + ", archive=false, price=2000, hardwareType=Computer(condition=DUSTY)), startDate=null, endDate=null)";
-        assertEquals(expectedInfo, repairService.getInfo(createdRepair.getId()));
     }
 
     @Test
@@ -166,7 +158,7 @@ class RepairServiceTest {
         assertTrue(hardware1.isArchive());
         assertFalse(hardware2.isArchive());
         repairService.repair(createdRepair1.getId());
-        assertTrue(client1.isArchive());
+        assertFalse(client1.isArchive());
         assertTrue(hardware1.isArchive());
         assertTrue(hardware2.isArchive());
     }
@@ -175,18 +167,26 @@ class RepairServiceTest {
     void repairServiceChangeBalanceTest() throws RepositoryException, RepairException, HardwareException, ClientException {
         Repair createdRepair = repairService.add(client1, hardware1);
         Repair createdRepair1 = repairService.add(client1, hardware2);
-        assertEquals(0, client1.getBalance());
+        assertEquals(100.0, client1.getBalance());
         repairService.repair(createdRepair1.getId());
-        assertEquals(-2160, client1.getBalance());
+        assertEquals(-2300, client1.getBalance());
         repairService.repair(createdRepair.getId());
-        assertEquals(-2164.5, client1.getBalance());
+        assertEquals(-2305.0, client1.getBalance());
     }
 
     @AfterEach
     void afterEach() {
-        Query query = em.createQuery("DELETE FROM Repair ");
+        Query query1 = em.createQuery("DELETE FROM Repair ");
+        Query query2 = em.createQuery("DELETE FROM Client ");
+        Query query3 = em.createQuery("DELETE FROM Hardware ");
+        Query query4 = em.createQuery("DELETE FROM HardwareType ");
+        Query query5 = em.createQuery("DELETE FROM ClientType ");
         em.getTransaction().begin();
-        query.executeUpdate();
+        query1.executeUpdate();
+        query2.executeUpdate();
+        query3.executeUpdate();
+        query4.executeUpdate();
+        query5.executeUpdate();
         em.getTransaction().commit();
     }
 
