@@ -1,17 +1,18 @@
 package org.pl.services;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.repositories.ClientRepository;
 
 import java.util.UUID;
 
+@ApplicationScoped
+@NoArgsConstructor
 public class ClientService {
-    private final ClientRepository clientRepository;
-
-    public ClientService(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
+    @Inject private ClientRepository clientRepository;
 
     public Client add(Client client) throws RepositoryException {
         return clientRepository.create(client);
