@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 import org.pl.exceptions.HardwareException;
 
 import java.util.Objects;
@@ -16,9 +17,14 @@ import java.util.UUID;
 @DiscriminatorColumn(name = "type")
 public abstract class HardwareType {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     private UUID id;
     @NotNull
+    @Transient
     private Condition condition;
 
     public abstract double calculateRepairCost(int price) throws HardwareException;
