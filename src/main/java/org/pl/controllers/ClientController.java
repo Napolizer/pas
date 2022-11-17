@@ -7,7 +7,7 @@ import jakarta.ws.rs.core.Response;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.services.ClientService;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,27 +31,30 @@ public class ClientController {
         }
     }
 
-//    @GET
-//    @Path("/username/{username}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getClientByUsername(@PathParam("username")String username, @QueryParam("strict")String strict) {
-//        try {
-//            if (Objects.equals(strict, "true")) {
-//                Client client = null; //TODO dodac metode zwracajaca jednego uzytkownika i liste po username
-//                return Response.ok(client).build();
-//            } else {
-//                ArrayList<Client> clients = null;
-//                return Response.ok(clients).build();
-//            }
-//        } catch (RepositoryException e) {
-//            return Response.status(404, "Client not found").build();
-//        }
-//    }
+    @GET
+    @Path("/username/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getClientByUsername(@PathParam("username")String username, @QueryParam("strict")String strict) {
+        //try {
+            if (Objects.equals(strict, "true")) {
+                Client client = clientService.getClientByUsername(username);
+                return Response.ok(client).build();
+            } else if (Objects.equals(strict, "false")) {
+                List<Client> clients = null;
+                //clientService.getClientsByUsername(username)
+                return Response.ok(clients).build();
+            } else {
+                return Response.status(400, "Given query parameter is invalid").build();
+            }
+        /*} catch (RepositoryException e) {
+            return Response.status(404, "Client not found").build();
+        }*/
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllClients() {
-        ArrayList<Client> clients = null; //TODO dodac metode zwracającą wszystkich klientów
+        List<Client> clients = clientService.getAllCLients();
         return Response.ok(clients).build();
     }
 

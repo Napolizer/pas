@@ -6,6 +6,8 @@ import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.repositories.ClientRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -31,5 +33,13 @@ public class ClientService {
 
     public void archivize(UUID id) throws RepositoryException {
         clientRepository.deleteClient(id);
+    }
+
+    public List<Client> getAllCLients() {
+        return clientRepository.getAllClients();
+    }
+
+    public Client getClientByUsername(String username) {
+        return clientRepository.getCLientByUsername(username);
     }
 }
