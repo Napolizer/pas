@@ -1,7 +1,6 @@
 package org.pl.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.pl.exceptions.ClientException;
@@ -13,9 +12,7 @@ import org.pl.model.Hardware;
 import org.pl.model.Repair;
 import org.pl.repositories.RepairRepository;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -71,5 +68,35 @@ public class RepairService {
 
     public int getArchiveSize() {
         return repairRepository.getRepairs(true).size();
+    }
+
+    public List<Repair> getClientsPastRepairs(UUID uuid) {
+        List<Repair> pastRepairs = new ArrayList<>();
+        List<Repair> repairs = repairRepository.getClientRepairs(uuid);
+        for (Repair repair : repairs) {
+            if (repair.isArchive()) {
+                pastRepairs.add(repair);
+            }
+        }
+        return pastRepairs;
+    }
+
+    public List<Repair> getClientsPresentRepairs(UUID uuid) {
+        List<Repair> presentRepairs = new ArrayList<>();
+        List<Repair> repairs = repairRepository.getClientRepairs(uuid);
+        for (Repair repair : repairs) {
+            if (!repair.isArchive()) {
+                presentRepairs.add(repair);
+            }
+        }
+        return presentRepairs;
+    }
+
+    public List<Repair> getAllRepairs() {
+        return repairRepository.getAllRepairs();
+    }
+
+    public Repair updateRepair(UUID uuid, Repair repair) throws RepositoryException {
+        return repairRepository.updateRepair(uuid, repair);
     }
 }

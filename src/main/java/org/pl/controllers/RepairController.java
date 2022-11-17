@@ -9,6 +9,7 @@ import org.pl.model.Hardware;
 import org.pl.model.Repair;
 import org.pl.services.RepairService;
 
+import java.util.List;
 import java.util.UUID;
 
 @Path("repair")
@@ -34,22 +35,21 @@ public class RepairController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllRepairs() {
-        //ArrayList<Repair> hardwares = repairService.getAll(); //TODO dodac metode zwracającą wszystkie naprawy
-        return Response.ok().build(); //wyrzucic liste w odpowiedzi
+        List<Repair> repairs = repairService.getAllRepairs();
+        return Response.ok(repairs).build();
     }
 
-//    @POST
-//    @Produces(MediaType.TEXT_PLAIN)
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response addRepair(Repair repair) {
-//        try {
-//            repairService.add(repair);
-//            return Response.status(201, "Created successfully").build();
-//        } catch (RepositoryException e) {
-//            return Response.status(400, "Repair already exists").build();
-//            //przy obecnej implementacji tego bledu nie powinno wyrzucic, bo repair jest nadpisywany
-//        }
-//    }
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addRepair(Repair repair) {
+        try {
+            repairService.add(repair);
+            return Response.status(201, "Created successfully").build();
+        } catch (RepositoryException e) {
+            return Response.status(400, "Repair already exists").build();
+        }
+    }
 
     @PUT
     @Path("id/{id}")
@@ -57,14 +57,13 @@ public class RepairController {
     public Response updateRepair(Repair repair, @PathParam("id")String id) {
         try {
             UUID uuid = UUID.fromString(id);
-            //repairService.update(uuid, repair);
-            //brak metody do updatu hardware
+            repairService.updateRepair(uuid, repair);
             return Response.ok(repair).build();
         } catch (IllegalArgumentException e) {
             return Response.status(400, "Invalid data in request").build();
-        } /*catch (RepositoryException e) {
+        } catch (RepositoryException e) {
             return Response.status(404, "Repair does not exist").build();
-        }*/
+        }
     }
 
     @DELETE
@@ -72,7 +71,6 @@ public class RepairController {
     public Response deleteRepair(@PathParam("id")String id) {
         try {
             UUID uuid = UUID.fromString(id);
-            // tutaj pytanie czy repair archive = false oznacza ze jest przypisany do repair
             if (!repairService.isRepairArchive(uuid)) {
                 repairService.archivize(uuid);
                 return Response.ok("Deleted Successfully").build();

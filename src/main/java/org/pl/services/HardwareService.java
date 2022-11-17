@@ -9,6 +9,8 @@ import org.pl.exceptions.RepositoryException;
 import org.pl.model.*;
 import org.pl.repositories.HardwareRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -49,5 +51,23 @@ public class HardwareService {
 
     public int getArchiveSize() {
         return hardwareRepository.getHardwareList(true).size();
+    }
+
+    public List<Hardware> getAllHardwares() {
+        return hardwareRepository.getAllHardwares();
+    }
+
+    public Hardware updateHardware(UUID uuid, Hardware hardware) throws RepositoryException {
+        return hardwareRepository.updateHardware(uuid, hardware);
+    }
+
+    public HardwareType getHardwareTypeById(UUID uuid) throws RepositoryException {
+        List<Hardware> hardwares = hardwareRepository.getAllHardwares();
+        for (Hardware hardware : hardwares) {
+            if (hardware.getHardwareType().getId() == uuid) {
+                return hardware.getHardwareType();
+            }
+        }
+        throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
     }
 }

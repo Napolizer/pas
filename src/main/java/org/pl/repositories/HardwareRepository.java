@@ -90,4 +90,15 @@ public class HardwareRepository {
         hardwareList = query.getResultList();
         return hardwareList;
     }
+
+    public List<Hardware> getAllHardwares() {
+        List<Hardware> hardwares;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Hardware> criteriaQuery = criteriaBuilder.createQuery(Hardware.class);
+        Root<Hardware> root = criteriaQuery.from(Hardware.class);
+        criteriaQuery.select(root);
+        TypedQuery<Hardware> query = entityManager.createQuery(criteriaQuery);
+        hardwares = query.getResultList();
+        return hardwares;
+    }
 }

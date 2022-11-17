@@ -25,7 +25,7 @@ public class ClientTypeController {
     public Response getClientTypeById(@PathParam("id")String id) {
         try {
             UUID uuid = UUID.fromString(id);
-            Client clientType = clientService.get(uuid); //TODO Stworzyc w repo metode do szukania clientType po id
+            ClientType clientType = clientService.getClientTypeById(uuid);
             return Response.ok(clientType).build();
         } catch (IllegalArgumentException e) {
             return Response.status(400, "Given id is invalid").build();

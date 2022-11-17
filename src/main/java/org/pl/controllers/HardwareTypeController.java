@@ -17,7 +17,7 @@ import java.util.UUID;
 @Path("/hardware-type")
 public class HardwareTypeController {
     @Inject
-    private HardwareService hardwareService; //something tu nie teges
+    private HardwareService hardwareService;
 
     @GET
     @Path("/id/{id}")
@@ -25,7 +25,7 @@ public class HardwareTypeController {
     public Response getHardwareTypeById(@PathParam("id")String id) {
         try {
             UUID uuid = UUID.fromString(id);
-            Hardware hardwareType = hardwareService.get(uuid); //TODO Stworzyc w repo metode do szukania hardwareType po id
+            HardwareType hardwareType = hardwareService.getHardwareTypeById(uuid);
             return Response.ok(hardwareType).build();
         } catch (IllegalArgumentException e) {
             return Response.status(400, "Given id is invalid").build();

@@ -1,19 +1,14 @@
 package org.pl.repositories;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.CriteriaUpdate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import lombok.AllArgsConstructor;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.model.Client_;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,7 +61,7 @@ public class ClientRepository {
         }
     }
 
-    public void deleteClient(UUID id) throws RepositoryException {
+    public Client deleteClient(UUID id) throws RepositoryException {
         try {
             Client client = entityManager.find(Client.class, id);
                 if (!client.isArchive()) {
@@ -74,6 +69,7 @@ public class ClientRepository {
                     entityManager.merge(client);
                     client.setArchive(true);
                     entityManager.getTransaction().commit();
+                    return client;
                 } else {
                     throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
                 }
@@ -94,17 +90,13 @@ public class ClientRepository {
     }
 
     public List<Client> getAllClients() {
-        List<Client> clients = new ArrayList<>();
-        try (Session session = entityManager.unwrap(Session.class)) {
-            CriteriaBuilder criteriaBuilder = (CriteriaBuilder) session.getCriteriaBuilder();
-            CriteriaQuery<Client> criteriaQuery = criteriaBuilder.createQuery(Client.class);
-            Root<Client> root = criteriaQuery.from(Client.class);
-            criteriaQuery.select(root);
-            Query<Client> query = session.createQuery((CriteriaUpdate) criteriaQuery);
-            clients = query.getResultList();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        List<Client> clients;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Client> criteriaQuery = criteriaBuilder.createQuery(Client.class);
+        Root<Client> root = criteriaQuery.from(Client.class);
+        criteriaQuery.select(root);
+        TypedQuery<Client> query = entityManager.createQuery(criteriaQuery);
+        clients = query.getResultList();
         return clients;
     }
 
@@ -121,5 +113,33 @@ public class ClientRepository {
             throw new RepositoryException(RepositoryException.REPOSITORY_GET_BY_USERNAME_EXCEPTION);
         }
         return client;
+    }
+
+    public List<Client> getClientsByUsername(String username) {
+        List<Client> clients;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Client> criteriaQuery = criteriaBuilder.createQuery(Client.class);
+        Root<Client> root = criteriaQuery.from(Client.class);
+        criteriaQuery.where(criteriaBuilder.like(root.get(Client_.USERNAME), "%" + username + "%"));
+        TypedQuery<Client> query = entityManager.createQuery(criteriaQuery);
+        clients = query.getResultList();
+        return clients;
+    }
+
+    public Client restoreClient(UUID uuid) throws RepositoryException {
+        try {
+            Client client = entityManager.find(Client.class, uuid);
+            if (client.isArchive()) {
+                entityManager.getTransaction().begin();
+                entityManager.merge(client);
+                client.setArchive(false);
+                entityManager.getTransaction().commit();
+                return client;
+            } else {
+                throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+            }
+        } catch (IllegalArgumentException ex) {
+            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+        }
     }
 }

@@ -4,12 +4,11 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
-import org.pl.model.Client;
 import org.pl.model.Hardware;
 import org.pl.services.HardwareService;
-
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Path("/hardware")
@@ -35,22 +34,23 @@ public class HardwareController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllHardwares() {
-        //ArrayList<Hardware> hardwares = hardwareService.getAll(); //TODO dodac metode zwracającą wszystkie urzadzenia
-        return Response.ok().build(); //wyrzucic liste w odpowiedzi
+        List<Hardware> hardwares = hardwareService.getAllHardwares();
+        return Response.ok(hardwares).build();
     }
 
-//    @POST
-//    @Produces(MediaType.TEXT_PLAIN)
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response addHardware(Hardware hardware) {
-//        try {
-//            hardwareService.add(hardware);
-//            return Response.status(201, "Created successfully").build();
-//        } catch (RepositoryException e) {
-//            return Response.status(400, "Hardware already exists").build();
-//            //przy obecnej implementacji tego bledu nie powinno wyrzucic, bo hardware jest nadpisywany
-//        }
-//    }
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addHardware(Hardware hardware) {
+        try {
+            hardwareService.add(hardware);
+            return Response.status(201, "Created successfully").build();
+        } catch (RepositoryException e) {
+            return Response.status(400, "Hardware already exists").build();
+        } catch (HardwareException e) {
+            return Response.status(400, "Invalid fields").build();
+        }
+    }
 
     @PUT
     @Path("id/{id}")
@@ -58,14 +58,13 @@ public class HardwareController {
     public Response updateHardware(Hardware hardware, @PathParam("id")String id) {
         try {
             UUID uuid = UUID.fromString(id);
-            //hardwareService.update(uuid, hardware);
-            //brak metody do updatu hardware
+            hardwareService.updateHardware(uuid, hardware);
             return Response.ok(hardware).build();
         } catch (IllegalArgumentException e) {
             return Response.status(400, "Invalid data in request").build();
-        } /*catch (RepositoryException e) {
+        } catch (RepositoryException e) {
             return Response.status(404, "Hardware does not exist").build();
-        }*/
+        }
     }
 
     @DELETE
@@ -73,7 +72,6 @@ public class HardwareController {
     public Response deleteHardware(@PathParam("id")String id) {
         try {
             UUID uuid = UUID.fromString(id);
-            // tutaj pytanie czy hardware archive = false oznacza ze jest przypisany do repair
             if (!hardwareService.isHardwareArchive(uuid)) {
                 hardwareService.archive(uuid);
                 return Response.ok("Deleted Successfully").build();

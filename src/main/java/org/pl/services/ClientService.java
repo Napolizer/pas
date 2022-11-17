@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.pl.exceptions.ClientException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
+import org.pl.model.ClientType;
 import org.pl.repositories.ClientRepository;
 
 import java.util.List;
@@ -47,8 +48,8 @@ public class ClientService {
         return clientRepository.getClientById(id).isArchive();
     }
 
-    public void archive(UUID id) throws RepositoryException {
-        clientRepository.deleteClient(id);
+    public Client archive(UUID id) throws RepositoryException {
+        return clientRepository.deleteClient(id);
     }
 
     public List<Client> getAllCLients() {
@@ -65,5 +66,23 @@ public class ClientService {
 
     public int getArchiveSize() {
         return clientRepository.getClients(true).size();
+    }
+
+    public List<Client> getClientsByUsername(String username) { return clientRepository.getClientsByUsername(username); }
+
+    public Client updateClient(UUID uuid, Client client) throws RepositoryException { return clientRepository.updateClient(uuid, client);}
+
+    public Client dearchivize(UUID uuid) throws RepositoryException {
+        return clientRepository.restoreClient(uuid);
+    }
+
+    public ClientType getClientTypeById(UUID uuid) throws RepositoryException {
+        List<Client> clients = clientRepository.getAllClients();
+        for (Client client : clients) {
+            if (client.getClientType().getId() == uuid) {
+                return client.getClientType();
+            }
+        }
+        throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
     }
 }
