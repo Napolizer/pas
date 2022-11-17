@@ -93,7 +93,7 @@ public class ClientController {
     public Response deactivateClient(@PathParam("id")String id) {
         try {
             UUID uuid = UUID.fromString(id);
-            clientService.archivize(uuid);
+            clientService.archive(uuid);
             return Response.ok(clientService.get(uuid)).build();
         } catch (IllegalArgumentException e) {
             return Response.status(400, "Invalid data in request").build();

@@ -75,7 +75,7 @@ public class HardwareController {
             UUID uuid = UUID.fromString(id);
             // tutaj pytanie czy hardware archive = false oznacza ze jest przypisany do repair
             if (!hardwareService.isHardwareArchive(uuid)) {
-                hardwareService.archivize(uuid);
+                hardwareService.archive(uuid);
                 return Response.ok("Deleted Successfully").build();
             } else
                 return Response.status(400, "Hardware is in active repair").build();

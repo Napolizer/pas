@@ -2,6 +2,8 @@ package org.pl.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.pl.exceptions.ClientException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
@@ -13,9 +15,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @ApplicationScoped
 public class ClientService {
-    @Inject
     private ClientRepository clientRepository;
 
     public Client add(Client client) throws RepositoryException, ClientException {
@@ -55,7 +58,8 @@ public class ClientService {
     }
 
     public Client getClientByUsername(String username) {
-        return clientRepository.getCLientByUsername(username);
+        return clientRepository.getClientByUsername(username);
+    }
 
     public int getPresentSize() {
         return clientRepository.getClients(false).size();

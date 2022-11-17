@@ -9,9 +9,6 @@ import lombok.Data;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.Objects;
-import java.util.UUID;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,7 +23,7 @@ public class Address {
     @NotBlank
     @Size(min=9,max=9)
     @Pattern(regexp="(^$|[0-9]{9})")
-    private String phoneNumber;
+    private String number;
     @NotBlank
     private String street;
 }

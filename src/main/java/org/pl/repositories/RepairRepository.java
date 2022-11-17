@@ -54,7 +54,7 @@ public class RepairRepository {
         }
     }
 
-    public void deleteRepair(UUID id) throws RepositoryException {
+    public Repair deleteRepair(UUID id) throws RepositoryException {
         try {
             Repair repair = entityManager.find(Repair.class, id);
             if (!repair.isArchive()) {
@@ -62,6 +62,7 @@ public class RepairRepository {
                 entityManager.merge(repair);
                 repair.setArchive(true);
                 entityManager.getTransaction().commit();
+                return repair;
             } else {
                 throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
             }

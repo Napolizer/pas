@@ -25,7 +25,7 @@ class AddressTest {
 
         validAddress = Address.builder()
                 .city("Warsaw")
-                .phoneNumber("123456789")
+                .number("123456789")
                 .street("Street")
                 .build();
     }
@@ -69,8 +69,8 @@ class AddressTest {
                 "000000000"
         );
         for (var phoneNumber : validPhoneNumbers) {
-            validAddress.setPhoneNumber(phoneNumber);
-            assertEquals(phoneNumber, validAddress.getPhoneNumber());
+            validAddress.setNumber(phoneNumber);
+            assertEquals(phoneNumber, validAddress.getNumber());
             assertTrue(validator.validate(validAddress).isEmpty());
         }
     }
@@ -88,8 +88,8 @@ class AddressTest {
         ));
         invalidPhoneNumbers.add(null);
         for (var phoneNumber : invalidPhoneNumbers) {
-            validAddress.setPhoneNumber(phoneNumber);
-            assertEquals(phoneNumber, validAddress.getPhoneNumber());
+            validAddress.setNumber(phoneNumber);
+            assertEquals(phoneNumber, validAddress.getNumber());
             assertFalse(validator.validate(validAddress).isEmpty());
         }
     }
@@ -126,15 +126,13 @@ class AddressTest {
     @Test
     void equalsPositiveTest() {
         Address address = Address.builder()
-                .id(UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c"))
                 .city("Warsaw")
-                .phoneNumber("123456789")
+                .number("123456789")
                 .street("Street")
                 .build();
          Address addressWithSameId = Address.builder()
-                .id(UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c"))
                 .city("Warsaw")
-                .phoneNumber("123456789")
+                .number("123456789")
                 .street("Street")
                 .build();
 
@@ -144,16 +142,14 @@ class AddressTest {
     @Test
     void equalsNegativeTest() {
         Address address = Address.builder()
-                .id(UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c"))
                 .city("Warsaw")
-                .phoneNumber("123456789")
+                .number("123456789")
                 .street("Street")
                 .build();
 
         Address addressWithDifferentId = Address.builder()
-                .id(UUID.fromString("6fc03087-d265-11e7-b8c6-83e29cd24f4c"))
                 .city("Warsaw")
-                .phoneNumber("123456789")
+                .number("123456789")
                 .street("Street")
                 .build();
 
