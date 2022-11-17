@@ -38,6 +38,9 @@ public class RepairService {
         return repairRepository.getClientRepairs(clientId);
     }
 
+    public boolean isRepairArchive(UUID id) throws RepositoryException {
+        return repairRepository.getRepairById(id).isArchive();
+    }
     public Repair archivize(UUID id) throws RepositoryException {
         return repairRepository.deleteRepair(id);
     }
