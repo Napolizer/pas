@@ -59,26 +59,18 @@ public class ClientRepositoryTest {
 
     @Test
     void saveClientPositiveTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertEquals(repository.saveClient(client), client);
-        em.getTransaction().commit();
         assertEquals(repository.getClientById(client.getId()), client);
     }
     @Test
     void saveClientNegativeTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repository.saveClient(client));
-        em.getTransaction().commit();
-        em.getTransaction().begin();
         assertThrows(RepositoryException.class, () -> repository.saveClient(client));
-        em.getTransaction().commit();
     }
     @Test
     void checkClientIdCreatedByDatabaseTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repository.saveClient(client));
         assertNotNull(repository.saveClient(client1));
-        em.getTransaction().commit();
         assertNotEquals(client.getId(), client1.getId());
         assertEquals(client.getId().getClass(), UUID.class);
         assertEquals(client1.getId().getClass(), UUID.class);
@@ -86,9 +78,7 @@ public class ClientRepositoryTest {
 
     @Test
     void getClientByIdPositiveTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repository.saveClient(client));
-        em.getTransaction().commit();
         assertNotNull(repository.getClientById(client.getId()));
     }
 
@@ -99,21 +89,42 @@ public class ClientRepositoryTest {
 
     @Test
     void deleteClientPositiveTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repository.saveClient(client));
         repository.deleteClient(client.getId());
-        em.getTransaction().commit();
         assertTrue(repository.getClientById(client.getId()).isArchive());
     }
 
     @Test
     void deleteClientNegativeTest() throws RepositoryException {
         assertThrows(RepositoryException.class, () -> repository.deleteClient(client.getId()));
-        em.getTransaction().begin();
         assertNotNull(repository.saveClient(client1));
-        em.getTransaction().commit();
         assertThrows(RepositoryException.class, () -> repository.deleteClient(client.getId()));
         assertTrue(repository.getClientById(client1.getId()).isArchive());
+    }
+
+    @Test
+    void getPresentClientsTest() throws RepositoryException {
+        assertEquals(0, repository.getClients(false).size());
+        assertNotNull(repository.saveClient(client));
+        assertEquals(1, repository.getClients(false).size());
+        assertNotNull(repository.saveClient(client1));
+        assertEquals(1, repository.getClients(false).size());
+    }
+    @Test
+    void getArchiveClientsTest() throws RepositoryException {
+        assertEquals(0, repository.getClients(true).size());
+        assertNotNull(repository.saveClient(client));
+        assertEquals(0, repository.getClients(true).size());
+        assertNotNull(repository.saveClient(client1));
+        assertEquals(1, repository.getClients(true).size());
+    }
+
+    @AfterEach
+    void afterEach() {
+        Query query = em.createQuery("DELETE FROM Client ");
+        em.getTransaction().begin();
+        query.executeUpdate();
+        em.getTransaction().commit();
     }
 
     @AfterAll

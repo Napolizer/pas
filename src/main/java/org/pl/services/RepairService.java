@@ -18,7 +18,7 @@ public class RepairService {
         this.repairRepository = repairRepository;
     }
 
-    public Repair create(Client client, Hardware hardware) throws RepositoryException {
+    public Repair add(Client client, Hardware hardware) throws RepositoryException {
         return repairRepository.saveRepair(
                 Repair.builder()
                         .client(client)
@@ -26,7 +26,7 @@ public class RepairService {
                         .build());
     }
 
-    public Repair create(Repair repair) throws RepositoryException {
+    public Repair add(Repair repair) throws RepositoryException {
         return repairRepository.saveRepair(repair);
     }
 
@@ -38,7 +38,7 @@ public class RepairService {
         return repairRepository.getClientRepairs(clientId);
     }
 
-    public void archivize(UUID id) throws RepositoryException {
+    public void archive(UUID id) throws RepositoryException {
         repairRepository.deleteRepair(id);
     }
 

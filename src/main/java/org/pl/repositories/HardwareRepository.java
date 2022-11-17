@@ -1,12 +1,19 @@
 package org.pl.repositories;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
+import org.pl.model.Client_;
 import org.pl.model.Hardware;
+import org.pl.model.Hardware_;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -15,7 +22,9 @@ public class HardwareRepository {
 
     public Hardware saveHardware(Hardware hardware) throws RepositoryException {
         if (!entityManager.contains(hardware)) {
+            entityManager.getTransaction().begin();
             entityManager.persist(hardware);
+            entityManager.getTransaction().commit();
             return hardware;
         }
         throw new RepositoryException(RepositoryException.REPOSITORY_ADD_EXCEPTION);
@@ -37,13 +46,26 @@ public class HardwareRepository {
         try {
             Hardware hardware = entityManager.find(Hardware.class, id);
             if (!hardware.isArchive()) {
+                entityManager.getTransaction().begin();
                 entityManager.merge(hardware);
                 hardware.setArchive(true);
+                entityManager.getTransaction().commit();
             } else {
                 throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
             }
         } catch (IllegalArgumentException ex) {
             throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
         }
+    }
+
+    public List<Hardware> getHardwareList(boolean condition) {
+        List<Hardware> hardwareList;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Hardware> criteriaQuery = criteriaBuilder.createQuery(Hardware.class);
+        Root<Hardware> root = criteriaQuery.from(Hardware.class);
+        criteriaQuery.where(criteriaBuilder.equal(root.get(Hardware_.ARCHIVE), condition));
+        TypedQuery<Hardware> query = entityManager.createQuery(criteriaQuery);
+        hardwareList = query.getResultList();
+        return hardwareList;
     }
 }

@@ -5,15 +5,12 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import lombok.AllArgsConstructor;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.model.Client_;
 import org.pl.model.Repair;
 import org.pl.model.Repair_;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +21,9 @@ public class RepairRepository {
 
     public Repair saveRepair(Repair repair) throws RepositoryException {
         if (!entityManager.contains(repair)) {
+            entityManager.getTransaction().begin();
             entityManager.persist(repair);
+            entityManager.getTransaction().commit();
             return repair;
         }
         throw new RepositoryException(RepositoryException.REPOSITORY_ADD_EXCEPTION);
@@ -46,8 +45,10 @@ public class RepairRepository {
         try {
             Repair repair = entityManager.find(Repair.class, id);
             if (!repair.isArchive()) {
+                entityManager.getTransaction().begin();
                 entityManager.merge(repair);
                 repair.setArchive(true);
+                entityManager.getTransaction().commit();
             } else {
                 throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
             }

@@ -45,28 +45,20 @@ public class HardwareRepositoryTest {
 
     @Test
     void saveHardwarePositiveTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertEquals(repository.saveHardware(hardware), hardware);
-        em.getTransaction().commit();
         assertEquals(repository.getHardwareById(hardware.getId()), hardware);
     }
 
     @Test
     void saveHardwareNegativeTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repository.saveHardware(hardware));
-        em.getTransaction().commit();
-        em.getTransaction().begin();
         assertThrows(RepositoryException.class, () -> repository.saveHardware(hardware));
-        em.getTransaction().commit();
     }
 
     @Test
     void checkHardwareIdCreatedByDatabaseTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repository.saveHardware(hardware));
         assertNotNull(repository.saveHardware(hardware1));
-        em.getTransaction().commit();
         assertNotEquals(hardware.getId(), hardware1.getId());
         assertEquals(hardware.getId().getClass(), UUID.class);
         assertEquals(hardware1.getId().getClass(), UUID.class);
@@ -74,9 +66,7 @@ public class HardwareRepositoryTest {
 
     @Test
     void getHardwareByIdPositiveTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repository.saveHardware(hardware));
-        em.getTransaction().commit();
         assertNotNull(repository.getHardwareById(hardware.getId()));
     }
 
@@ -87,21 +77,42 @@ public class HardwareRepositoryTest {
 
     @Test
     void deleteHardwarePositiveTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repository.saveHardware(hardware));
         repository.deleteHardware(hardware.getId());
-        em.getTransaction().commit();
         assertTrue(repository.getHardwareById(hardware.getId()).isArchive());
     }
 
     @Test
     void deleteHardwareNegativeTest() throws RepositoryException {
         assertThrows(RepositoryException.class, () -> repository.deleteHardware(hardware.getId()));
-        em.getTransaction().begin();
         assertNotNull(repository.saveHardware(hardware1));
-        em.getTransaction().commit();
         assertThrows(RepositoryException.class, () -> repository.deleteHardware(hardware.getId()));
         assertTrue(repository.getHardwareById(hardware1.getId()).isArchive());
+    }
+
+    @Test
+    void getPresentHardwareListTest() throws RepositoryException {
+        assertEquals(0, repository.getHardwareList(false).size());
+        assertNotNull(repository.saveHardware(hardware));
+        assertEquals(1, repository.getHardwareList(false).size());
+        assertNotNull(repository.saveHardware(hardware1));
+        assertEquals(1, repository.getHardwareList(false).size());
+    }
+    @Test
+    void getArchiveClientsTest() throws RepositoryException {
+        assertEquals(0, repository.getHardwareList(true).size());
+        assertNotNull(repository.saveHardware(hardware));
+        assertEquals(0, repository.getHardwareList(true).size());
+        assertNotNull(repository.saveHardware(hardware1));
+        assertEquals(1, repository.getHardwareList(true).size());
+    }
+
+    @AfterEach
+    void afterEach() {
+        Query query = em.createQuery("DELETE FROM Hardware ");
+        em.getTransaction().begin();
+        query.executeUpdate();
+        em.getTransaction().commit();
     }
 
     @AfterAll

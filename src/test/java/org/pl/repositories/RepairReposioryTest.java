@@ -87,26 +87,18 @@ class RepairReposioryTest {
 
     @Test
     void saveRepairPositiveTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertEquals(repairRepository.saveRepair(repair), repair);
-        em.getTransaction().commit();
         assertEquals(repairRepository.getRepairById(repair.getId()), repair);
     }
     @Test
     void saveRepairNegativeTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repairRepository.saveRepair(repair));
-        em.getTransaction().commit();
-        em.getTransaction().begin();
         assertThrows(RepositoryException.class, () -> repairRepository.saveRepair(repair));
-        em.getTransaction().commit();
     }
     @Test
     void checkRepairsIdCreatedByDatabaseTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repairRepository.saveRepair(repair));
         assertNotNull(repairRepository.saveRepair(repair1));
-        em.getTransaction().commit();
         assertNotEquals(repair.getId(), repair1.getId());
         assertEquals(repair.getId().getClass(), UUID.class);
         assertEquals(repair1.getId().getClass(), UUID.class);
@@ -114,9 +106,7 @@ class RepairReposioryTest {
 
     @Test
     void getRepairByIdPositiveTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repairRepository.saveRepair(repair));
-        em.getTransaction().commit();
         assertNotNull(repairRepository.getRepairById(repair.getId()));
     }
 
@@ -127,19 +117,15 @@ class RepairReposioryTest {
 
     @Test
     void deleteRepairPositiveTest() throws RepositoryException {
-        em.getTransaction().begin();
         assertNotNull(repairRepository.saveRepair(repair));
         repairRepository.deleteRepair(repair.getId());
-        em.getTransaction().commit();
         assertTrue(repairRepository.getRepairById(repair.getId()).isArchive());
     }
 
     @Test
     void deleteRepairNegativeTest() throws RepositoryException {
         assertThrows(RepositoryException.class, () -> repairRepository.deleteRepair(repair.getId()));
-        em.getTransaction().begin();
         assertNotNull(repairRepository.saveRepair(repair1));
-        em.getTransaction().commit();
         assertThrows(RepositoryException.class, () -> repairRepository.deleteRepair(repair.getId()));
         assertTrue(repairRepository.getRepairById(repair1.getId()).isArchive());
     }
@@ -147,11 +133,9 @@ class RepairReposioryTest {
     @Test
     void getClientRepairsTest() throws RepositoryException {
         assertEquals(0, repairRepository.getClientRepairs(client.getId()).size());
-        em.getTransaction().begin();
         assertNotNull(repairRepository.saveRepair(repair));
         assertNotNull(repairRepository.saveRepair(repair1));
         assertNotNull(repairRepository.saveRepair(repair2));
-        em.getTransaction().commit();
         assertEquals(2, repairRepository.getClientRepairs(client.getId()).size());
     }
 
