@@ -1,5 +1,7 @@
 package org.pl.services;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.pl.exceptions.ClientException;
 import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
@@ -11,12 +13,10 @@ import org.pl.repositories.RepairRepository;
 import java.util.List;
 import java.util.UUID;
 
+@ApplicationScoped
 public class RepairService {
-    private final RepairRepository repairRepository;
-
-    public RepairService(RepairRepository repairRepository) {
-        this.repairRepository = repairRepository;
-    }
+    @Inject
+    private RepairRepository repairRepository;
 
     public Repair create(Client client, Hardware hardware) throws RepositoryException {
         return repairRepository.create(
