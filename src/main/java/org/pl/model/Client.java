@@ -28,6 +28,7 @@ public class Client implements Entity {
     )
     private UUID id;
     @NotBlank
+    @Column(unique = true)
     private String username;
     @NotNull
     private Boolean archive;

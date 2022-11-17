@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.pl.model.Condition.DUSTY;
 
-class RepairReposioryTest {
+class RepairRepositoryTest {
     private RepairRepository repairRepository;
     private ClientRepository clientRepository;
     private Address address;
@@ -47,6 +47,8 @@ class RepairReposioryTest {
 
         client = Client.builder()
                 .clientType(new Premium())
+                .username("scooby")
+                .clientAccessType(ClientAccessType.USER)
                 .address(address)
                 .balance(300.0)
                 .firstName("John")
@@ -70,6 +72,8 @@ class RepairReposioryTest {
                 .build();
         repair = Repair.builder()
                 .client(client)
+                .startDate(new Date())
+                .endDate(new Date())
                 .hardware(hardware)
                 .archive(false)
                 .build();
@@ -79,6 +83,8 @@ class RepairReposioryTest {
                 .archive(true)
                 .build();
         repair2 = Repair.builder()
+                .startDate(new Date())
+                .endDate(new Date())
                 .client(client1)
                 .hardware(hardware)
                 .archive(true)

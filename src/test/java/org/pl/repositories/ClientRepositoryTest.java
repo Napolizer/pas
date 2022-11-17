@@ -9,6 +9,7 @@ import org.pl.exceptions.RepositoryException;
 import org.pl.model.Address;
 import org.pl.model.Basic;
 import org.pl.model.Client;
+import org.pl.model.ClientAccessType;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -46,6 +47,8 @@ public class ClientRepositoryTest {
                 .address(address)
                 .build();
         client1 = Client.builder()
+                .username("johny")
+                .clientAccessType(ClientAccessType.EMPLOYEE)
                 .archive(true)
                 .clientType(new Basic())
                 .phoneNumber("535-535-535")
