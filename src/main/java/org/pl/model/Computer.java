@@ -17,12 +17,6 @@ import org.pl.exceptions.HardwareException;
 @Entity
 @DiscriminatorValue("Computer")
 public class Computer extends HardwareType {
-    @NotNull
-    private Condition condition;
-    public Computer(Condition condition) {
-        super();
-        this.condition = condition;
-    }
     public double calculateRepairCost(double price) throws HardwareException {
         if (price < 0) {
             throw new HardwareException(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_ZERO_EXCEPTION);

@@ -21,8 +21,7 @@ public class Address {
     @Pattern(regexp = "^[^0-9]+$")
     private String city;
     @NotBlank
-    @Size(min=9,max=9)
-    @Pattern(regexp="(^$|[0-9]{9})")
+    @Size(min=1,max=9)
     private String number;
     @NotBlank
     private String street;

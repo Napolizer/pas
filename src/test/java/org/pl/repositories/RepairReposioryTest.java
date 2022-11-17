@@ -65,7 +65,7 @@ class RepairReposioryTest {
                 .build();
         hardware = Hardware.builder()
                 .archive(false)
-                .hardwareType(new Computer(DUSTY))
+                .hardwareType(Computer.builder().condition(DUSTY).build())
                 .price(100)
                 .build();
         repair = Repair.builder()

@@ -85,14 +85,14 @@ public class ClientRepository {
         return clients;
     }
 
-    public Client getCLientByUsername(String username) {
-        Client client = new Client();
-        try (Session session = entityManager.unwrap(Session.class)) {
-            CriteriaBuilder criteriaBuilder = (CriteriaBuilder) session.getCriteriaBuilder();
-            CriteriaQuery<Client> criteriaQuery = criteriaBuilder.createQuery(Client.class);
-            Root<Client> root = criteriaQuery.from(Client.class);
-            criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("username"), username));
-            Query<Client> query = session.createQuery((CriteriaUpdate) criteriaQuery);
+    public Client getClientByUsername(String username) throws RepositoryException {
+        Client client;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Client> criteriaQuery = criteriaBuilder.createQuery(Client.class);
+        Root<Client> root = criteriaQuery.from(Client.class);
+        criteriaQuery.where(criteriaBuilder.equal(root.get(Client_.USERNAME), username));
+        TypedQuery<Client> query = entityManager.createQuery(criteriaQuery);
+        try {
             client = query.getSingleResult();
         } catch (Exception ex) {
             ex.printStackTrace();

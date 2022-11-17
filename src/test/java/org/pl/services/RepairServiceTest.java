@@ -61,8 +61,8 @@ class RepairServiceTest {
                 .balance(200.0)
                 .clientType(new Vip())
                 .build();
-        computer = new Computer(Condition.DUSTY);
-        monitor = new Monitor(Condition.AVERAGE);
+        computer = Computer.builder().condition(Condition.DUSTY).build();
+        monitor = Monitor.builder().condition(Condition.AVERAGE).build();
         hardware1 = Hardware.builder()
                 .price(2000)
                 .hardwareType(computer)

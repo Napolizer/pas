@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -62,11 +61,13 @@ class AddressTest {
     }
 
     @Test
-    void fieldPhoneNumberPositiveTest() {
+    void fieldNumberPositiveTest() {
         List<String> validPhoneNumbers = List.of(
                 "123456789",
                 "987654321",
-                "000000000"
+                "000000000",
+                "1",
+                "123"
         );
         for (var phoneNumber : validPhoneNumbers) {
             validAddress.setNumber(phoneNumber);
@@ -76,14 +77,12 @@ class AddressTest {
     }
 
     @Test
-    void fieldPhoneNumberNegativeTest() {
+    void fieldNumberNegativeTest() {
         List<String> invalidPhoneNumbers = new ArrayList<>(List.of(
                 " 123456789",
                 "987654321 ",
-                "abcdefghi",
-                "12345678i",
-                "i12345678",
-                "         ",
+                "      ",
+                "  2312 312 312 32",
                 ""
         ));
         invalidPhoneNumbers.add(null);
@@ -149,7 +148,7 @@ class AddressTest {
 
         Address addressWithDifferentId = Address.builder()
                 .city("Warsaw")
-                .number("123456789")
+                .number("023456789")
                 .street("Street")
                 .build();
 

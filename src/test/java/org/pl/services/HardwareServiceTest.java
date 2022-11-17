@@ -28,10 +28,10 @@ public class HardwareServiceTest {
     }
     @BeforeEach
     void setUp() {
-        computer = new Computer(Condition.FINE);
-        console = new Console(Condition.VERY_BAD);
-        monitor = new Monitor(Condition.DUSTY);
-        phone = new Phone(Condition.UNREPAIRABLE);
+        computer = Computer.builder().condition(Condition.FINE).build();
+        console = Console.builder().condition(Condition.VERY_BAD).build();
+        monitor = Monitor.builder().condition(Condition.DUSTY).build();
+        phone = Phone.builder().condition(Condition.UNREPAIRABLE).build();
         hardware = Hardware.builder()
                 .price(1000)
                 .hardwareType(computer)
