@@ -15,23 +15,19 @@ public class HardwareService {
     @Inject
     private HardwareRepository hardwareRepository;
 
-    public Hardware create(Hardware hardware) throws RepositoryException {
-        return hardwareRepository.create(hardware);
-    }
-
-    public Hardware update(Hardware hardware) throws RepositoryException {
-        return hardwareRepository.update(hardware);
+    public Hardware create(Hardware hardware) {
+        return hardwareRepository.saveHardware(hardware);
     }
 
     public boolean isHardwareArchive(UUID id) throws RepositoryException {
-        return hardwareRepository.read(id).isArchive();
+        return hardwareRepository.getHardwareById(id).isArchive();
     }
 
     public Hardware get(UUID id) throws RepositoryException {
-        return hardwareRepository.read(id);
+        return hardwareRepository.getHardwareById(id);
     }
 
     public void archivize(UUID id) throws RepositoryException {
-        hardwareRepository.delete(id);
+        hardwareRepository.deleteHardware(id);
     }
 }

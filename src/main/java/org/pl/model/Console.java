@@ -1,15 +1,14 @@
 package org.pl.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import jakarta.persistence.DiscriminatorValue;
+import lombok.*;
 import org.pl.exceptions.HardwareException;
 
 @Data
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@DiscriminatorValue("Console")
 public class Console extends HardwareType {
     public double calculateRepairCost(int price) throws HardwareException {
         if (price < 0) {

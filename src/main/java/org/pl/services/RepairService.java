@@ -19,7 +19,7 @@ public class RepairService {
     private RepairRepository repairRepository;
 
     public Repair create(Client client, Hardware hardware) throws RepositoryException {
-        return repairRepository.create(
+        return repairRepository.saveRepair(
                 Repair.builder()
                         .client(client)
                         .hardware(hardware)
@@ -27,15 +27,11 @@ public class RepairService {
     }
 
     public Repair create(Repair repair) throws RepositoryException {
-        return repairRepository.create(repair);
-    }
-
-    public Repair update(Repair repair) throws RepositoryException {
-        return repairRepository.update(repair);
+        return repairRepository.saveRepair(repair);
     }
 
     public Repair get(UUID id) throws RepositoryException {
-        return repairRepository.read(id);
+        return repairRepository.getRepairById(id);
     }
 
     public List<Repair> getAllClientRepairs(UUID clientId) {
@@ -43,11 +39,11 @@ public class RepairService {
     }
 
     public Repair archivize(UUID id) throws RepositoryException {
-        return repairRepository.delete(id);
+        return repairRepository.deleteRepair(id);
     }
 
     public void repair(UUID id) throws HardwareException, RepositoryException, ClientException {
-        Repair repair = repairRepository.read(id);
+        Repair repair = repairRepository.getRepairById(id);
         if (repair.isArchive() || repair.getClient().isArchive() || repair.getHardware().isArchive()) {
             throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
         }

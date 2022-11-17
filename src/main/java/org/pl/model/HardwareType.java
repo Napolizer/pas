@@ -1,8 +1,7 @@
 package org.pl.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.pl.exceptions.HardwareException;
@@ -11,6 +10,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Data
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Access(AccessType.FIELD)
+@DiscriminatorColumn(name = "type")
 public abstract class HardwareType {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

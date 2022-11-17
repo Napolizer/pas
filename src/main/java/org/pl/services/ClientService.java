@@ -13,23 +13,23 @@ public class ClientService {
     @Inject
     private ClientRepository clientRepository;
 
-    public Client add(Client client) throws RepositoryException {
-        return clientRepository.create(client);
+    public Client add(Client client) {
+        return clientRepository.saveClient(client);
     }
 
     public Client get(UUID id) throws RepositoryException {
-        return clientRepository.read(id);
+        return clientRepository.getClientById(id);
     }
 
     public double getClientBalance(UUID id) throws RepositoryException {
-        return clientRepository.read(id).getBalance();
+        return clientRepository.getClientById(id).getBalance();
     }
 
     public boolean isClientArchive(UUID id) throws RepositoryException {
-        return clientRepository.read(id).isArchive();
+        return clientRepository.getClientById(id).isArchive();
     }
 
     public void archivize(UUID id) throws RepositoryException {
-        clientRepository.delete(id);
+        clientRepository.deleteClient(id);
     }
 }
