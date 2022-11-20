@@ -29,7 +29,7 @@ public abstract class HardwareType {
     )
     protected UUID id;
     @NotNull
-    @Transient
+//    @Transient
     public Condition condition;
 
     public abstract double calculateRepairCost(double price) throws HardwareException;
