@@ -61,8 +61,8 @@ class ClientControllerTest {
                 .lastName("Doe")
                 .address(address)
                 .build();
-        var clientBuilder = ClientBuilder.newBuilder();
-        client = clientBuilder.build();
+//        var clientBuilder = ClientBuilder.newBuilder();
+//        client = clientBuilder.build();
     }
 
     @Test
@@ -70,12 +70,12 @@ class ClientControllerTest {
         clientService.add(client1);
         clientService.add(client2);
 
-        WebTarget target = client.target(BASE_URL + "/client/id/" + client1.getId());
+//        WebTarget target = client.target(BASE_URL + "/client/id/" + client1.getId());
 //                Student student = target.path("rest").path("api").request(MediaType.APPLICATION_JSON).get(Student.class);
 //        assertNotNull(student);
 //        assertEquals("Marcin",student.getFirstName());
-        Response response = target.request().get();
-        assertEquals(200, response.getStatus());
+//        Response response = target.request().get();
+//        assertEquals(200, response.getStatus());
 //        assertEquals(client1, response.getEntity());
 
     }

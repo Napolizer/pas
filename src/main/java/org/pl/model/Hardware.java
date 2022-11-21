@@ -1,9 +1,14 @@
 package org.pl.model;
 
+import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.pl.controllers.HardwareTypeAdapters;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -30,6 +35,7 @@ public class Hardware implements Entity {
     private Integer price;
     @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
+    @JsonbTypeAdapter(HardwareTypeAdapters.class)
     private HardwareType hardwareType;
 
     public void repair() {

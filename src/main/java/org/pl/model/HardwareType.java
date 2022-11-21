@@ -1,9 +1,8 @@
 package org.pl.model;
 
-import jakarta.persistence.*;
 import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -29,7 +28,6 @@ public abstract class HardwareType {
     )
     protected UUID id;
     @NotNull
-//    @Transient
     public Condition condition;
 
     public abstract double calculateRepairCost(double price) throws HardwareException;
