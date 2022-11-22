@@ -1,7 +1,7 @@
 package org.pl.model;
 
-import jakarta.persistence.*;
 import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +17,7 @@ import java.util.UUID;
 @SuperBuilder
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Access(AccessType.FIELD)
 @DiscriminatorColumn(name = "type")
@@ -30,6 +31,10 @@ public abstract class HardwareType {
     protected UUID id;
     @NotNull
     public Condition condition;
+
+    public HardwareType(Condition condition) {
+        setCondition(condition);
+    }
 
     public abstract double calculateRepairCost(double price) throws HardwareException;
 
