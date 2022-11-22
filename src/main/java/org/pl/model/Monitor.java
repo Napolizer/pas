@@ -11,8 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.pl.exceptions.HardwareException;
 
-@Data
-@NoArgsConstructor 
+@NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @Entity
