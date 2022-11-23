@@ -1,37 +1,58 @@
 package org.pl.repositories;
 
+import jakarta.annotation.Resource;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.UserTransaction;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.pl.exceptions.RepositoryException;
+import org.pl.model.Console;
 import org.pl.model.Hardware;
 import org.pl.model.Hardware_;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.util.List;
 import java.util.UUID;
 
+import static org.pl.model.Condition.DUSTY;
+
+@NoArgsConstructor
 @AllArgsConstructor
 @ApplicationScoped
 public class HardwareRepository {
+    @PersistenceContext
     private EntityManager entityManager;
 
-    HardwareRepository() {
-        var emf = Persistence.createEntityManagerFactory("POSTGRES_REPAIR_PU");
-        entityManager = emf.createEntityManager();
-    }
+    @Resource
+    UserTransaction userTransaction;
 
     public Hardware saveHardware(Hardware hardware) throws RepositoryException {
-        if (!entityManager.contains(hardware)) {
-            entityManager.getTransaction().begin();
-            entityManager.persist(hardware);
-            entityManager.getTransaction().commit();
-            return hardware;
+        hardware.setId(UUID.randomUUID());
+        hardware.getHardwareType().setId(UUID.randomUUID());
+        try {
+            if (!entityManager.contains(hardware)) {
+//            entityManager.getTransaction().begin();
+//            Context context = new InitialContext();
+//            UserTransaction transaction = (UserTransaction)context.lookup("java:comp/UserTransaction");
+                userTransaction.begin();
+                entityManager.persist(hardware);
+                userTransaction.commit();
+//            entityManager.getTransaction().commit();
+                return hardware;
+            }
+        } catch (Exception e) {
+            throw new RepositoryException(e.getMessage());
         }
         throw new RepositoryException(RepositoryException.REPOSITORY_ADD_EXCEPTION);
     }

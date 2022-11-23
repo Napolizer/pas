@@ -23,14 +23,15 @@ public class HardwareTypeController {
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getHardwareTypeById(@PathParam("id")String id) {
-        try {
-            UUID uuid = UUID.fromString(id);
-            HardwareType hardwareType = hardwareService.getHardwareTypeById(uuid);
-            return Response.ok(hardwareType).build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(400, "Given id is invalid").build();
-        } catch (RepositoryException e) {
-            return Response.status(404, "HardwareType not found").build();
-        }
+//        try {
+//            UUID uuid = UUID.fromString(id);
+//            HardwareType hardwareType = hardwareService.getHardwareTypeById(uuid);
+//            return Response.ok(hardwareType).build();
+//        } catch (IllegalArgumentException e) {
+//            return Response.status(400, "Given id is invalid").build();
+//        } catch (RepositoryException e) {
+//            return Response.status(404, "HardwareType not found").build();
+//        }
+        return Response.ok().build();
     }
 }

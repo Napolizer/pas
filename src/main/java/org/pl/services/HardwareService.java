@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.*;
@@ -14,7 +15,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@NoArgsConstructor
+//@NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @ApplicationScoped
 public class HardwareService {
@@ -61,10 +63,10 @@ public class HardwareService {
         return hardwareRepository.updateHardware(uuid, hardware);
     }
 
-    public HardwareType getHardwareTypeById(UUID uuid) throws RepositoryException {
+    public HardwareType getHardwareTypeById(Long uuid) throws RepositoryException {
         List<Hardware> hardwares = hardwareRepository.getAllHardwares();
         for (Hardware hardware : hardwares) {
-            if (hardware.getHardwareType().getId() == uuid) {
+            if (hardware.getHardwareType().getId().equals(uuid)) {
                 return hardware.getHardwareType();
             }
         }

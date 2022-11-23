@@ -15,6 +15,7 @@ import org.pl.exceptions.HardwareException;
 public class Console extends HardwareType {
     public Console(Condition condition) {
         super(condition);
+        setType("CONSOLE");
     }
     public double calculateRepairCost(double price) throws HardwareException {
         if (price < 0) {

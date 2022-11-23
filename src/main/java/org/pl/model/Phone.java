@@ -15,6 +15,7 @@ import org.pl.exceptions.HardwareException;
 public class Phone extends HardwareType {
     public Phone(Condition condition) {
         super(condition);
+        setType("PHONE");
     }
     public double calculateRepairCost(double price) throws HardwareException {
         if (price < 0) {

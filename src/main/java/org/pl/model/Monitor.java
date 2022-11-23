@@ -15,6 +15,7 @@ import org.pl.exceptions.HardwareException;
 public class Monitor extends HardwareType {
     public Monitor(Condition condition) {
         super(condition);
+        setType("MONITOR");
     }
     public double calculateRepairCost(double price) throws HardwareException {
         if (price < 0) {

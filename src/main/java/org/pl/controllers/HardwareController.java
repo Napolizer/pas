@@ -1,20 +1,36 @@
 package org.pl.controllers;
 
 import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonValue;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbConfig;
+import jakarta.json.bind.JsonbException;
+import jakarta.persistence.Persistence;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.pl.adapters.HardwareTypeAdapter;
 import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
-import org.pl.model.Hardware;
+import org.pl.model.*;
+import org.pl.repositories.HardwareRepository;
 import org.pl.services.HardwareService;
 import java.util.List;
 import java.util.UUID;
 
+import static org.pl.model.Condition.DUSTY;
+
 @Path("/hardware")
 public class HardwareController {
     @Inject
-    private HardwareService hardwareService; //something tu nie teges
+    private HardwareService hardwareService;
+
+    HardwareController() {
+        hardwareService = new HardwareService(new HardwareRepository());
+    }
 
     @GET
     @Path("/id/{id}")
@@ -39,12 +55,14 @@ public class HardwareController {
     }
 
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addHardware(Hardware hardware) {
+    public Response addHardware(@Valid Hardware hardware) {
         try {
-            hardwareService.add(hardware);
-            return Response.status(201, "Created successfully").build();
+            Hardware createdHardware = hardwareService.add(hardware);
+            return Response.status(201).entity(createdHardware).build();
+        } catch (JsonbException e) {
+            return Response.status(400).build();
         } catch (RepositoryException e) {
             return Response.status(400, "Hardware already exists").build();
         } catch (HardwareException e) {

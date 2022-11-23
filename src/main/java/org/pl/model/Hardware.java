@@ -1,9 +1,12 @@
 package org.pl.model;
 
+import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
+import org.pl.adapters.HardwareTypeAdapter;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -18,11 +21,6 @@ import static org.pl.model.Condition.FINE;
 @Access(AccessType.FIELD)
 public class Hardware implements Entity {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
     private UUID id;
     @NotNull
     private Boolean archive;
@@ -30,6 +28,7 @@ public class Hardware implements Entity {
     private Integer price;
     @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
+    @JsonbTypeAdapter(HardwareTypeAdapter.class)
     private HardwareType hardwareType;
 
     public void repair() {
