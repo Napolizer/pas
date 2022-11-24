@@ -69,35 +69,46 @@ public class HardwareRepository {
         return null;
     }
 
-    public Hardware updateHardware(UUID id, @NotNull Hardware hardware) throws RepositoryException {
+    public Hardware updateHardware(UUID id, Hardware hardware) throws RepositoryException {
         try {
             Hardware hardwareToChange = entityManager.find(Hardware.class, id);
-            hardwareToChange.setHardwareType(hardware.getHardwareType());
-            hardwareToChange.setPrice(hardware.getPrice());
-            hardwareToChange.setArchive(hardware.isArchive());
-            hardwareToChange.getHardwareType().setCondition(hardware.getHardwareType().getCondition());
-            entityManager.getTransaction().begin();
-            entityManager.merge(hardwareToChange);
-            entityManager.getTransaction().commit();
-            return hardwareToChange;
+            hardware.setId(hardwareToChange.getId());
+            if (hardware.getHardwareType() == null) {
+                hardware.setHardwareType(hardwareToChange.getHardwareType());
+            } if (hardware.getPrice() == null) {
+                hardware.setPrice(hardwareToChange.getPrice());
+            } if (hardware.getArchive() == null) {
+                hardware.setArchive(hardwareToChange.getArchive());
+            }
+            userTransaction.begin();
+            entityManager.merge(hardware);
+            userTransaction.commit();
+            return hardware;
         } catch (IllegalArgumentException ex) {
             throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+        } catch (Exception e) {
+            throw new RepositoryException(e.getMessage());
         }
     }
 
     public void deleteHardware(UUID id) throws RepositoryException {
         try {
             Hardware hardware = entityManager.find(Hardware.class, id);
+            if (hardware == null) {
+                throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            }
             if (!hardware.isArchive()) {
-                entityManager.getTransaction().begin();
-                entityManager.merge(hardware);
+                userTransaction.begin();
                 hardware.setArchive(true);
-                entityManager.getTransaction().commit();
+                entityManager.merge(hardware);
+                userTransaction.commit();
             } else {
                 throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
             }
         } catch (IllegalArgumentException ex) {
             throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+        } catch (Exception e) {
+            throw new RepositoryException(e.getMessage());
         }
     }
 

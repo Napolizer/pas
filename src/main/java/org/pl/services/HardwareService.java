@@ -32,7 +32,11 @@ public class HardwareService {
     }
 
     public boolean isHardwareArchive(UUID id) throws RepositoryException {
-        return hardwareRepository.getHardwareById(id).isArchive();
+        Hardware hardware = hardwareRepository.getHardwareById(id);
+        if (hardware == null) {
+            return false;
+        }
+        return hardware.isArchive();
     }
 
     public Hardware get(UUID id) throws RepositoryException {
