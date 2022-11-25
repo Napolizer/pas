@@ -11,7 +11,6 @@ import org.pl.exceptions.HardwareException;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@DiscriminatorValue("Phone")
 public class Phone extends HardwareType {
     public Phone(Condition condition) {
         super(condition);

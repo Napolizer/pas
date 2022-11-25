@@ -11,7 +11,6 @@ import org.pl.exceptions.HardwareException;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@DiscriminatorValue("Monitor")
 public class Monitor extends HardwareType {
     public Monitor(Condition condition) {
         super(condition);

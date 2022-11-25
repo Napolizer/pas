@@ -42,13 +42,9 @@ public class HardwareRepository {
         hardware.getHardwareType().setId(UUID.randomUUID());
         try {
             if (!entityManager.contains(hardware)) {
-//            entityManager.getTransaction().begin();
-//            Context context = new InitialContext();
-//            UserTransaction transaction = (UserTransaction)context.lookup("java:comp/UserTransaction");
                 userTransaction.begin();
                 entityManager.persist(hardware);
                 userTransaction.commit();
-//            entityManager.getTransaction().commit();
                 return hardware;
             }
         } catch (Exception e) {

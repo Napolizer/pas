@@ -19,7 +19,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Access(AccessType.FIELD)
-@DiscriminatorColumn(name = "discriminator_type")
 public abstract class HardwareType {
     @Id
     protected UUID id = UUID.randomUUID();
