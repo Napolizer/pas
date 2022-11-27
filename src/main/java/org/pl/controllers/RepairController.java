@@ -1,9 +1,14 @@
 package org.pl.controllers;
 
 import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.bind.annotation.JsonbTypeAdapter;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.pl.adapters.RepairAdapter;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Hardware;
 import org.pl.model.Repair;
@@ -12,7 +17,7 @@ import org.pl.services.RepairService;
 import java.util.List;
 import java.util.UUID;
 
-@Path("repair")
+@Path("/repair")
 public class RepairController {
     @Inject
     private RepairService repairService; //something tu nie teges
@@ -40,14 +45,16 @@ public class RepairController {
     }
 
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addRepair(Repair repair) {
+    public Response addRepair(@NotNull @Valid Repair repair) {
+        var json = Json.createObjectBuilder();
         try {
-            repairService.add(repair);
-            return Response.status(201, "Created successfully").build();
+            Repair createdRepair = repairService.add(repair);
+            return Response.status(201).entity(createdRepair).build();
         } catch (RepositoryException e) {
-            return Response.status(400, "Repair already exists").build();
+            json.add("error", "Repair already exists");
+            return Response.status(400).build();
         }
     }
 

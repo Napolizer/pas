@@ -46,7 +46,9 @@ public class HardwareTypeAdapter implements JsonbAdapter<HardwareType, JsonValue
             return null;
         }
 
-        output.setCondition(Condition.valueOf(jsonObject.getString("condition")));
+        if (output != null) {
+            output.setCondition(Condition.valueOf(jsonObject.getString("condition")));
+        }
         return output;
     }
 }

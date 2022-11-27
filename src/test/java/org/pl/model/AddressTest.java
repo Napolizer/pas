@@ -46,11 +46,11 @@ class AddressTest {
     @Test
     void fieldCityNegativeTest() {
         List<String> invalidTowns = new ArrayList<>(List.of(
-                "a",
-                "",
-                "0",
-                "Warsaw0",
-                "1Lodz"
+                " ",
+                "   ",
+                "      ",
+                "  ",
+                ""
         ));
         invalidTowns.add(null);
         for (var city : invalidTowns) {
@@ -78,15 +78,15 @@ class AddressTest {
 
     @Test
     void fieldNumberNegativeTest() {
-        List<String> invalidPhoneNumbers = new ArrayList<>(List.of(
-                " 123456789",
-                "987654321 ",
+        List<String> invalidStreetNumbers = new ArrayList<>(List.of(
+                " ",
+                "   ",
                 "      ",
-                "  2312 312 312 32",
+                "  ",
                 ""
         ));
-        invalidPhoneNumbers.add(null);
-        for (var phoneNumber : invalidPhoneNumbers) {
+        invalidStreetNumbers.add(null);
+        for (var phoneNumber : invalidStreetNumbers) {
             validAddress.setNumber(phoneNumber);
             assertEquals(phoneNumber, validAddress.getNumber());
             assertFalse(validator.validate(validAddress).isEmpty());

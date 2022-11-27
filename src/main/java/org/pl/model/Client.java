@@ -1,13 +1,20 @@
 package org.pl.model;
 
+import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.Range;
+import org.pl.adapters.ClientTypeAdapter;
 import org.pl.exceptions.ClientException;
 
 import java.util.Objects;
@@ -33,6 +40,7 @@ public class Client implements Entity {
     @NotNull
     private Boolean archive;
     @NotNull
+    @Min(0)
     private Double balance;
     @NotBlank
     private String firstName;
@@ -42,11 +50,14 @@ public class Client implements Entity {
     private String phoneNumber;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @NotNull
+    @JsonbTypeAdapter(ClientTypeAdapter.class)
     private ClientType clientType;
     @Embedded
     @NotNull
+    @Valid
     private Address address;
     @NotNull
+    @Valid
     private ClientAccessType clientAccessType;
 
     public double calculateDiscount(int price) throws ClientException {

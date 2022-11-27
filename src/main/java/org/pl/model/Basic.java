@@ -12,8 +12,8 @@ import lombok.experimental.SuperBuilder;
 @Entity
 public class Basic extends ClientType {
     public Basic() {
-        setFactor(1.0f);
+        setFactor(1.0);
         setMaxRepairs(2);
-        setTypeName("Basic");
+        setType("BASIC");
     }
 }

@@ -1,10 +1,15 @@
 package org.pl.repositories;
 
+import jakarta.annotation.Resource;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
+import jakarta.transaction.*;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 import org.pl.model.Client_;
@@ -12,16 +17,28 @@ import org.pl.model.Client_;
 import java.util.List;
 import java.util.UUID;
 
+@NoArgsConstructor
 @AllArgsConstructor
+@ApplicationScoped
 public class ClientRepository {
+    @PersistenceContext
     private EntityManager entityManager;
 
+    @Resource
+    UserTransaction userTransaction;
+
     public Client saveClient(Client client) throws RepositoryException {
-        if (!entityManager.contains(client)) {
-            entityManager.getTransaction().begin();
-            entityManager.persist(client);
-            entityManager.getTransaction().commit();
-            return client;
+        client.setId(UUID.randomUUID());
+        client.getClientType().setId(UUID.randomUUID());
+        try {
+            if (!entityManager.contains(client)) {
+                userTransaction.begin();
+                entityManager.persist(client);
+                userTransaction.commit();
+                return client;
+            }
+        } catch (Exception e) {
+            throw new RepositoryException(e.getMessage());
         }
         throw new RepositoryException(RepositoryException.REPOSITORY_ADD_EXCEPTION);
     }
@@ -31,11 +48,12 @@ public class ClientRepository {
             Client client = entityManager.find(Client.class, uuid);
             if (client != null) {
                 return client;
+            } else {
+                throw new IllegalArgumentException();
             }
         } catch (IllegalArgumentException ex) {
             throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
         }
-        return null;
     }
 
     public Client updateClient(UUID id, Client client) throws RepositoryException {
@@ -48,7 +66,7 @@ public class ClientRepository {
             clientToChange.setPhoneNumber(client.getPhoneNumber());
             clientToChange.setArchive(client.isArchive());
             clientToChange.setUsername(client.getUsername());
-            clientToChange.getClientType().setTypeName(client.getClientType().getTypeName());
+            clientToChange.getClientType().setType(client.getClientType().getType());
             clientToChange.getClientType().setFactor(client.getClientType().getFactor());
             clientToChange.getClientType().setMaxRepairs(client.getClientType().getMaxRepairs());
             clientToChange.setClientAccessType(client.getClientAccessType());
@@ -63,17 +81,17 @@ public class ClientRepository {
 
     public Client deleteClient(UUID id) throws RepositoryException {
         try {
-            Client client = entityManager.find(Client.class, id);
-                if (!client.isArchive()) {
-                    entityManager.getTransaction().begin();
-                    entityManager.merge(client);
-                    client.setArchive(true);
-                    entityManager.getTransaction().commit();
-                    return client;
-                } else {
-                    throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
-                }
-        } catch (IllegalArgumentException ex) {
+            Client client = getClientById(id);
+            if (!client.isArchive()) {
+                userTransaction.begin();
+                client.setArchive(true);
+                entityManager.merge(client);
+                userTransaction.commit();
+                return client;
+            } else {
+                throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+            }
+        } catch (NullPointerException | NotSupportedException | SystemException | HeuristicRollbackException | HeuristicMixedException | RollbackException ex) {
             throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
         }
     }
@@ -130,15 +148,15 @@ public class ClientRepository {
         try {
             Client client = entityManager.find(Client.class, uuid);
             if (client.isArchive()) {
-                entityManager.getTransaction().begin();
-                entityManager.merge(client);
+                userTransaction.begin();
                 client.setArchive(false);
-                entityManager.getTransaction().commit();
+                entityManager.merge(client);
+                userTransaction.commit();
                 return client;
             } else {
                 throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
             }
-        } catch (IllegalArgumentException ex) {
+        } catch (NullPointerException | NotSupportedException | SystemException | HeuristicRollbackException | HeuristicMixedException | RollbackException ex) {
             throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
         }
     }

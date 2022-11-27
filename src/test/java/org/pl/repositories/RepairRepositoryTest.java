@@ -1,21 +1,6 @@
 package org.pl.repositories;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.Query;
-import org.junit.jupiter.api.*;
-import org.pl.exceptions.HardwareException;
-import org.pl.exceptions.RepairException;
-import org.pl.exceptions.RepositoryException;
-import org.pl.model.*;
-
-import java.util.Date;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.pl.model.Condition.DUSTY;
 
 class RepairRepositoryTest {
 //    private RepairRepository repairRepository;

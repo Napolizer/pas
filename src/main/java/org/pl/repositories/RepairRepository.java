@@ -1,10 +1,15 @@
 package org.pl.repositories;
 
 
+import jakarta.annotation.Resource;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
+import jakarta.transaction.*;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.*;
@@ -13,17 +18,27 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@NoArgsConstructor
 @AllArgsConstructor
+@ApplicationScoped
 public class RepairRepository {
-
+    @PersistenceContext
     private EntityManager entityManager;
 
+    @Resource
+    UserTransaction userTransaction;
+
     public Repair saveRepair(Repair repair) throws RepositoryException {
-        if (!entityManager.contains(repair)) {
-            entityManager.getTransaction().begin();
-            entityManager.persist(repair);
-            entityManager.getTransaction().commit();
-            return repair;
+        repair.setId(UUID.randomUUID());
+        try {
+            if (!entityManager.contains(repair)) {
+                userTransaction.begin();
+                entityManager.persist(repair);
+                userTransaction.commit();
+                return repair;
+            }
+        } catch (Exception e) {
+            throw new RepositoryException(e.getMessage());
         }
         throw new RepositoryException(RepositoryException.REPOSITORY_ADD_EXCEPTION);
     }
@@ -59,16 +74,19 @@ public class RepairRepository {
         try {
             Repair repair = entityManager.find(Repair.class, id);
             if (!repair.isArchive()) {
-                entityManager.getTransaction().begin();
+                userTransaction.begin();
                 entityManager.merge(repair);
                 repair.setArchive(true);
-                entityManager.getTransaction().commit();
+                userTransaction.commit();
                 return repair;
             } else {
                 throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
             }
         } catch (IllegalArgumentException ex) {
             throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+        } catch (NullPointerException | NotSupportedException | SystemException | HeuristicRollbackException |
+                 HeuristicMixedException | RollbackException ex) {
+            throw new RepositoryException(ex.getMessage());
         }
     }
 
@@ -120,8 +138,12 @@ public class RepairRepository {
                 repair.getClient().getBalance() - price
         );
 
-        entityManager.getTransaction().begin();
-        entityManager.merge(repair);
-        entityManager.getTransaction().commit();
+        try {
+            userTransaction.begin();
+            entityManager.merge(repair);
+            userTransaction.commit();
+        } catch (Exception e) {
+            throw new RepositoryException(e.getMessage());
+        }
     }
 }

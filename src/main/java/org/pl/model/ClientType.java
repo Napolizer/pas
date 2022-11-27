@@ -34,12 +34,12 @@ public abstract class ClientType {
     private UUID id;
     @NotNull
     @Range(min = 0, max = 1)
-    protected Float factor;
+    protected Double factor;
     @NotNull
     @Min(value = 1)
     protected Integer maxRepairs;
     @NotBlank
-    protected String typeName;
+    protected String type;
 
     public ClientType() {
 

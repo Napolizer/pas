@@ -1,13 +1,15 @@
 package org.pl.controllers;
 
 import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.exceptions.ClientException;
 import org.pl.exceptions.RepositoryException;
-import org.pl.model.Client;
-import org.pl.model.Repair;
+import org.pl.model.*;
 import org.pl.services.ClientService;
 import org.pl.services.RepairService;
 
@@ -26,14 +28,20 @@ public class ClientController {
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClientById(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
             Client client = clientService.get(uuid);
+            if (client == null) {
+                throw new RepositoryException("");
+            }
             return Response.ok(client).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(400, "Given id is invalid").build();
+            json.add("error", "Given id is invalid");
+            return Response.status(400).entity(json.build()).build();
         } catch (RepositoryException e) {
-            return Response.status(404, "Client not found").build();
+            json.add("error", "Client not found");
+            return Response.status(404).entity(json.build()).build();
         }
     }
 
@@ -41,39 +49,45 @@ public class ClientController {
     @Path("/username/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClientByUsername(@PathParam("username")String username, @QueryParam("strict")String strict) throws RepositoryException {
+        var json = Json.createObjectBuilder();
         try {
-            if (Objects.equals(strict, "true")) {
-                Client client = clientService.getClientByUsername(username);
-                return Response.ok(client).build();
-            } else if (Objects.equals(strict, "false")) {
+            if (Objects.equals(strict, "false")) {
                 List<Client> clients = clientService.getClientsByUsername(username);
                 return Response.ok(clients).build();
             } else {
-                return Response.status(400, "Given query parameter is invalid").build();
+                Client client = clientService.getClientByUsername(username);
+                if (client == null) {
+                    throw new RepositoryException("");
+                }
+                return Response.ok(client).build();
             }
         } catch (RepositoryException e) {
-            return Response.status(404, "Client not found").build();
+            json.add("error", "Client not found");
+            return Response.status(404).entity(json.build()).build();
         }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllClients() {
-        List<Client> clients = clientService.getAllCLients();
+        List<Client> clients = clientService.getAllClients();
         return Response.ok(clients).build();
     }
 
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addClient(Client client) {
+    public Response addClient(@Valid @NotNull Client client) {
+        var json = Json.createObjectBuilder();
         try {
-            clientService.add(client);
-            return Response.status(201, "Created successfully").build();
+            Client createdClient = clientService.add(client);
+            return Response.status(201).entity(createdClient).build();
         } catch (RepositoryException e) {
-            return Response.status(400, "Client already exists").build();
+            json.add("error", "Client already exists");
+            return Response.status(400).entity(json.build()).build();
         } catch (ClientException e) {
-            return Response.status(400, "Invalid fields").build();
+            json.add("error", "Invalid fields");
+            return Response.status(400).entity(json.build()).build();
         }
     }
 
@@ -81,14 +95,17 @@ public class ClientController {
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateClient(Client client, @PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            clientService.updateClient(uuid, client);
-            return Response.ok(client).build();
+            Client updatedClient = clientService.updateClient(uuid, client);
+            return Response.ok(updatedClient).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(400, "Invalid data in request").build();
+            json.add("error", "Invalid data in request");
+            return Response.status(400).entity(json.build()).build();
        } catch (RepositoryException e) {
-            return Response.status(404, "Client does not exist").build();
+            json.add("error", "Client does not exist");
+            return Response.status(404).entity(json.build()).build();
         }
     }
 
@@ -96,14 +113,23 @@ public class ClientController {
     @Path("/id/{id}/deactivate")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deactivateClient(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
             Client client = clientService.archive(uuid);
             return Response.ok(client).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(400, "Invalid data in request").build();
+            json.add("error", "Invalid data in request");
+            return Response.status(400).entity(json.build()).build();
         } catch (RepositoryException e) {
-            return Response.status(404, "Client does not exist").build();
+            if (e.getMessage().equals(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION)) {
+                json.add("error", "Client is already deactivated");
+                return Response.status(400).entity(json.build()).build();
+            } else {
+                json.add("error", "Client does not exist");
+                json.add("exception", e.getMessage());
+                return Response.status(404).entity(json.build()).build();
+            }
         }
     }
 
@@ -111,14 +137,22 @@ public class ClientController {
     @Path("/id/{id}/activate")
     @Produces(MediaType.APPLICATION_JSON)
     public Response activateClient(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            Client client = clientService.dearchivize(uuid);
+            Client client = clientService.dearchive(uuid);
             return Response.ok(client).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(400, "Invalid data in request").build();
+            json.add("error", "Invalid data in request");
+            return Response.status(400).entity(json.build()).build();
         } catch (RepositoryException e) {
-            return Response.status(404, "Client does not exist").build();
+            if (e.getMessage().equals(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION)) {
+                json.add("error", "Client is already active");
+                return Response.status(400).entity(json.build()).build();
+            } else {
+                json.add("error", "Client does not exist");
+                return Response.status(404).entity(json.build()).build();
+            }
         }
     }
 
