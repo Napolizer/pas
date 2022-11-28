@@ -80,7 +80,7 @@ public class ClientService {
     public ClientType getClientTypeById(UUID uuid) throws RepositoryException {
         List<Client> clients = clientRepository.getAllClients();
         for (Client client : clients) {
-            if (client.getClientType().getId() == uuid) {
+            if (client.getClientType().getId().equals(uuid)) {
                 return client.getClientType();
             }
         }

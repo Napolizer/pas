@@ -56,7 +56,7 @@ public class HardwareRepository {
     public Hardware getHardwareById(UUID uuid) throws RepositoryException {
         try {
             Hardware hardware = entityManager.find(Hardware.class, uuid);
-            if (hardware != null) {
+            if (hardware != null && !hardware.isArchive()) {
                 return hardware;
             }
         } catch (IllegalArgumentException ex) {

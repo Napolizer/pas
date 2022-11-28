@@ -20,20 +20,23 @@ import java.util.UUID;
 @Path("/repair")
 public class RepairController {
     @Inject
-    private RepairService repairService; //something tu nie teges
+    private RepairService repairService;
 
     @GET
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRepairById(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
             Repair repair = repairService.get(uuid);
             return Response.ok(repair).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(400, "Given id is invalid").build();
+            json.add("error", "Given id is invalid");
+            return Response.status(400).entity(json.build()).build();
         } catch (RepositoryException e) {
-            return Response.status(404, "Repair not found").build();
+            json.add("error", "Repair not found");
+            return Response.status(404).entity(json.build()).build();
         }
     }
 
@@ -61,30 +64,40 @@ public class RepairController {
     @PUT
     @Path("id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateRepair(Repair repair, @PathParam("id")String id) {
+    public Response updateRepair(@NotNull Repair repair, @PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            repairService.updateRepair(uuid, repair);
-            return Response.ok(repair).build();
+            Repair updatedRepair = repairService.updateRepair(uuid, repair);
+            return Response.ok(updatedRepair).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(400, "Invalid data in request").build();
+            json.add("error", "Invalid data in request");
+            return Response.status(400).entity(json.build()).build();
         } catch (RepositoryException e) {
-            return Response.status(404, "Repair does not exist").build();
+            json.add("error", "Repair does not exist");
+            return Response.status(404).entity(json.build()).build();
         }
     }
 
     @DELETE
     @Path("id/{id}")
     public Response deleteRepair(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
             if (!repairService.isRepairArchive(uuid)) {
-                repairService.archivize(uuid);
-                return Response.ok("Deleted Successfully").build();
-            } else
-                return Response.status(400, "Repair is already deleted").build();
+                Repair deletedRepair = repairService.repair(uuid);
+                return Response.ok(deletedRepair).build();
+            } else {
+                json.add("error", "Repair is already archive");
+                return Response.status(400).entity(json.build()).build();
+            }
         } catch (RepositoryException e) {
-            return Response.status(404, "Repair does not exist").build();
+            json.add("error", "Given request is invalid");
+            return Response.status(400).entity(json.build()).build();
+        } catch (Exception e) {
+            json.add("error", "Repair does not exist");
+            return Response.status(404).entity(json.build()).build();
         }
     }
 }

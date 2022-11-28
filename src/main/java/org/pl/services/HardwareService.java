@@ -67,7 +67,7 @@ public class HardwareService {
         return hardwareRepository.updateHardware(uuid, hardware);
     }
 
-    public HardwareType getHardwareTypeById(Long uuid) throws RepositoryException {
+    public HardwareType getHardwareTypeById(UUID uuid) throws RepositoryException {
         List<Hardware> hardwares = hardwareRepository.getAllHardwares();
         for (Hardware hardware : hardwares) {
             if (hardware.getHardwareType().getId().equals(uuid)) {

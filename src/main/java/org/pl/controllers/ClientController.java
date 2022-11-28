@@ -160,11 +160,16 @@ public class ClientController {
     @Path("/id/{id}/repair/past")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClientsPastRepairs(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             List<Repair> repairs = repairService.getClientsPastRepairs(UUID.fromString(id));
-            return Response.ok("Repairs returned successfully").build();
+            return Response.ok(repairs).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(400, "Given id is invalid").build();
+            json.add("error", "Given client id is invalid");
+            return Response.status(400).entity(json.build()).build();
+        } catch (RepositoryException e) {
+            json.add("error", "User with given id was not found");
+            return Response.status(404).entity(json.build()).build();
         }
     }
 
@@ -172,11 +177,16 @@ public class ClientController {
     @Path("/id/{id}/repair/present")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClientsPresentRepairs(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             List<Repair> repairs = repairService.getClientsPresentRepairs(UUID.fromString(id));
-            return Response.ok("Repairs returned successfully").build();
+            return Response.ok(repairs).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(400, "Given id is invalid").build();
+            json.add("error", "Given client id is invalid");
+            return Response.status(400).entity(json.build()).build();
+        } catch (RepositoryException e) {
+            json.add("error", "User with given id was not found");
+            return Response.status(404).entity(json.build()).build();
         }
     }
 }

@@ -7,6 +7,7 @@ import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.json.bind.adapter.JsonbAdapter;
 import org.pl.model.Client;
+import org.pl.model.DateRange;
 import org.pl.model.Hardware;
 import org.pl.model.Repair;
 import org.pl.repositories.ClientRepository;
@@ -32,8 +33,10 @@ public class RepairAdapter implements JsonbAdapter<Repair, JsonValue> {
             json.add("id", repair.getId().toString());
         }
         json.add("archive", repair.getArchive());
-        json.add("startDate", repair.getStartDate().toString());
-        json.add("endDate", repair.getEndDate().toString());
+        json.add("startDate", repair.getDateRange().getStartDate().toString());
+        if (repair.getDateRange().getEndDate() != null) {
+            json.add("endDate", repair.getDateRange().getEndDate().toString());
+        }
 
         JsonbConfig config = new JsonbConfig().
                 withFormatting(true);
@@ -67,17 +70,33 @@ public class RepairAdapter implements JsonbAdapter<Repair, JsonValue> {
             output.setArchive(false);
         }
 
-        output.setStartDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(jsonObject.getString("startDate")));
-        output.setEndDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(jsonObject.getString("endDate")));
+        if (jsonObject.containsKey("startDate") || jsonObject.containsKey("endDate")) {
+            DateRange dateRange = new DateRange();
+            if (jsonObject.containsKey("startDate")) {
+                dateRange.setStartDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(jsonObject.getString("startDate")));
+            }
+            if (jsonObject.containsKey("endDate")) {
+                dateRange.setEndDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(jsonObject.getString("endDate")));
+            }
+            output.setDateRange(dateRange);
+        }
 
-        String hardwareId = jsonObject.getString("hardwareId");
-        String clientId = jsonObject.getString("clientId");
-
-        Hardware hardware = hardwareRepository.getHardwareById(UUID.fromString(hardwareId));
-        Client client = clientRepository.getClientById(UUID.fromString(clientId));
-
-        output.setHardware(hardware);
-        output.setClient(client);
+        if (jsonObject.containsKey("hardwareId")) {
+            String hardwareId = jsonObject.getString("hardwareId");
+            Hardware hardware = hardwareRepository.getHardwareById(UUID.fromString(hardwareId));
+            if (hardware == null) {
+                throw new Exception();
+            }
+            output.setHardware(hardware);
+        }
+        if (jsonObject.containsKey("clientId")) {
+            String clientId = jsonObject.getString("clientId");
+            Client client = clientRepository.getClientById(UUID.fromString(clientId));
+            if (client == null) {
+                throw new Exception();
+            }
+            output.setClient(client);
+        }
 
         return output;
     }
