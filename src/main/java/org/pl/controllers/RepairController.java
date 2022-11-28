@@ -40,13 +40,6 @@ public class RepairController {
         }
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllRepairs() {
-        List<Repair> repairs = repairService.getAllRepairs();
-        return Response.ok(repairs).build();
-    }
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

@@ -67,13 +67,6 @@ public class ClientController {
         }
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllClients() {
-        List<Client> clients = clientService.getAllClients();
-        return Response.ok(clients).build();
-    }
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

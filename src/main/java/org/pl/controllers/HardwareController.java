@@ -52,13 +52,6 @@ public class HardwareController {
         }
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllHardware() {
-        List<Hardware> hardwareList = hardwareService.getAllHardwares();
-        return Response.ok(hardwareList).build();
-    }
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
