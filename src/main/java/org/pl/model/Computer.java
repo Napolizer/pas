@@ -1,22 +1,21 @@
 package org.pl.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
-import org.pl.exceptions.HardwareException;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.pl.exceptions.HardwareException;
 
-@Data
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@DiscriminatorValue("Computer")
 public class Computer extends HardwareType {
+    public Computer(Condition condition) {
+        super(condition);
+        setType("COMPUTER");
+    }
     public double calculateRepairCost(double price) throws HardwareException {
         if (price < 0) {
             throw new HardwareException(HardwareException.HARDWARE_TYPE_CALCULATE_REPAIR_COST_BELOW_ZERO_EXCEPTION);

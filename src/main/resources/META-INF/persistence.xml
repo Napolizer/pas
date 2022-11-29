@@ -4,7 +4,8 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
              https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
-  <persistence-unit name="POSTGRES_REPAIR_PU" transaction-type="RESOURCE_LOCAL">
+  <persistence-unit name="POSTGRES_REPAIR_PU" transaction-type="JTA">
+<!--  <persistence-unit name="POSTGRES_REPAIR_PU" transaction-type="RESOURCE_LOCAL">-->
     <class>org.pl.model.Address</class>
     <class>org.pl.model.ClientType</class>
     <class>org.pl.model.Basic</class>
@@ -29,6 +30,9 @@
       <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.format_sql" value="true"/>
+<!--      <property name="eclipselink.target-database" value="PostgreSQL"/>-->
+<!--        <property name="hibernate.transaction.jta.platform"-->
+<!--                  value="org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform" />-->
     </properties>
   </persistence-unit>
 </persistence>

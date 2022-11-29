@@ -31,22 +31,10 @@ class HardwareTypeTest {
 
         uuid = UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c");
 
-        validComputer = Computer.builder()
-                .id(uuid)
-                .condition(Condition.FINE)
-                .build();
-        validConsole = Console.builder()
-                .id(uuid)
-                .condition(Condition.BAD)
-                .build();
-        validMonitor = Monitor.builder()
-                .id(uuid)
-                .condition(Condition.DUSTY)
-                .build();
-        validPhone = Phone.builder()
-                .id(uuid)
-                .condition(Condition.AVERAGE)
-                .build();
+        validComputer = new Computer(Condition.FINE);
+        validConsole = new Console(Condition.BAD);
+        validMonitor = new Monitor(Condition.DUSTY);
+        validPhone = new Phone(Condition.AVERAGE);
 
         validHardwareTypes = List.of(
                 validComputer,

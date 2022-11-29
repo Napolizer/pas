@@ -1,6 +1,7 @@
 package org.pl.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.pl.exceptions.ClientException;
@@ -8,6 +9,7 @@ import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepairException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
+import org.pl.model.DateRange;
 import org.pl.model.Hardware;
 import org.pl.model.Repair;
 import org.pl.repositories.RepairRepository;
@@ -18,22 +20,8 @@ import java.util.*;
 @NoArgsConstructor
 @ApplicationScoped
 public class RepairService {
+    @Inject
     private RepairRepository repairRepository;
-
-    public Repair add(Client client, Hardware hardware) throws RepositoryException, RepairException {
-        if (Objects.equals(client, null))
-            throw new RepairException(RepairException.REPAIR_CLIENT_EXCEPTION);
-        if (Objects.equals(hardware, null))
-            throw new RepairException(RepairException.REPAIR_HARDWARE_EXCEPTION);
-        return repairRepository.saveRepair(
-                Repair.builder()
-                        .client(client)
-                        .hardware(hardware)
-                        .archive(false)
-                        .startDate(new Date())
-                        .endDate(null)
-                        .build());
-    }
 
     public Repair add(Repair repair) throws RepositoryException {
         return repairRepository.saveRepair(repair);
@@ -47,7 +35,7 @@ public class RepairService {
         return repairRepository.getRepairById(id).toString();
     }
 
-    public List<Repair> getAllClientRepairs(UUID clientId) {
+    public List<Repair> getAllClientRepairs(UUID clientId) throws RepositoryException {
         return repairRepository.getClientRepairs(clientId);
     }
 
@@ -58,8 +46,8 @@ public class RepairService {
         return repairRepository.deleteRepair(id);
     }
 
-    public void repair(UUID id) throws HardwareException, RepositoryException, ClientException {
-        repairRepository.repair(id);
+    public Repair repair(UUID id) throws HardwareException, RepositoryException, ClientException {
+        return repairRepository.repair(id);
     }
 
     public int getPresentSize() {
@@ -70,7 +58,7 @@ public class RepairService {
         return repairRepository.getRepairs(true).size();
     }
 
-    public List<Repair> getClientsPastRepairs(UUID uuid) {
+    public List<Repair> getClientsPastRepairs(UUID uuid) throws RepositoryException {
         List<Repair> pastRepairs = new ArrayList<>();
         List<Repair> repairs = repairRepository.getClientRepairs(uuid);
         for (Repair repair : repairs) {
@@ -81,7 +69,7 @@ public class RepairService {
         return pastRepairs;
     }
 
-    public List<Repair> getClientsPresentRepairs(UUID uuid) {
+    public List<Repair> getClientsPresentRepairs(UUID uuid) throws RepositoryException {
         List<Repair> presentRepairs = new ArrayList<>();
         List<Repair> repairs = repairRepository.getClientRepairs(uuid);
         for (Repair repair : repairs) {

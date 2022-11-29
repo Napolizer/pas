@@ -1,84 +1,103 @@
 package org.pl.controllers;
 
 import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonValue;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbConfig;
+import jakarta.json.bind.JsonbException;
+import jakarta.persistence.Persistence;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.pl.adapters.HardwareTypeAdapter;
 import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
-import org.pl.model.Hardware;
+import org.pl.model.*;
+import org.pl.repositories.HardwareRepository;
 import org.pl.services.HardwareService;
 import java.util.List;
 import java.util.UUID;
 
+import static org.pl.model.Condition.DUSTY;
+
 @Path("/hardware")
 public class HardwareController {
     @Inject
-    private HardwareService hardwareService; //something tu nie teges
+    private HardwareService hardwareService;
+
+    HardwareController() {
+        hardwareService = new HardwareService(new HardwareRepository());
+    }
 
     @GET
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getHardwareById(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
             Hardware hardware = hardwareService.get(uuid);
+            if (hardware == null) {
+                json.add("error", "Hardware with given id not found");
+                return Response.status(404).entity(json.build()).build();
+            }
             return Response.ok(hardware).build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(400, "Given id is invalid").build();
-        } catch (RepositoryException e) {
-            return Response.status(404, "Hardware not found").build();
+        } catch (IllegalArgumentException | RepositoryException e) {
+            json.add("error", e.getMessage());
+            return Response.status(400).entity(json.build()).build();
         }
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllHardwares() {
-        List<Hardware> hardwares = hardwareService.getAllHardwares();
-        return Response.ok(hardwares).build();
-    }
-
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addHardware(Hardware hardware) {
+    public Response addHardware(@Valid @NotNull Hardware hardware) {
+        var json = Json.createObjectBuilder();
         try {
-            hardwareService.add(hardware);
-            return Response.status(201, "Created successfully").build();
-        } catch (RepositoryException e) {
-            return Response.status(400, "Hardware already exists").build();
-        } catch (HardwareException e) {
-            return Response.status(400, "Invalid fields").build();
+            Hardware createdHardware = hardwareService.add(hardware);
+            return Response.status(201).entity(createdHardware).build();
+        } catch (RepositoryException | HardwareException | JsonbException e) {
+            json.add("error", e.getMessage());
+            return Response.status(400).entity(json).build();
         }
     }
 
     @PUT
     @Path("id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateHardware(Hardware hardware, @PathParam("id")String id) {
+    public Response updateHardware(@NotNull Hardware hardware, @PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
             hardwareService.updateHardware(uuid, hardware);
             return Response.ok(hardware).build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(400, "Invalid data in request").build();
-        } catch (RepositoryException e) {
-            return Response.status(404, "Hardware does not exist").build();
+        } catch (IllegalArgumentException | RepositoryException e) {
+            json.add("error", e.getMessage());
+            return Response.status(400).entity(json.build()).build();
         }
     }
 
     @DELETE
     @Path("id/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteHardware(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
             if (!hardwareService.isHardwareArchive(uuid)) {
                 hardwareService.archive(uuid);
-                return Response.ok("Deleted Successfully").build();
+                json.add("message", "Hardware deleted successfully");
+                return Response.ok(json.build()).build();
             } else
-                return Response.status(400, "Hardware is in active repair").build();
+                json.add("error", "Hardware is in active repair");
+            return Response.status(400).entity(json.build()).build();
         } catch (RepositoryException e) {
-            return Response.status(404, "Hardware does not exist").build();
+            json.add("error", "Hardware does not exist");
+            return Response.status(404).entity(json.build()).build();
         }
     }
 }

@@ -12,8 +12,8 @@ import lombok.experimental.SuperBuilder;
 @Entity
 public class Premium extends ClientType {
     public Premium() {
-        setFactor(0.9f);
+        setFactor(0.9);
         setMaxRepairs(5);
-        setTypeName("Premium");
+        setType("PREMIUM");
     }
 }

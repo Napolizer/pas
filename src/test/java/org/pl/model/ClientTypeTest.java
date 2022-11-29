@@ -38,8 +38,8 @@ class ClientTypeTest {
 
     @Test
     void fieldFactorPositiveTest() {
-        List<Float> validFactors = List.of(
-                0.0f, 0.01f, 0.1f, 0.5f, 0.9f, 0.99f, 1.0f
+        List<Double> validFactors = List.of(
+                0.0, 0.01, 0.1, 0.5, 0.9, 0.99, 1.0
         );
         for (var factor : validFactors) {
             validClientType.setFactor(factor);
@@ -50,8 +50,8 @@ class ClientTypeTest {
 
     @Test
     void fieldFactorNegativeTest() {
-        List<Float> invalidFactors = new ArrayList<>(List.of(
-                -100f, -10f, -1f, -0.1f, -0.01f, 1.01f, 1.1f, 10f, 100f
+        List<Double> invalidFactors = new ArrayList<>(List.of(
+                -100.0, -10.0, -1.0, -0.1, -0.01, 1.01, 1.1, 10.0, 100.0
         ));
         invalidFactors.add(null);
         for (var factor : invalidFactors) {
@@ -99,8 +99,8 @@ class ClientTypeTest {
                 " other name 123 "
         );
         for (var typeName : validTypeNames) {
-            validClientType.setTypeName(typeName);
-            assertEquals(typeName, validClientType.getTypeName());
+            validClientType.setType(typeName);
+            assertEquals(typeName, validClientType.getType());
             assertTrue(validator.validate(validClientType).isEmpty());
         }
     }
@@ -114,8 +114,8 @@ class ClientTypeTest {
         ));
         invalidTypeNames.add(null);
         for (var typeName : invalidTypeNames) {
-            validClientType.setTypeName(typeName);
-            assertEquals(typeName, validClientType.getTypeName());
+            validClientType.setType(typeName);
+            assertEquals(typeName, validClientType.getType());
             assertFalse(validator.validate(validClientType).isEmpty());
         }
     }

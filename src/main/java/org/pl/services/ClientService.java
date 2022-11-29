@@ -18,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @ApplicationScoped
 public class ClientService {
+    @Inject
     private ClientRepository clientRepository;
 
     public Client add(Client client) throws RepositoryException, ClientException {
@@ -52,7 +53,7 @@ public class ClientService {
         return clientRepository.deleteClient(id);
     }
 
-    public List<Client> getAllCLients() {
+    public List<Client> getAllClients() {
         return clientRepository.getAllClients();
     }
 
@@ -72,14 +73,14 @@ public class ClientService {
 
     public Client updateClient(UUID uuid, Client client) throws RepositoryException { return clientRepository.updateClient(uuid, client);}
 
-    public Client dearchivize(UUID uuid) throws RepositoryException {
+    public Client dearchive(UUID uuid) throws RepositoryException {
         return clientRepository.restoreClient(uuid);
     }
 
     public ClientType getClientTypeById(UUID uuid) throws RepositoryException {
         List<Client> clients = clientRepository.getAllClients();
         for (Client client : clients) {
-            if (client.getClientType().getId() == uuid) {
+            if (client.getClientType().getId().equals(uuid)) {
                 return client.getClientType();
             }
         }

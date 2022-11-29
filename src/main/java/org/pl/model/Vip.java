@@ -12,8 +12,8 @@ import lombok.experimental.SuperBuilder;
 @Entity
 public class Vip extends ClientType {
     public Vip() {
-        setFactor(0.8f);
+        setFactor(0.8);
         setMaxRepairs(10);
-        setTypeName("Vip");
+        setType("VIP");
     }
 }

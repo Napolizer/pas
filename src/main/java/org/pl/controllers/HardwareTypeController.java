@@ -1,6 +1,7 @@
 package org.pl.controllers;
 
 import jakarta.inject.Inject;
+import jakarta.json.Json;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -23,14 +24,17 @@ public class HardwareTypeController {
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getHardwareTypeById(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
             HardwareType hardwareType = hardwareService.getHardwareTypeById(uuid);
             return Response.ok(hardwareType).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(400, "Given id is invalid").build();
+            json.add("error", "Given id is invalid");
+            return Response.status(400).entity(json.build()).build();
         } catch (RepositoryException e) {
-            return Response.status(404, "HardwareType not found").build();
+            json.add("error", "HardwareType not found");
+            return Response.status(404).entity(json.build()).build();
         }
     }
 }

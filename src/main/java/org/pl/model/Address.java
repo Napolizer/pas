@@ -18,10 +18,8 @@ import lombok.NoArgsConstructor;
 public class Address {
     @NotBlank
     @Size(min=2)
-    @Pattern(regexp = "^[^0-9]+$")
     private String city;
     @NotBlank
-    @Size(min=1,max=9)
     private String number;
     @NotBlank
     private String street;
