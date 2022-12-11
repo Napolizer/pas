@@ -133,6 +133,17 @@ public class ClientRepository {
         return client;
     }
 
+    public List<Client> getAllClientsFilter(String substr) {
+        List<Client> clients;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Client> criteriaQuery = criteriaBuilder.createQuery(Client.class);
+        Root<Client> root = criteriaQuery.from(Client.class);
+        criteriaQuery.where(criteriaBuilder.like(root.get(Client_.ID), "%" + substr + "%"));
+        TypedQuery<Client> query = entityManager.createQuery(criteriaQuery);
+        clients = query.getResultList();
+        return clients;
+    }
+
     public List<Client> getClientsByUsername(String username) {
         List<Client> clients;
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

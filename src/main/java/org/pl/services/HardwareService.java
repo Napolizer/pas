@@ -76,4 +76,12 @@ public class HardwareService {
         }
         throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
     }
+
+    public List<Hardware> getAllPresentHardware() {
+        return hardwareRepository.getAllPresentHardwares();
+    }
+
+    public List<Hardware> getAllPresentHardwareFilter(String substr) {
+        return hardwareRepository.getAllPresentHardwareFilter(substr);
+    }
 }

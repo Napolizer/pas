@@ -100,4 +100,20 @@ public class HardwareController {
             return Response.status(404).entity(json.build()).build();
         }
     }
+
+    @GET
+    @Path("/present")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllClientsFilter() {
+        List<Hardware> hardware = hardwareService.getAllPresentHardware();
+        return Response.ok(hardware).build();
+    }
+
+    @GET
+    @Path("/present/filter/{substr}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllClientsFilter(@PathParam("substr")String substr) {
+        List<Hardware> hardware = hardwareService.getAllPresentHardwareFilter(substr);
+        return Response.ok(hardware).build();
+    }
 }

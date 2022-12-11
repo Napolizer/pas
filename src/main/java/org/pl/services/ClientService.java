@@ -69,6 +69,10 @@ public class ClientService {
         return clientRepository.getClients(true).size();
     }
 
+    public List<Client> getAllClientsFilter(String substr) {
+        return clientRepository.getAllClientsFilter(substr);
+    }
+
     public List<Client> getClientsByUsername(String username) { return clientRepository.getClientsByUsername(username); }
 
     public Client updateClient(UUID uuid, Client client) throws RepositoryException { return clientRepository.updateClient(uuid, client);}

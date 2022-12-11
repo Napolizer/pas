@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.pl.exceptions.RepositoryException;
+import org.pl.model.Client_;
 import org.pl.model.Console;
 import org.pl.model.Hardware;
 import org.pl.model.Hardware_;
@@ -125,6 +126,29 @@ public class HardwareRepository {
         CriteriaQuery<Hardware> criteriaQuery = criteriaBuilder.createQuery(Hardware.class);
         Root<Hardware> root = criteriaQuery.from(Hardware.class);
         criteriaQuery.select(root);
+        TypedQuery<Hardware> query = entityManager.createQuery(criteriaQuery);
+        hardwares = query.getResultList();
+        return hardwares;
+    }
+
+    public List<Hardware> getAllPresentHardwares() {
+        List<Hardware> hardwares;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Hardware> criteriaQuery = criteriaBuilder.createQuery(Hardware.class);
+        Root<Hardware> root = criteriaQuery.from(Hardware.class);
+        criteriaQuery.where(criteriaBuilder.isFalse(root.get(Hardware_.archive)));
+        TypedQuery<Hardware> query = entityManager.createQuery(criteriaQuery);
+        hardwares = query.getResultList();
+        return hardwares;
+    }
+
+    public List<Hardware> getAllPresentHardwareFilter(String substr) {
+        List<Hardware> hardwares;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Hardware> criteriaQuery = criteriaBuilder.createQuery(Hardware.class);
+        Root<Hardware> root = criteriaQuery.from(Hardware.class);
+        criteriaQuery.where(criteriaBuilder.isFalse(root.get(Hardware_.archive)));
+        criteriaQuery.where(criteriaBuilder.like(root.get(Hardware_.ID), "%" + substr + "%"));
         TypedQuery<Hardware> query = entityManager.createQuery(criteriaQuery);
         hardwares = query.getResultList();
         return hardwares;

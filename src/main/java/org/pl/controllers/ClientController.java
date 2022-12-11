@@ -182,4 +182,12 @@ public class ClientController {
             return Response.status(404).entity(json.build()).build();
         }
     }
+
+    @GET
+    @Path("/filter/{substr}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllClientsFilter(@PathParam("substr")String substr) {
+        List<Client> clients = clientService.getAllClientsFilter(substr);
+        return Response.ok(clients).build();
+    }
 }
