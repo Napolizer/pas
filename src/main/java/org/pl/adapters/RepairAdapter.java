@@ -15,7 +15,11 @@ import org.pl.repositories.HardwareRepository;
 
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.UUID;
 
@@ -33,9 +37,15 @@ public class RepairAdapter implements JsonbAdapter<Repair, JsonValue> {
             json.add("id", repair.getId().toString());
         }
         json.add("archive", repair.getArchive());
-        json.add("startDate", repair.getDateRange().getStartDate().toString());
+
+        Instant instant = repair.getDateRange().getStartDate().toInstant();
+        LocalDateTime ldt = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        json.add("startDate", ldt.format(formatter));
         if (repair.getDateRange().getEndDate() != null) {
-            json.add("endDate", repair.getDateRange().getEndDate().toString());
+            instant = repair.getDateRange().getStartDate().toInstant();
+            ldt = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+            json.add("endDate", ldt.format(formatter));
         }
 
         JsonbConfig config = new JsonbConfig().
