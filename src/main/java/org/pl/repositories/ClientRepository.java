@@ -70,11 +70,11 @@ public class ClientRepository {
             clientToChange.getClientType().setFactor(client.getClientType().getFactor());
             clientToChange.getClientType().setMaxRepairs(client.getClientType().getMaxRepairs());
             clientToChange.setClientAccessType(client.getClientAccessType());
-            entityManager.getTransaction().begin();
+            userTransaction.begin();
             entityManager.merge(clientToChange);
-            entityManager.getTransaction().commit();
+            userTransaction.commit();
             return clientToChange;
-        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
             throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
         }
     }
