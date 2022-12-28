@@ -1,5 +1,8 @@
 package org.pl.controllers;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.validation.Valid;
@@ -10,12 +13,11 @@ import jakarta.ws.rs.core.Response;
 import org.pl.exceptions.ClientException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.*;
+import org.pl.providers.TokenProvider;
 import org.pl.services.ClientService;
 import org.pl.services.RepairService;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Path("/client")
 public class ClientController {
@@ -23,6 +25,8 @@ public class ClientController {
     private ClientService clientService;
     @Inject
     private RepairService repairService;
+    @Inject
+    private TokenProvider tokenProvider;
 
     @GET
     @Path("/id/{id}")
@@ -189,5 +193,12 @@ public class ClientController {
     public Response getAllClientsFilter(@PathParam("substr")String substr) {
         List<Client> clients = clientService.getAllClientsFilter(substr);
         return Response.ok(clients).build();
+    }
+
+    @GET
+    @Path("/login")
+    public Response getToken() {
+        String token = tokenProvider.generateToken("john", "123");
+        return Response.ok(token).build();
     }
 }
