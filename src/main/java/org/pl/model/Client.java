@@ -7,13 +7,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.validator.constraints.Range;
 import org.pl.adapters.ClientTypeAdapter;
 import org.pl.exceptions.ClientException;
 
@@ -37,6 +35,8 @@ public class Client implements Entity {
     @NotBlank
     @Column(unique = true)
     private String username;
+    @NotBlank
+    private String password;
     @NotNull
     private Boolean archive;
     @NotNull
@@ -81,6 +81,11 @@ public class Client implements Entity {
     @Override
     public UUID getId() {
         return id;
+    }
+
+    @JsonbTransient
+    public String getPassword() {
+        return password;
     }
 
     @Override
