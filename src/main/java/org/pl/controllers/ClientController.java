@@ -1,5 +1,6 @@
 package org.pl.controllers;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.validation.Valid;
@@ -18,7 +19,6 @@ import org.pl.providers.TokenProvider;
 import org.pl.services.ClientService;
 import org.pl.services.RepairService;
 
-import javax.security.auth.login.CredentialException;
 import java.util.*;
 
 @Path("/client")
@@ -35,6 +35,7 @@ public class ClientController {
     @GET
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getClientById(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -56,6 +57,7 @@ public class ClientController {
     @GET
     @Path("/username/{username}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getClientByUsername(@PathParam("username")String username, @QueryParam("strict")String strict) throws RepositoryException {
         var json = Json.createObjectBuilder();
         try {
@@ -78,6 +80,7 @@ public class ClientController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed("ADMIN")
     public Response addClient(@Valid @NotNull Client client) {
         var json = Json.createObjectBuilder();
         try {
@@ -113,6 +116,7 @@ public class ClientController {
     @PUT
     @Path("/id/{id}/deactivate")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
     public Response deactivateClient(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -137,6 +141,7 @@ public class ClientController {
     @PUT
     @Path("/id/{id}/activate")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
     public Response activateClient(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -160,6 +165,7 @@ public class ClientController {
     @GET
     @Path("/id/{id}/repair/past")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getClientsPastRepairs(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -177,6 +183,7 @@ public class ClientController {
     @GET
     @Path("/id/{id}/repair/present")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getClientsPresentRepairs(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -194,6 +201,7 @@ public class ClientController {
     @GET
     @Path("/filter/{substr}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
     public Response getAllClientsFilter(@PathParam("substr")String substr) {
         List<Client> clients = clientService.getAllClientsFilter(substr);
         return Response.ok(clients).build();
