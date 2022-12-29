@@ -1,5 +1,6 @@
 package org.pl.controllers;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
@@ -36,6 +37,7 @@ public class HardwareController {
     @GET
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getHardwareById(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -55,6 +57,7 @@ public class HardwareController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
     public Response addHardware(@Valid @NotNull Hardware hardware) {
         var json = Json.createObjectBuilder();
         try {
@@ -84,6 +87,7 @@ public class HardwareController {
     @DELETE
     @Path("id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
     public Response deleteHardware(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -104,7 +108,8 @@ public class HardwareController {
     @GET
     @Path("/present")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllClientsFilter() {
+    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
+    public Response getAllPresentHardware() {
         List<Hardware> hardware = hardwareService.getAllPresentHardware();
         return Response.ok(hardware).build();
     }
@@ -112,7 +117,8 @@ public class HardwareController {
     @GET
     @Path("/present/filter/{substr}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllClientsFilter(@PathParam("substr")String substr) {
+    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
+    public Response getAllPresentHardwareFilter(@PathParam("substr")String substr) {
         List<Hardware> hardware = hardwareService.getAllPresentHardwareFilter(substr);
         return Response.ok(hardware).build();
     }
