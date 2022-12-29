@@ -15,6 +15,10 @@ public class TokenProvider {
     @Inject
     @ConfigProperty(name="secret_key", defaultValue = "Default secret key")
     private String secretKey;
+    @Inject
+    @ConfigProperty(name="token_expiration_time", defaultValue = "900000")
+    private Long expirationTime;
+
     public String generateToken(Client client) {
         long now = System.currentTimeMillis();
         return Jwts.builder()
@@ -22,7 +26,7 @@ public class TokenProvider {
                 .claim("username", client.getUsername())
                 .claim("group", client.getClientAccessType())
                 .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + 900000)) // 15 minutes expiration time
+                .setExpiration(new Date(now + expirationTime)) // 15 minutes expiration time
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
