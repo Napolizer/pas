@@ -58,7 +58,7 @@ public class Client implements Entity {
     private Address address;
     @NotNull
     @Valid
-    private ClientAccessType clientAccessType;
+    private clientAccessType clientAccessType;
 
     public double calculateDiscount(int price) throws ClientException {
         return getClientType().calculateDiscount(price);

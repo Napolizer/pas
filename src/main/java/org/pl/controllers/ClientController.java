@@ -1,8 +1,5 @@
 package org.pl.controllers;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.validation.Valid;
@@ -10,13 +7,18 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.pl.authentication.UserAuthenticator;
 import org.pl.exceptions.ClientException;
 import org.pl.exceptions.RepositoryException;
+import org.pl.exceptions.authentication.InvalidCredentialsException;
+import org.pl.exceptions.authentication.UserIsArchiveException;
+import org.pl.exceptions.authentication.UserNotFoundException;
 import org.pl.model.*;
 import org.pl.providers.TokenProvider;
 import org.pl.services.ClientService;
 import org.pl.services.RepairService;
 
+import javax.security.auth.login.CredentialException;
 import java.util.*;
 
 @Path("/client")
@@ -27,6 +29,8 @@ public class ClientController {
     private RepairService repairService;
     @Inject
     private TokenProvider tokenProvider;
+    @Inject
+    private UserAuthenticator userAuthenticator;
 
     @GET
     @Path("/id/{id}")
@@ -195,10 +199,27 @@ public class ClientController {
         return Response.ok(clients).build();
     }
 
-    @GET
+    @POST
     @Path("/login")
-    public Response getToken() {
-        String token = tokenProvider.generateToken("john", "123");
-        return Response.ok(token).build();
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(@NotNull @Valid UserCredentials userCredentials) {
+        var json = Json.createObjectBuilder();
+        try {
+            Client client = userAuthenticator.authenticate(userCredentials);
+
+            String token = tokenProvider.generateToken(client);
+            json.add("token", token);
+            return Response.ok(json.build()).build();
+        } catch (UserNotFoundException e) {
+            json.add("error", e.getMessage());
+            return Response.status(404).entity(json.build()).build();
+        } catch (InvalidCredentialsException e) {
+            json.add("error", e.getMessage());
+            return Response.status(401).entity(json.build()).build();
+        } catch (UserIsArchiveException e) {
+            json.add("error", e.getMessage());
+            return Response.status(400).entity(json.build()).build();
+        }
     }
 }
