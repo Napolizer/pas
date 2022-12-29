@@ -2,8 +2,16 @@
 <!DOCTYPE payara-web-app PUBLIC "-//Payara.fish//DTD Payara Server 4 Servlet 3.0//EN" "https://raw.githubusercontent.com/payara/Payara-Server-Documentation/master/schemas/payara-web-app_4.dtd">
 <payara-web-app>
    <security-role-mapping>
-      <role-name>User</role-name>
-      <group-name>Users</group-name>
+      <role-name>ADMIN</role-name>
+      <group-name>ADMINISTRATORS</group-name>
+   </security-role-mapping>
+   <security-role-mapping>
+      <role-name>EMPLOYEE</role-name>
+      <group-name>EMPLOYEES</group-name>
+   </security-role-mapping>
+   <security-role-mapping>
+      <role-name>USER</role-name>
+      <group-name>USERS</group-name>
    </security-role-mapping>
 </payara-web-app>
 

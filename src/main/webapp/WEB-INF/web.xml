@@ -5,7 +5,13 @@
          version="5.0">
 
     <security-role>
-        <role-name>User</role-name>
+        <role-name>ADMIN</role-name>
+    </security-role>
+    <security-role>
+        <role-name>EMPLOYEE</role-name>
+    </security-role>
+    <security-role>
+        <role-name>USER</role-name>
     </security-role>
 
     <security-constraint>
