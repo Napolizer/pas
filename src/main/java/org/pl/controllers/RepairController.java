@@ -1,5 +1,6 @@
 package org.pl.controllers;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.bind.annotation.JsonbTypeAdapter;
@@ -25,6 +26,7 @@ public class RepairController {
     @GET
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getRepairById(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -43,6 +45,7 @@ public class RepairController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response addRepair(@NotNull @Valid Repair repair) {
         var json = Json.createObjectBuilder();
         try {
@@ -74,6 +77,7 @@ public class RepairController {
 
     @DELETE
     @Path("id/{id}")
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response deleteRepair(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
