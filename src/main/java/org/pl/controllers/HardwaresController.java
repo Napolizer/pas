@@ -1,5 +1,6 @@
 package org.pl.controllers;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -12,6 +13,7 @@ import org.pl.services.HardwareService;
 import java.util.List;
 
 @Path("/hardwares")
+@RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
 public class HardwaresController {
     @Inject
     HardwareService hardwareService;

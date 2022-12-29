@@ -1,6 +1,7 @@
 package org.pl.controllers;
 
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -13,6 +14,7 @@ import org.pl.services.ClientService;
 import java.util.List;
 
 @Path("/clients")
+@RolesAllowed(value={"EMPLOYEE", "ADMIN"})
 public class ClientsController {
     @Inject
     ClientService clientService;
