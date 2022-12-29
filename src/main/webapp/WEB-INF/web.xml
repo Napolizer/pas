@@ -23,9 +23,9 @@
             <transport-guarantee>NONE</transport-guarantee>
         </user-data-constraint>
 
-<!--        <user-data-constraint>-->
-<!--            <transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
-<!--        </user-data-constraint>-->
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
 
 <!--       <auth-constraint>-->
 <!--          <role-name>User</role-name>-->
