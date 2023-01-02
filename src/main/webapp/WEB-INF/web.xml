@@ -19,9 +19,6 @@
           <web-resource-name>Require HTTPS</web-resource-name>
           <url-pattern>/*</url-pattern>
        </web-resource-collection>
-        <user-data-constraint>
-            <transport-guarantee>NONE</transport-guarantee>
-        </user-data-constraint>
 
         <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
