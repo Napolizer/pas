@@ -2,6 +2,7 @@ package org.pl.model;
 
 import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -25,6 +26,7 @@ public class Hardware implements Entity {
     @NotNull
     private Boolean archive;
     @NotNull
+    @Min(1)
     private Integer price;
     @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
