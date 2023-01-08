@@ -4,10 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import org.pl.model.Address;
-import org.pl.model.Client;
-import org.pl.model.Premium;
-import org.pl.model.clientAccessType;
+import org.pl.model.*;
 import org.pl.services.ClientService;
 
 import java.util.logging.Logger;
@@ -21,7 +18,7 @@ public class StartupListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         Client admin = Client.builder()
                 .username("admin")
-                .password("admin")
+                .password("password")
                 .archive(false)
                 .balance(0.0)
                 .firstName("Admin")
@@ -35,11 +32,55 @@ public class StartupListener implements ServletContextListener {
                 ))
                 .clientAccessType(clientAccessType.ADMINISTRATORS)
                 .build();
+            Client employee = Client.builder()
+                .username("employee")
+                .password("password")
+                .archive(false)
+                .balance(0.0)
+                .firstName("James")
+                .lastName("Jameson")
+                .phoneNumber("123-456-789")
+                .clientType(new Basic())
+                .address(new Address(
+                        "Lodz",
+                        "31",
+                        "Narutowicza"
+                ))
+                .clientAccessType(clientAccessType.EMPLOYEES)
+                .build();
+            Client user = Client.builder()
+                .username("user")
+                .password("password")
+                .archive(false)
+                .balance(0.0)
+                .firstName("Peter")
+                .lastName("Jackson")
+                .phoneNumber("123-456-789")
+                .clientType(new Basic())
+                .address(new Address(
+                        "Lodz",
+                        "31",
+                        "Narutowicza"
+                ))
+                .clientAccessType(clientAccessType.USERS)
+                .build();
         try {
             LOGGER.info("Creating admin client");
             clientService.add(admin);
         } catch (Exception e) {
-            LOGGER.warning("Could not create admin user: " + e.getMessage());
+            LOGGER.warning("Could not create admin account: " + e.getMessage());
+        }
+        try {
+            LOGGER.info("Creating employee account");
+            clientService.add(employee);
+        } catch (Exception e) {
+            LOGGER.warning("Could not create employee account: " + e.getMessage());
+        }
+        try {
+            LOGGER.info("Creating user account");
+            clientService.add(user);
+        } catch (Exception e) {
+            LOGGER.warning("Could not create user account: " + e.getMessage());
         }
     }
 }
