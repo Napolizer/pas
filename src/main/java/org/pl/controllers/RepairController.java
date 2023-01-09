@@ -9,12 +9,14 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import org.pl.adapters.RepairAdapter;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.Hardware;
 import org.pl.model.Repair;
 import org.pl.services.RepairService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +24,8 @@ import java.util.UUID;
 public class RepairController {
     @Inject
     private RepairService repairService;
+    @Inject
+    private Principal principal;
 
     @GET
     @Path("/id/{id}")
@@ -45,7 +49,7 @@ public class RepairController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
+    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
     public Response addRepair(@NotNull @Valid Repair repair) {
         var json = Json.createObjectBuilder();
         try {
@@ -55,6 +59,18 @@ public class RepairController {
             json.add("error", "Repair already exists");
             return Response.status(400).build();
         }
+    }
+
+    @POST
+    @Path("byUser")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value="USER")
+    public Response addRepairByUser(@NotNull @Valid Repair repair) {
+        if (!repair.getClient().getUsername().equals(principal.getName())) {
+            return Response.status(403).build();
+        }
+        return addRepair(repair);
     }
 
     @PUT
