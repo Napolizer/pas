@@ -3,6 +3,8 @@ package org.pl.controllers;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
@@ -142,12 +144,19 @@ public class ClientController {
     @Path("/id/{id}/change_password")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
-    public Response changePassword(@PathParam("id")String id, String newPassword) {
+    public Response changePassword(@PathParam("id")String id, JsonValue jsonValue) {
         var json = Json.createObjectBuilder();
         try {
+            JsonObject body = jsonValue.asJsonObject();
             UUID uuid = UUID.fromString(id);
-            Client client = clientService.updatePassword(uuid, newPassword);
-            return Response.ok(client).build();
+            if (body.containsKey("newPassword")) {
+                String newPassword = body.getString("newPassword");
+                Client client = clientService.updatePassword(uuid, newPassword);
+                return Response.ok(client).build();
+            } else {
+                json.add("error", "Invalid data in request");
+                return Response.status(400).entity(json.build()).build();
+            }
         } catch (IllegalArgumentException e) {
             json.add("error", "Invalid data in request");
             return Response.status(400).entity(json.build()).build();
