@@ -144,7 +144,7 @@ public class ClientController {
     @Path("/id/{id}/change_password")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
-    public Response changePassword(@PathParam("id")String id, JsonValue jsonValue) {
+    public Response changePassword(@PathParam("id")String id,@NotNull JsonValue jsonValue) {
         var json = Json.createObjectBuilder();
         try {
             JsonObject body = jsonValue.asJsonObject();
