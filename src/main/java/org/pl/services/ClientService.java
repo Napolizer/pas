@@ -77,6 +77,10 @@ public class ClientService {
 
     public Client updateClient(UUID uuid, Client client) throws RepositoryException { return clientRepository.updateClient(uuid, client);}
 
+    public Client updatePassword(UUID uuid, String newPassword) throws RepositoryException {
+        return clientRepository.changePassword(uuid, newPassword);
+    }
+
     public Client dearchive(UUID uuid) throws RepositoryException {
         return clientRepository.restoreClient(uuid);
     }

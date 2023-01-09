@@ -139,6 +139,25 @@ public class ClientController {
     }
 
     @PUT
+    @Path("/id/{id}/change_password")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
+    public Response changePassword(@PathParam("id")String id, String newPassword) {
+        var json = Json.createObjectBuilder();
+        try {
+            UUID uuid = UUID.fromString(id);
+            Client client = clientService.updatePassword(uuid, newPassword);
+            return Response.ok(client).build();
+        } catch (IllegalArgumentException e) {
+            json.add("error", "Invalid data in request");
+            return Response.status(400).entity(json.build()).build();
+        } catch (RepositoryException e) {
+            json.add("error", "Client does not exist");
+            return Response.status(404).entity(json.build()).build();
+        }
+    }
+
+    @PUT
     @Path("/id/{id}/activate")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
