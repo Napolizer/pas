@@ -27,6 +27,8 @@ public class RepairController {
     private ETagProvider eTagProvider;
     @Context
     private SecurityContext securityContext;
+    @Context
+    private HttpHeaders httpHeaders;
 
     @GET
     @Path("/id/{id}")
@@ -76,7 +78,19 @@ public class RepairController {
     public Response updateRepair(@NotNull Repair repair, @PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
+            String etag = httpHeaders.getHeaderString("If-Match");
+            if (etag == null) {
+                json.add("error", "Request is missing If-Match header");
+                return Response.status(400).entity(json.build()).build();
+            }
             UUID uuid = UUID.fromString(id);
+
+            Repair existingRepair = repairService.get(uuid);
+            if (!eTagProvider.generateETag(existingRepair).equals(etag)) {
+                json.add("error", "Invalid If-Match signature");
+                return Response.status(412).entity(json.build()).build();
+            }
+
             Repair updatedRepair = repairService.updateRepair(uuid, repair);
             return Response.ok(updatedRepair).build();
         } catch (IllegalArgumentException e) {

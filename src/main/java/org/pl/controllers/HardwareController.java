@@ -7,6 +7,8 @@ import jakarta.json.bind.JsonbException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.exceptions.HardwareException;
@@ -24,6 +26,8 @@ public class HardwareController {
     private HardwareService hardwareService;
     @Inject
     private ETagProvider eTagProvider;
+    @Context
+    private HttpHeaders httpHeaders;
 
     HardwareController() {
         hardwareService = new HardwareService(new HardwareRepository());
@@ -73,7 +77,19 @@ public class HardwareController {
     public Response updateHardware(@NotNull Hardware hardware, @PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
+            String etag = httpHeaders.getHeaderString("If-Match");
+            if (etag == null) {
+                json.add("error", "Request is missing If-Match header");
+                return Response.status(400).entity(json.build()).build();
+            }
             UUID uuid = UUID.fromString(id);
+
+            Hardware existingHardware = hardwareService.get(uuid);
+            if (!eTagProvider.generateETag(existingHardware).equals(etag)) {
+                json.add("error", "Invalid If-Match signature");
+                return Response.status(412).entity(json.build()).build();
+            }
+
             hardwareService.updateHardware(uuid, hardware);
             return Response.ok(hardware).build();
         } catch (IllegalArgumentException | RepositoryException e) {

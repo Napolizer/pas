@@ -8,6 +8,8 @@ import jakarta.json.JsonValue;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.authentication.UserAuthenticator;
@@ -36,6 +38,8 @@ public class ClientController {
     private UserAuthenticator userAuthenticator;
     @Inject
     private ETagProvider eTagProvider;
+    @Context
+    private HttpHeaders httpHeaders;
 
     @GET
     @Path("/id/{id}")
@@ -109,7 +113,19 @@ public class ClientController {
     public Response updateClient(Client client, @PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
+            String etag = httpHeaders.getHeaderString("If-Match");
+            if (etag == null) {
+                json.add("error", "Request is missing If-Match header");
+                return Response.status(400).entity(json.build()).build();
+            }
             UUID uuid = UUID.fromString(id);
+
+            Client existingClient = clientService.get(uuid);
+            if (!eTagProvider.generateETag(existingClient).equals(etag)) {
+                json.add("error", "Invalid If-Match signature");
+                return Response.status(412).entity(json.build()).build();
+            }
+
             Client updatedClient = clientService.updateClient(uuid, client);
             return Response.ok(updatedClient).build();
         } catch (IllegalArgumentException e) {
