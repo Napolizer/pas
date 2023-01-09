@@ -1,6 +1,5 @@
 package org.pl.controllers;
 
-import jakarta.annotation.Resource;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
@@ -8,8 +7,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
-import org.hibernate.service.spi.InjectService;
-import org.pl.adapters.RepairAdapter;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.exceptions.RepositoryException;
