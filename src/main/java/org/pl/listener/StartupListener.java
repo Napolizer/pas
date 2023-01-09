@@ -23,7 +23,7 @@ public class StartupListener implements ServletContextListener {
                 .balance(0.0)
                 .firstName("Admin")
                 .lastName("Admin")
-                .phoneNumber("123-456-789")
+                .phoneNumber("123456789")
                 .clientType(new Premium())
                 .address(new Address(
                         "Lodz",
@@ -39,7 +39,7 @@ public class StartupListener implements ServletContextListener {
                 .balance(0.0)
                 .firstName("James")
                 .lastName("Jameson")
-                .phoneNumber("123-456-789")
+                .phoneNumber("123456789")
                 .clientType(new Basic())
                 .address(new Address(
                         "Lodz",
@@ -55,7 +55,7 @@ public class StartupListener implements ServletContextListener {
                 .balance(0.0)
                 .firstName("Peter")
                 .lastName("Jackson")
-                .phoneNumber("123-456-789")
+                .phoneNumber("123456789")
                 .clientType(new Basic())
                 .address(new Address(
                         "Lodz",
