@@ -1,11 +1,15 @@
 package org.pl.controllers;
 
+import jakarta.annotation.Resource;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
+import org.hibernate.service.spi.InjectService;
+import org.pl.adapters.RepairAdapter;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.exceptions.RepositoryException;
@@ -24,6 +28,8 @@ public class RepairController {
     private Principal principal;
     @Inject
     private ETagProvider eTagProvider;
+    @Context
+    private SecurityContext securityContext;
 
     @GET
     @Path("/id/{id}")
@@ -50,8 +56,13 @@ public class RepairController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response addRepair(@NotNull @Valid Repair repair) {
+        if (securityContext.isUserInRole("USER")) {
+            if (!repair.getClient().getUsername().equals(principal.getName())) {
+                return Response.status(403).build();
+            }
+        }
         var json = Json.createObjectBuilder();
         try {
             Repair createdRepair = repairService.add(repair);
@@ -60,18 +71,6 @@ public class RepairController {
             json.add("error", "Repair already exists");
             return Response.status(400).build();
         }
-    }
-
-    @POST
-    @Path("byUser")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed(value="USER")
-    public Response addRepairByUser(@NotNull @Valid Repair repair) {
-        if (!repair.getClient().getUsername().equals(principal.getName())) {
-            return Response.status(403).build();
-        }
-        return addRepair(repair);
     }
 
     @PUT
