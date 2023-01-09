@@ -17,6 +17,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.pl.exceptions.ClientException;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ import java.util.UUID;
 @SuperBuilder
 @Entity
 @Access(AccessType.FIELD)
-public abstract class ClientType {
+public abstract class ClientType implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(

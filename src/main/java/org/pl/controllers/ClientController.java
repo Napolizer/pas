@@ -17,6 +17,7 @@ import org.pl.exceptions.authentication.InvalidCredentialsException;
 import org.pl.exceptions.authentication.UserIsArchiveException;
 import org.pl.exceptions.authentication.UserNotFoundException;
 import org.pl.model.*;
+import org.pl.providers.ETagProvider;
 import org.pl.providers.TokenProvider;
 import org.pl.services.ClientService;
 import org.pl.services.RepairService;
@@ -33,6 +34,8 @@ public class ClientController {
     private TokenProvider tokenProvider;
     @Inject
     private UserAuthenticator userAuthenticator;
+    @Inject
+    private ETagProvider eTagProvider;
 
     @GET
     @Path("/id/{id}")
@@ -46,7 +49,10 @@ public class ClientController {
             if (client == null) {
                 throw new RepositoryException("");
             }
-            return Response.ok(client).build();
+            return Response
+                    .ok(client)
+                    .header("ETag", eTagProvider.generateETag(client))
+                    .build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given id is invalid");
             return Response.status(400).entity(json.build()).build();

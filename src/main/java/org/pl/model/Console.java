@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.pl.exceptions.HardwareException;
 
+import java.io.Serializable;
+
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Console extends HardwareType {
+public class Console extends HardwareType implements Serializable {
     public Console(Condition condition) {
         super(condition);
         setType("CONSOLE");

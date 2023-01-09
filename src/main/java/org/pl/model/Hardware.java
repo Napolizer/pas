@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UuidGenerator;
 import org.pl.adapters.HardwareTypeAdapter;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ import static org.pl.model.Condition.FINE;
 @AllArgsConstructor
 @jakarta.persistence.Entity
 @Access(AccessType.FIELD)
-public class Hardware implements Entity {
+public class Hardware implements Entity, Serializable {
     @Id
     private UUID id;
     @NotNull

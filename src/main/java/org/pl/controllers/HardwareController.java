@@ -3,32 +3,27 @@ package org.pl.controllers;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
-import jakarta.json.JsonValue;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
-import jakarta.json.bind.JsonbConfig;
 import jakarta.json.bind.JsonbException;
-import jakarta.persistence.Persistence;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.pl.adapters.HardwareTypeAdapter;
 import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.*;
+import org.pl.providers.ETagProvider;
 import org.pl.repositories.HardwareRepository;
 import org.pl.services.HardwareService;
 import java.util.List;
 import java.util.UUID;
 
-import static org.pl.model.Condition.DUSTY;
-
 @Path("/hardware")
 public class HardwareController {
     @Inject
     private HardwareService hardwareService;
+    @Inject
+    private ETagProvider eTagProvider;
 
     HardwareController() {
         hardwareService = new HardwareService(new HardwareRepository());
@@ -47,7 +42,10 @@ public class HardwareController {
                 json.add("error", "Hardware with given id not found");
                 return Response.status(404).entity(json.build()).build();
             }
-            return Response.ok(hardware).build();
+            return Response
+                    .ok(hardware)
+                    .header("ETag", eTagProvider.generateETag(hardware))
+                    .build();
         } catch (IllegalArgumentException | RepositoryException e) {
             json.add("error", e.getMessage());
             return Response.status(400).entity(json.build()).build();

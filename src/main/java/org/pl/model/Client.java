@@ -15,6 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.pl.adapters.ClientTypeAdapter;
 import org.pl.exceptions.ClientException;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @jakarta.persistence.Entity
 @Access(AccessType.FIELD)
-public class Client implements Entity {
+public class Client implements Entity, Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(

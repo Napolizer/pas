@@ -9,13 +9,15 @@ import lombok.Data;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
 @Access(AccessType.FIELD)
-public class Address {
+public class Address implements Serializable {
     @NotBlank
     @Size(min=2)
     private String city;

@@ -15,6 +15,7 @@ import org.pl.adapters.RepairAdapter;
 import org.pl.annotations.ValidDateRange;
 import org.pl.exceptions.HardwareException;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
@@ -26,7 +27,7 @@ import java.util.UUID;
 @jakarta.persistence.Entity
 @Access(AccessType.FIELD)
 @JsonbTypeAdapter(RepairAdapter.class)
-public class Repair implements Entity {
+public class Repair implements Entity, Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(

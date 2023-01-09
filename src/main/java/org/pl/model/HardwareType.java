@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UuidGenerator;
 import org.pl.exceptions.HardwareException;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Access(AccessType.FIELD)
-public abstract class HardwareType {
+public abstract class HardwareType implements Serializable {
     @Id
     protected UUID id = UUID.randomUUID();
     @NotNull

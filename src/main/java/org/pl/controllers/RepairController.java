@@ -3,21 +3,17 @@ package org.pl.controllers;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
-import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.SecurityContext;
-import org.pl.adapters.RepairAdapter;
 import org.pl.exceptions.RepositoryException;
-import org.pl.model.Hardware;
 import org.pl.model.Repair;
+import org.pl.providers.ETagProvider;
 import org.pl.services.RepairService;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.UUID;
 
 @Path("/repair")
@@ -26,6 +22,8 @@ public class RepairController {
     private RepairService repairService;
     @Inject
     private Principal principal;
+    @Inject
+    private ETagProvider eTagProvider;
 
     @GET
     @Path("/id/{id}")
@@ -36,7 +34,10 @@ public class RepairController {
         try {
             UUID uuid = UUID.fromString(id);
             Repair repair = repairService.get(uuid);
-            return Response.ok(repair).build();
+            return Response
+                    .ok(repair)
+                    .header("ETag", eTagProvider.generateETag(repair))
+                    .build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given id is invalid");
             return Response.status(400).entity(json.build()).build();

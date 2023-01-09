@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
@@ -19,7 +20,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Embeddable
 @Access(AccessType.FIELD)
-public class DateRange {
+public class DateRange implements Serializable {
     @NotNull
     @JsonbDateFormat(value = "dd-MM-yyyy HH:mm:ss")
     private Date startDate;

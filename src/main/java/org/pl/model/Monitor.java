@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.pl.exceptions.HardwareException;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Monitor extends HardwareType {
+public class Monitor extends HardwareType implements Serializable {
     public Monitor(Condition condition) {
         super(condition);
         setType("MONITOR");
