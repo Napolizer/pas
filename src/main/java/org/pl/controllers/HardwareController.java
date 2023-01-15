@@ -122,7 +122,7 @@ public class HardwareController {
     @GET
     @Path("/present")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getAllPresentHardware() {
         List<Hardware> hardware = hardwareService.getAllPresentHardware();
         return Response.ok(hardware).build();
@@ -131,7 +131,7 @@ public class HardwareController {
     @GET
     @Path("/present/filter/{substr}")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getAllPresentHardwareFilter(@PathParam("substr")String substr) {
         List<Hardware> hardware = hardwareService.getAllPresentHardwareFilter(substr);
         return Response.ok(hardware).build();
