@@ -8,6 +8,7 @@ import jakarta.security.enterprise.authentication.mechanism.http.HttpMessageCont
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.HttpHeaders;
+import org.pl.filters.CorsResponseFilter;
 import org.pl.model.TokenClaims;
 import org.pl.providers.TokenProvider;
 
@@ -19,6 +20,8 @@ import java.util.logging.Logger;
 public class ClientAuthenticationMechanism implements HttpAuthenticationMechanism {
     @Inject
     private TokenProvider tokenProvider;
+    @Inject
+    private CorsResponseFilter corsResponseFilter;
     private static final Logger LOGGER = Logger.getLogger(ClientAuthenticationMechanism.class.getName());
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext httpMessageContext) {
@@ -40,10 +43,12 @@ public class ClientAuthenticationMechanism implements HttpAuthenticationMechanis
                 return httpMessageContext.notifyContainerAboutLogin(tokenClaims.getUsername(), groups);
             } catch (Exception e) {
                 LOGGER.info("Authorization failed: " + e.getMessage());
+                corsResponseFilter.addHeaders(response);
                 return httpMessageContext.responseUnauthorized();
             }
         } else {
             LOGGER.info("Trying to access secured resource, with missing Authorization header, or in invalid format");
+            corsResponseFilter.addHeaders(response);
             return httpMessageContext.responseUnauthorized();
         }
     }
