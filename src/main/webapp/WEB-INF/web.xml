@@ -14,20 +14,20 @@
         <role-name>USER</role-name>
     </security-role>
 
-    <security-constraint>
-       <web-resource-collection>
-          <web-resource-name>Require HTTPS</web-resource-name>
-          <url-pattern>/*</url-pattern>
-       </web-resource-collection>
+<!--    <security-constraint>-->
+<!--       <web-resource-collection>-->
+<!--          <web-resource-name>Require HTTPS</web-resource-name>-->
+<!--          <url-pattern>/*</url-pattern>-->
+<!--       </web-resource-collection>-->
 
-        <user-data-constraint>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
+<!--        <user-data-constraint>-->
+<!--            <transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
+<!--        </user-data-constraint>-->
 
-<!--       <auth-constraint>-->
-<!--          <role-name>User</role-name>-->
-<!--       </auth-constraint>-->
-    </security-constraint>
+<!--&lt;!&ndash;       <auth-constraint>&ndash;&gt;-->
+<!--&lt;!&ndash;          <role-name>User</role-name>&ndash;&gt;-->
+<!--&lt;!&ndash;       </auth-constraint>&ndash;&gt;-->
+<!--    </security-constraint>-->
 
 <!--    <login-config>-->
 <!--        <auth-method>FORM</auth-method>-->
