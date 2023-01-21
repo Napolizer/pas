@@ -147,8 +147,9 @@ public class HardwareRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Hardware> criteriaQuery = criteriaBuilder.createQuery(Hardware.class);
         Root<Hardware> root = criteriaQuery.from(Hardware.class);
-        criteriaQuery.where(criteriaBuilder.isFalse(root.get(Hardware_.archive)));
-        criteriaQuery.where(criteriaBuilder.like(root.get(Hardware_.ID), "%" + substr + "%"));
+        criteriaQuery
+                .where(criteriaBuilder.isFalse(root.get(Hardware_.archive)),
+                        criteriaBuilder.like(root.get(Hardware_.ID), "%" + substr + "%"));
         TypedQuery<Hardware> query = entityManager.createQuery(criteriaQuery);
         hardwares = query.getResultList();
         return hardwares;
