@@ -1,0 +1,9 @@
+org\pl\model\ClientTypeTest.class
+org\pl\model\HardwareTypeTest$calculateRepairCostTests$ComputerRepairCosts.class
+org\pl\model\HardwareTypeTest.class
+org\pl\model\AddressTest.class
+org\pl\model\HardwareTypeTest$calculateRepairCostTests$MonitorRepairCosts.class
+org\pl\model\HardwareTypeTest$calculateRepairCostTests$ConsoleRepairCosts.class
+org\pl\model\HardwareTypeTest$calculateRepairCostTests$PhoneRepairCosts.class
+org\pl\model\HardwareTypeTest$EqualsTests.class
+org\pl\model\HardwareTypeTest$calculateRepairCostTests.class
