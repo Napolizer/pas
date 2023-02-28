@@ -21,9 +21,7 @@ import java.util.UUID;
 public abstract class HardwareTypeEnt implements Serializable {
     @Id
     protected UUID id = UUID.randomUUID();
-    @NotNull
     public ConditionEnt condition;
-    @NotNull
     @Setter(AccessLevel.PROTECTED)
     protected String type;
 

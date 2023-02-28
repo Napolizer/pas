@@ -24,13 +24,9 @@ import static org.pl.adapter.data.model.ConditionEnt.FINE;
 public class HardwareEnt implements EntityEnt, Serializable {
     @Id
     private UUID id;
-    @NotNull
     private Boolean archive;
-    @NotNull
     private Integer price;
     @ManyToOne(cascade = CascadeType.ALL)
-    @NotNull
-    @JsonbTypeAdapter(HardwareTypeAdapter.class)
     private HardwareTypeEnt hardwareTypeEnt;
 
     public void repair() {

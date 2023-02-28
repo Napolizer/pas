@@ -1,6 +1,5 @@
 package org.pl.adapter.data.model;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +12,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserCredentialsEnt implements Serializable {
-    @NotBlank
     private String username;
-    @NotBlank
     private String password;
 }

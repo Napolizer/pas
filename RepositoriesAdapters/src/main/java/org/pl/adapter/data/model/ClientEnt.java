@@ -1,18 +1,12 @@
 package org.pl.adapter.data.model;
 
 import jakarta.json.bind.annotation.JsonbTransient;
-import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.pl.adapters.ClientTypeAdapter;
 import org.pl.exceptions.ClientException;
 
 
@@ -34,33 +28,19 @@ public class ClientEnt implements EntityEnt, Serializable {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID id;
-    @NotBlank
     @Column(unique = true)
     private String username;
-    @NotBlank
     private String password;
-    @NotNull
     private Boolean archive;
-    @NotNull
-    @Min(0)
     private Double balance;
-    @NotBlank
     private String firstName;
-    @NotBlank
     private String lastName;
-    @NotBlank
     private String phoneNumber;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @NotNull
-    @JsonbTypeAdapter(ClientTypeAdapter.class)
     private ClientTypeEnt clientTypeEnt;
     @Embedded
-    @NotNull
-    @Valid
     private AddressEnt addressEnt;
-    @NotNull
-    @Valid
-    private clientAccessTypeEnt clientAccessType;
+    private ClientAccessTypeEnt clientAccessType;
 
     public double calculateDiscount(int price) throws ClientException {
         return getClientTypeEnt().calculateDiscount(price);

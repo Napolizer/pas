@@ -2,14 +2,12 @@ package org.pl.adapter.data.model;
 
 import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.pl.adapters.RepairAdapter;
-import org.pl.annotations.ValidDateRange;
 import org.pl.exceptions.HardwareException;
 
 import java.io.Serializable;
@@ -31,16 +29,11 @@ public class RepairEnt implements EntityEnt, Serializable {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID id;
-    @NotNull
     private Boolean archive;
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     private ClientEnt clientEnt;
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     private HardwareEnt hardwareEnt;
-    @NotNull
-    @ValidDateRange
     private DateRangeEnt dateRangeEnt;
 
     public double calculateRepairCost() throws HardwareException {

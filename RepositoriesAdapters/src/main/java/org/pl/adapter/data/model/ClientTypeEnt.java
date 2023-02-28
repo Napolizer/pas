@@ -2,13 +2,9 @@ package org.pl.adapter.data.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.validator.constraints.Range;
 import org.pl.exceptions.ClientException;
 
 
@@ -28,13 +24,8 @@ public abstract class ClientTypeEnt implements Serializable {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID id;
-    @NotNull
-    @Range(min = 0, max = 1)
     protected Double factor;
-    @NotNull
-    @Min(value = 1)
     protected Integer maxRepairs;
-    @NotBlank
     protected String type;
 
     public ClientTypeEnt() {
