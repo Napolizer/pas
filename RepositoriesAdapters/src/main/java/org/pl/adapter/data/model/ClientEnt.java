@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.pl.exceptions.ClientException;
+import org.pl.adapter.data.exceptions.ClientException;
 
 
 import java.io.Serializable;

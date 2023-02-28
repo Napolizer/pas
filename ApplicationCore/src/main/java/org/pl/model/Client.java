@@ -2,6 +2,7 @@ package org.pl.model;
 
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.json.bind.annotation.JsonbTypeAdapter;
+import jakarta.persistence.Id;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +22,9 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@jakarta.persistence.Entity
 public class Client implements Entity, Serializable {
+    @Id
     private UUID id;
     @NotBlank
     private String username;

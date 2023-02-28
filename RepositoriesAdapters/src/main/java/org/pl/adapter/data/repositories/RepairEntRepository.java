@@ -14,12 +14,12 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.pl.adapter.data.exceptions.HardwareException;
+import org.pl.adapter.data.exceptions.RepositoryException;
 import org.pl.adapter.data.model.ClientEnt;
 import org.pl.adapter.data.model.ClientEnt_;
 import org.pl.adapter.data.model.RepairEnt;
 import org.pl.adapter.data.model.RepairEnt_;
-import org.pl.exceptions.HardwareException;
-import org.pl.exceptions.RepositoryException;
 
 import java.util.Date;
 import java.util.List;

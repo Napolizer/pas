@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.pl.exceptions.HardwareException;
+import org.pl.adapter.data.exceptions.HardwareException;
 
 import java.io.Serializable;
 

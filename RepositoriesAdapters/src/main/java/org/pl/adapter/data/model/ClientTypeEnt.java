@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
-import org.pl.exceptions.ClientException;
+import org.pl.adapter.data.exceptions.ClientException;
 
 
 import java.io.Serializable;

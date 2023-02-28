@@ -7,8 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.pl.adapters.RepairAdapter;
-import org.pl.exceptions.HardwareException;
+import org.pl.adapter.data.exceptions.HardwareException;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,7 +19,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Access(AccessType.FIELD)
-@JsonbTypeAdapter(RepairAdapter.class)
 public class RepairEnt implements EntityEnt, Serializable {
     @Id
     @GeneratedValue(generator = "UUID")

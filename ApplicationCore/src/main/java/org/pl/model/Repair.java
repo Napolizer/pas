@@ -1,6 +1,7 @@
 package org.pl.model;
 
 import jakarta.json.bind.annotation.JsonbTypeAdapter;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonbTypeAdapter(RepairAdapter.class)
+@jakarta.persistence.Entity
 public class Repair implements Entity, Serializable {
+    @Id
     private UUID id;
     @NotNull
     private Boolean archive;

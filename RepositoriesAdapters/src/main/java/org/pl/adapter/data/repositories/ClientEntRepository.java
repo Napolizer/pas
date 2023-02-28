@@ -12,8 +12,8 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.pl.adapter.data.exceptions.RepositoryException;
 import org.pl.adapter.data.model.ClientEnt;
-import org.pl.exceptions.RepositoryException;
 import org.pl.adapter.data.model.ClientEnt_;
 
 import java.util.List;

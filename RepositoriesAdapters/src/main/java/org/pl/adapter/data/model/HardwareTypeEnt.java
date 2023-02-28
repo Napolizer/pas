@@ -2,10 +2,9 @@ package org.pl.adapter.data.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.pl.exceptions.HardwareException;
+import org.pl.adapter.data.exceptions.HardwareException;
 
 import java.io.Serializable;
 import java.util.Objects;
