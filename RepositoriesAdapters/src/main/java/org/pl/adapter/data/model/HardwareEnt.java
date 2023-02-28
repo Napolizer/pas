@@ -1,13 +1,10 @@
 package org.pl.adapter.data.model;
 
-import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.pl.adapters.HardwareTypeAdapter;
 
 import java.io.Serializable;
 import java.util.Objects;
