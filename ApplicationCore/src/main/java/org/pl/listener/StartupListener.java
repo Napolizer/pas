@@ -30,7 +30,7 @@ public class StartupListener implements ServletContextListener {
                         "31",
                         "Narutowicza"
                 ))
-                .clientAccessType(clientAccessType.ADMINISTRATORS)
+                .clientAccessType(ClientAccessType.ADMINISTRATORS)
                 .build();
             Client employee = Client.builder()
                 .username("employee")
@@ -46,7 +46,7 @@ public class StartupListener implements ServletContextListener {
                         "31",
                         "Narutowicza"
                 ))
-                .clientAccessType(clientAccessType.EMPLOYEES)
+                .clientAccessType(ClientAccessType.EMPLOYEES)
                 .build();
             Client user = Client.builder()
                 .username("user")
@@ -62,7 +62,7 @@ public class StartupListener implements ServletContextListener {
                         "31",
                         "Narutowicza"
                 ))
-                .clientAccessType(clientAccessType.USERS)
+                .clientAccessType(ClientAccessType.USERS)
                 .build();
         try {
             LOGGER.info("Creating admin client");

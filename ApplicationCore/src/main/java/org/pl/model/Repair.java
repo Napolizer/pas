@@ -1,22 +1,16 @@
 package org.pl.model;
 
-import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.json.bind.annotation.JsonbTypeAdapter;
-import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 import org.pl.adapters.RepairAdapter;
 import org.pl.annotations.ValidDateRange;
 import org.pl.exceptions.HardwareException;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -24,23 +18,13 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@jakarta.persistence.Entity
-@Access(AccessType.FIELD)
 @JsonbTypeAdapter(RepairAdapter.class)
 public class Repair implements Entity, Serializable {
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
     private UUID id;
     @NotNull
     private Boolean archive;
-    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Client client;
-    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Hardware hardware;
     @NotNull

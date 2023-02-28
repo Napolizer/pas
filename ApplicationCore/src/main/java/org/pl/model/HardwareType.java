@@ -1,12 +1,8 @@
 package org.pl.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UuidGenerator;
 import org.pl.exceptions.HardwareException;
 
 import java.io.Serializable;
@@ -15,13 +11,9 @@ import java.util.UUID;
 
 @Data
 @SuperBuilder
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Access(AccessType.FIELD)
 public abstract class HardwareType implements Serializable {
-    @Id
     protected UUID id = UUID.randomUUID();
     @NotNull
     public Condition condition;

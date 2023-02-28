@@ -1,8 +1,6 @@
 package org.pl.model;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,8 +13,6 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Embeddable
-@Access(AccessType.FIELD)
 public class Address implements Serializable {
     @NotBlank
     @Size(min=2)

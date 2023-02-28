@@ -1,20 +1,11 @@
 package org.pl.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.validator.constraints.Range;
-import jakarta.persistence.*;
-import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 import org.pl.exceptions.ClientException;
 
 import java.io.Serializable;
@@ -23,18 +14,11 @@ import java.util.UUID;
 
 @Data
 @SuperBuilder
-@Entity
-@Access(AccessType.FIELD)
 public abstract class ClientType implements Serializable {
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
     private UUID id;
     @NotNull
-    @Range(min = 0, max = 1)
+    @Min(0)
+    @Max(1)
     protected Double factor;
     @NotNull
     @Min(value = 1)

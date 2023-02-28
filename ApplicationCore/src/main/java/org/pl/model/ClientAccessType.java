@@ -1,6 +1,6 @@
 package org.pl.model;
 
-public enum clientAccessType {
+public enum ClientAccessType {
     ADMINISTRATORS,
     EMPLOYEES,
     USERS

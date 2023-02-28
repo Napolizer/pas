@@ -1,11 +1,8 @@
 package org.pl.model;
 
 import jakarta.json.bind.annotation.JsonbTypeAdapter;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UuidGenerator;
 import org.pl.adapters.HardwareTypeAdapter;
 
 import java.io.Serializable;
@@ -18,16 +15,12 @@ import static org.pl.model.Condition.FINE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@jakarta.persistence.Entity
-@Access(AccessType.FIELD)
 public class Hardware implements Entity, Serializable {
-    @Id
     private UUID id;
     @NotNull
     private Boolean archive;
     @NotNull
     private Integer price;
-    @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
     @JsonbTypeAdapter(HardwareTypeAdapter.class)
     private HardwareType hardwareType;

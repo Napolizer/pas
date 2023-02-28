@@ -1,7 +1,5 @@
 package org.pl.model;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -12,7 +10,6 @@ import java.io.Serializable;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Entity
 public class Computer extends HardwareType implements Serializable {
     public Computer(Condition condition) {
         super(condition);
