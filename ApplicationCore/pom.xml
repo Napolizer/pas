@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>ApplicationCore</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <build>
         <plugins>
@@ -25,6 +25,12 @@
                         </goals>
                     </execution>
                 </executions>
+                  <configuration>
+                    <webXml>ApplicationService/src/main/webapp/WEB-INF/web.xml</webXml>
+                  </configuration>
+<!--                <configuration>-->
+<!--                    <failOnMissingWebXml>false</failOnMissingWebXml>-->
+<!--                </configuration>-->
             </plugin>
         </plugins>
     </build>
