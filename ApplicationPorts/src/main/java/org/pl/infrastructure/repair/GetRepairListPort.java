@@ -4,6 +4,6 @@ import org.pl.adapter.data.model.RepairEnt;
 
 import java.util.List;
 
-public interface getRepairListPort {
+public interface GetRepairListPort {
     List<RepairEnt> getRepairList(boolean condition);
 }
