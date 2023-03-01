@@ -3,10 +3,10 @@ package org.pl.adapters;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
-import jakarta.json.bind.adapter.JsonbAdapter;
+import org.pl.interfaces.HardwareTypeAdapterInterface;
 import org.pl.model.*;
 
-public class HardwareTypeAdapter implements JsonbAdapter<HardwareType, JsonValue> {
+public class HardwareTypeAdapter implements HardwareTypeAdapterInterface {
     @Override
     public JsonValue adaptToJson(HardwareType hardwareType) throws Exception {
         var json = Json.createObjectBuilder();

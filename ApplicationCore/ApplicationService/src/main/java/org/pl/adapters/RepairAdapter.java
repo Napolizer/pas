@@ -5,7 +5,7 @@ import jakarta.json.*;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
-import jakarta.json.bind.adapter.JsonbAdapter;
+import org.pl.interfaces.RepairAdapterInterface;
 import org.pl.model.Client;
 import org.pl.model.DateRange;
 import org.pl.model.Hardware;
@@ -21,7 +21,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-public class RepairAdapter implements JsonbAdapter<Repair, JsonValue> {
+public class RepairAdapter implements RepairAdapterInterface {
 
     @Inject
     HardwareRepository hardwareRepository;

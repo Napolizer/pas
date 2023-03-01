@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.pl.adapters.RepairAdapter;
 import org.pl.annotations.ValidDateRange;
 import org.pl.exceptions.HardwareException;
+import org.pl.interfaces.RepairAdapterInterface;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonbTypeAdapter(RepairAdapter.class)
+@JsonbTypeAdapter(RepairAdapterInterface.class)
 @jakarta.persistence.Entity
 public class Repair implements Entity, Serializable {
     @Id

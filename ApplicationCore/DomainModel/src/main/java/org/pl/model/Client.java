@@ -11,8 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.pl.adapters.ClientTypeAdapter;
 import org.pl.exceptions.ClientException;
+import org.pl.interfaces.ClientTypeAdapterInterface;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -42,7 +42,7 @@ public class Client implements Entity, Serializable {
     @NotBlank
     private String phoneNumber;
     @NotNull
-    @JsonbTypeAdapter(ClientTypeAdapter.class)
+    @JsonbTypeAdapter(ClientTypeAdapterInterface.class)
     private ClientType clientType;
     @NotNull
     @Valid

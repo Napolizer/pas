@@ -4,7 +4,7 @@ import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.pl.adapters.HardwareTypeAdapter;
+import org.pl.interfaces.HardwareTypeAdapterInterface;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -25,7 +25,7 @@ public class Hardware implements Entity, Serializable {
     @NotNull
     private Integer price;
     @NotNull
-    @JsonbTypeAdapter(HardwareTypeAdapter.class)
+    @JsonbTypeAdapter(HardwareTypeAdapterInterface.class)
     private HardwareType hardwareType;
 
     public void repair() {

@@ -8,6 +8,11 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <modules>
+        <module>ApplicationService</module>
+        <module>DomainModel</module>
+    </modules>
+
     <artifactId>ApplicationCore</artifactId>
     <packaging>pom</packaging>
 
@@ -25,12 +30,12 @@
                         </goals>
                     </execution>
                 </executions>
-                  <configuration>
-                    <webXml>ApplicationService/src/main/webapp/WEB-INF/web.xml</webXml>
-                  </configuration>
-<!--                <configuration>-->
-<!--                    <failOnMissingWebXml>false</failOnMissingWebXml>-->
-<!--                </configuration>-->
+<!--                  <configuration>-->
+<!--                    <webXml>ApplicationService/src/main/webapp/WEB-INF/web.xml</webXml>-->
+<!--                  </configuration>-->
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
             </plugin>
         </plugins>
     </build>
