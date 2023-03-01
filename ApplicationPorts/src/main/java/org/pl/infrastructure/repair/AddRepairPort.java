@@ -1,7 +1,7 @@
 package org.pl.infrastructure.repair;
 
-import org.pl.adapter.data.model.RepairEnt;
+import org.pl.model.Repair;
 
 public interface AddRepairPort {
-    RepairEnt createRepair(RepairEnt repair);
+    Repair createRepair(Repair repair);
 }

@@ -1,9 +1,9 @@
 package org.pl.infrastructure.repair;
 
-import org.pl.adapter.data.model.RepairEnt;
+import org.pl.model.Repair;
 
 import java.util.UUID;
 
 public interface DeleteRepairPort {
-    RepairEnt deleteRepair(UUID uuid);
+    Repair deleteRepair(UUID uuid);
 }

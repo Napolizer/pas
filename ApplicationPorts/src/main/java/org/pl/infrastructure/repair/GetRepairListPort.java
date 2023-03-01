@@ -1,9 +1,9 @@
 package org.pl.infrastructure.repair;
 
-import org.pl.adapter.data.model.RepairEnt;
+import org.pl.model.Repair;
 
 import java.util.List;
 
 public interface GetRepairListPort {
-    List<RepairEnt> getRepairList(boolean condition);
+    List<Repair> getRepairList(boolean condition);
 }

@@ -18,4 +18,5 @@
 
     <artifactId>ApplicationService</artifactId>
     <packaging>jar</packaging>
+
 </project>
