@@ -1,9 +1,9 @@
 package org.pl.infrastructure.hardware;
 
-import org.pl.adapter.data.model.HardwareEnt;
+import org.pl.model.Hardware;
 
 import java.util.UUID;
 
 public interface UpdateHardwarePort {
-    HardwareEnt updateHardware(UUID uuid, HardwareEnt hardware);
+    Hardware updateHardware(UUID uuid, Hardware hardware);
 }
