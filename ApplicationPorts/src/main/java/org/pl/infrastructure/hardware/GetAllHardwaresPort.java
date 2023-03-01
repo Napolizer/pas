@@ -1,9 +1,9 @@
 package org.pl.infrastructure.hardware;
 
-import org.pl.adapter.data.model.HardwareEnt;
+import org.pl.model.Hardware;
 
 import java.util.List;
 
 public interface GetAllHardwaresPort {
-    List<HardwareEnt> getAllHardwares();
+    List<Hardware> getAllHardwares();
 }

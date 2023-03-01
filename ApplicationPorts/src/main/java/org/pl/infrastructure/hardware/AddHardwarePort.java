@@ -1,7 +1,7 @@
 package org.pl.infrastructure.hardware;
 
-import org.pl.adapter.data.model.HardwareEnt;
+import org.pl.model.Hardware;
 
 public interface AddHardwarePort {
-    HardwareEnt createHardware(HardwareEnt hardware);
+    Hardware createHardware(Hardware hardware);
 }
