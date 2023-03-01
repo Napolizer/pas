@@ -11,7 +11,7 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.pl.adapter.data.exceptions.RepositoryException;
+import org.pl.adapter.data.exceptions.RepositoryEntException;
 import org.pl.adapter.data.model.HardwareEnt;
 import org.pl.adapter.data.model.HardwareEnt_;
 
@@ -28,7 +28,7 @@ public class HardwareEntRepository {
     @Resource
     UserTransaction userTransaction;
 
-    public HardwareEnt saveHardware(HardwareEnt hardware) throws RepositoryException {
+    public HardwareEnt saveHardware(HardwareEnt hardware) throws RepositoryEntException {
         hardware.setId(UUID.randomUUID());
         hardware.getHardwareTypeEnt().setId(UUID.randomUUID());
         try {
@@ -39,24 +39,24 @@ public class HardwareEntRepository {
                 return hardware;
             }
         } catch (Exception e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryEntException(e.getMessage());
         }
-        throw new RepositoryException(RepositoryException.REPOSITORY_ADD_EXCEPTION);
+        throw new RepositoryEntException(RepositoryEntException.REPOSITORY_ADD_EXCEPTION);
     }
 
-    public HardwareEnt getHardwareById(UUID uuid) throws RepositoryException {
+    public HardwareEnt getHardwareById(UUID uuid) throws RepositoryEntException {
         try {
             HardwareEnt hardware = entityManager.find(HardwareEnt.class, uuid);
             if (hardware != null && !hardware.isArchive()) {
                 return hardware;
             }
         } catch (IllegalArgumentException ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
         }
         return null;
     }
 
-    public HardwareEnt updateHardware(UUID id, HardwareEnt hardware) throws RepositoryException {
+    public HardwareEnt updateHardware(UUID id, HardwareEnt hardware) throws RepositoryEntException {
         try {
             HardwareEnt hardwareToChange = entityManager.find(HardwareEnt.class, id);
             hardware.setId(hardwareToChange.getId());
@@ -72,17 +72,17 @@ public class HardwareEntRepository {
             userTransaction.commit();
             return hardware;
         } catch (IllegalArgumentException ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
         } catch (Exception e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryEntException(e.getMessage());
         }
     }
 
-    public void deleteHardware(UUID id) throws RepositoryException {
+    public void deleteHardware(UUID id) throws RepositoryEntException {
         try {
             HardwareEnt hardware = entityManager.find(HardwareEnt.class, id);
             if (hardware == null) {
-                throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+                throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
             }
             if (!hardware.isArchive()) {
                 userTransaction.begin();
@@ -90,12 +90,12 @@ public class HardwareEntRepository {
                 entityManager.merge(hardware);
                 userTransaction.commit();
             } else {
-                throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+                throw new RepositoryEntException(RepositoryEntException.REPOSITORY_ARCHIVE_EXCEPTION);
             }
         } catch (IllegalArgumentException ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
         } catch (Exception e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryEntException(e.getMessage());
         }
     }
 

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
-import org.pl.adapter.data.exceptions.ClientException;
+import org.pl.adapter.data.exceptions.ClientEntException;
 
 
 import java.io.Serializable;
@@ -32,9 +32,9 @@ public abstract class ClientTypeEnt implements Serializable {
 
     }
 
-    public double calculateDiscount(double price) throws ClientException {
+    public double calculateDiscount(double price) throws ClientEntException {
         if (price < 0) {
-            throw new ClientException(ClientException.CLIENT_TYPE_CALCULATE_DISCOUNT_EXCEPTION);
+            throw new ClientEntException(ClientEntException.CLIENT_TYPE_CALCULATE_DISCOUNT_EXCEPTION);
         }
         return price - (getFactor() * price);
     }

@@ -12,7 +12,7 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.pl.adapter.data.exceptions.RepositoryException;
+import org.pl.adapter.data.exceptions.RepositoryEntException;
 import org.pl.adapter.data.model.ClientEnt;
 import org.pl.adapter.data.model.ClientEnt_;
 
@@ -29,7 +29,7 @@ public class ClientEntRepository {
     @Resource
     UserTransaction userTransaction;
 
-    public ClientEnt saveClient(ClientEnt client) throws RepositoryException {
+    public ClientEnt saveClient(ClientEnt client) throws RepositoryEntException {
         client.setId(UUID.randomUUID());
         client.getClientTypeEnt().setId(UUID.randomUUID());
         try {
@@ -40,12 +40,12 @@ public class ClientEntRepository {
                 return client;
             }
         } catch (Exception e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryEntException(e.getMessage());
         }
-        throw new RepositoryException(RepositoryException.REPOSITORY_ADD_EXCEPTION);
+        throw new RepositoryEntException(RepositoryEntException.REPOSITORY_ADD_EXCEPTION);
     }
 
-    public ClientEnt getClientById(UUID uuid) throws RepositoryException {
+    public ClientEnt getClientById(UUID uuid) throws RepositoryEntException {
         try {
             ClientEnt client = entityManager.find(ClientEnt.class, uuid);
             if (client != null) {
@@ -54,11 +54,11 @@ public class ClientEntRepository {
                 throw new IllegalArgumentException();
             }
         } catch (IllegalArgumentException ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
         }
     }
 
-    public ClientEnt updateClient(UUID id, ClientEnt client) throws RepositoryException {
+    public ClientEnt updateClient(UUID id, ClientEnt client) throws RepositoryEntException {
         try {
             ClientEnt clientToChange = entityManager.find(ClientEnt.class, id);
             clientToChange.setFirstName(client.getFirstName());
@@ -77,11 +77,11 @@ public class ClientEntRepository {
             userTransaction.commit();
             return clientToChange;
         } catch (Exception ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
         }
     }
 
-    public ClientEnt changePassword(UUID id, String newPassword) throws RepositoryException {
+    public ClientEnt changePassword(UUID id, String newPassword) throws RepositoryEntException {
         try {
             ClientEnt clientToChange = entityManager.find(ClientEnt.class, id);
             userTransaction.begin();
@@ -90,11 +90,11 @@ public class ClientEntRepository {
             userTransaction.commit();
             return clientToChange;
         } catch (Exception ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
         }
     }
 
-    public ClientEnt deleteClient(UUID id) throws RepositoryException {
+    public ClientEnt deleteClient(UUID id) throws RepositoryEntException {
         try {
             ClientEnt client = getClientById(id);
             if (!client.isArchive()) {
@@ -104,10 +104,10 @@ public class ClientEntRepository {
                 userTransaction.commit();
                 return client;
             } else {
-                throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+                throw new RepositoryEntException(RepositoryEntException.REPOSITORY_ARCHIVE_EXCEPTION);
             }
         } catch (NullPointerException | NotSupportedException | SystemException | HeuristicRollbackException | HeuristicMixedException | RollbackException ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
         }
     }
 
@@ -133,7 +133,7 @@ public class ClientEntRepository {
         return clients;
     }
 
-    public ClientEnt getClientByUsername(String username) throws RepositoryException {
+    public ClientEnt getClientByUsername(String username) throws RepositoryEntException {
         ClientEnt client;
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ClientEnt> criteriaQuery = criteriaBuilder.createQuery(ClientEnt.class);
@@ -143,7 +143,7 @@ public class ClientEntRepository {
         try {
             client = query.getSingleResult();
         } catch (NoResultException ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_BY_USERNAME_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_BY_USERNAME_EXCEPTION);
         }
         return client;
     }
@@ -170,7 +170,7 @@ public class ClientEntRepository {
         return clients;
     }
 
-    public ClientEnt restoreClient(UUID uuid) throws RepositoryException {
+    public ClientEnt restoreClient(UUID uuid) throws RepositoryEntException {
         try {
             ClientEnt client = entityManager.find(ClientEnt.class, uuid);
             if (client.isArchive()) {
@@ -180,10 +180,10 @@ public class ClientEntRepository {
                 userTransaction.commit();
                 return client;
             } else {
-                throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+                throw new RepositoryEntException(RepositoryEntException.REPOSITORY_ARCHIVE_EXCEPTION);
             }
         } catch (NullPointerException | NotSupportedException | SystemException | HeuristicRollbackException | HeuristicMixedException | RollbackException ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
         }
     }
 }

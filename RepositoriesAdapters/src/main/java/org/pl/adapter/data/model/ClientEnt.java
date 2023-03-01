@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.pl.adapter.data.exceptions.ClientException;
+import org.pl.adapter.data.exceptions.ClientEntException;
 
 
 import java.io.Serializable;
@@ -42,7 +42,7 @@ public class ClientEnt implements EntityEnt, Serializable {
     private AddressEnt addressEnt;
     private ClientAccessTypeEnt clientAccessType;
 
-    public double calculateDiscount(int price) throws ClientException {
+    public double calculateDiscount(int price) throws ClientEntException {
         return getClientTypeEnt().calculateDiscount(price);
     }
 

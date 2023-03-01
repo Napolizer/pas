@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.pl.adapter.data.exceptions.HardwareException;
+import org.pl.adapter.data.exceptions.HardwareEntException;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -28,7 +28,7 @@ public abstract class HardwareTypeEnt implements Serializable {
         setCondition(conditionEnt);
     }
 
-    public abstract double calculateRepairCost(double price) throws HardwareException;
+    public abstract double calculateRepairCost(double price) throws HardwareEntException;
 
     @Override
     public boolean equals(Object o) {

@@ -1,13 +1,12 @@
 package org.pl.adapter.data.model;
 
-import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.pl.adapter.data.exceptions.HardwareException;
+import org.pl.adapter.data.exceptions.HardwareEntException;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -34,7 +33,7 @@ public class RepairEnt implements EntityEnt, Serializable {
     private HardwareEnt hardwareEnt;
     private DateRangeEnt dateRangeEnt;
 
-    public double calculateRepairCost() throws HardwareException {
+    public double calculateRepairCost() throws HardwareEntException {
         return getHardwareEnt().getHardwareTypeEnt().calculateRepairCost(getHardwareEnt().getPrice());
     }
 

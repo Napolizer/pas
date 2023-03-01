@@ -14,8 +14,8 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.pl.adapter.data.exceptions.HardwareException;
-import org.pl.adapter.data.exceptions.RepositoryException;
+import org.pl.adapter.data.exceptions.HardwareEntException;
+import org.pl.adapter.data.exceptions.RepositoryEntException;
 import org.pl.adapter.data.model.ClientEnt;
 import org.pl.adapter.data.model.ClientEnt_;
 import org.pl.adapter.data.model.RepairEnt;
@@ -37,7 +37,7 @@ public class RepairEntRepository {
     @Inject
     ClientEntRepository clientEntRepository;
 
-    public RepairEnt saveRepair(RepairEnt repair) throws RepositoryException {
+    public RepairEnt saveRepair(RepairEnt repair) throws RepositoryEntException {
         repair.setId(UUID.randomUUID());
         try {
             if (!entityManager.contains(repair)) {
@@ -47,25 +47,25 @@ public class RepairEntRepository {
                 return repair;
             }
         } catch (Exception e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryEntException(e.getMessage());
         }
-        throw new RepositoryException(RepositoryException.REPOSITORY_ADD_EXCEPTION);
+        throw new RepositoryEntException(RepositoryEntException.REPOSITORY_ADD_EXCEPTION);
     }
 
-    public RepairEnt getRepairById(UUID uuid) throws RepositoryException {
+    public RepairEnt getRepairById(UUID uuid) throws RepositoryEntException {
         try {
             RepairEnt repair = entityManager.find(RepairEnt.class, uuid);
             if (repair != null && !repair.isArchive()) {
                 return repair;
             } else {
-                throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+                throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
             }
         } catch (IllegalArgumentException ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
         }
     }
 
-    public RepairEnt updateRepair(UUID id, RepairEnt repair) throws RepositoryException {
+    public RepairEnt updateRepair(UUID id, RepairEnt repair) throws RepositoryEntException {
         try {
             RepairEnt repairToChange = getRepairById(id);
             if (repair.getClientEnt() != null) {
@@ -86,11 +86,11 @@ public class RepairEntRepository {
             userTransaction.commit();
             return repairToChange;
         } catch (SystemException | HeuristicRollbackException | HeuristicMixedException | NotSupportedException | RollbackException ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
         }
     }
 
-    public RepairEnt deleteRepair(UUID id) throws RepositoryException {
+    public RepairEnt deleteRepair(UUID id) throws RepositoryEntException {
         try {
             RepairEnt repair = getRepairById(id);
             userTransaction.begin();
@@ -99,16 +99,16 @@ public class RepairEntRepository {
             userTransaction.commit();
             return repair;
         } catch (IllegalArgumentException ex) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
         } catch (NullPointerException | NotSupportedException | SystemException | HeuristicRollbackException |
                  HeuristicMixedException | RollbackException ex) {
-            throw new RepositoryException(ex.getMessage());
+            throw new RepositoryEntException(ex.getMessage());
         }
     }
 
-    public List<RepairEnt> getClientRepairs(UUID clientId) throws RepositoryException {
+    public List<RepairEnt> getClientRepairs(UUID clientId) throws RepositoryEntException {
         if (clientEntRepository.getClientById(clientId) == null) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_ARCHIVE_EXCEPTION);
         }
         List<RepairEnt> repairs;
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -143,10 +143,10 @@ public class RepairEntRepository {
         return repairs;
     }
 
-    public RepairEnt repair(UUID id) throws RepositoryException, HardwareException {
+    public RepairEnt repair(UUID id) throws RepositoryEntException, HardwareEntException {
         RepairEnt repair = getRepairById(id);
         if (repair == null || repair.getClientEnt().isArchive() || repair.getHardwareEnt().isArchive()) {
-            throw new RepositoryException(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION);
+            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_ARCHIVE_EXCEPTION);
         }
         repair.getHardwareEnt().setArchive(true);
         repair.getDateRangeEnt().setEndDate(new Date());
@@ -162,7 +162,7 @@ public class RepairEntRepository {
             entityManager.merge(repair);
             userTransaction.commit();
         } catch (Exception e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryEntException(e.getMessage());
         }
         return repair;
     }
