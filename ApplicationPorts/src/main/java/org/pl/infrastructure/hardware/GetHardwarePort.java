@@ -1,4 +1,4 @@
-package org.pl.infrastructure;
+package org.pl.infrastructure.hardware;
 
 import org.pl.adapter.data.model.HardwareEnt;
 
