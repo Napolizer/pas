@@ -1,7 +1,7 @@
 package org.pl.infrastructure.client;
 
-import org.pl.adapter.data.model.ClientEnt;
+import org.pl.model.Client;
 
 public interface AddClientPort {
-    ClientEnt createClient(ClientEnt client);
+    Client createClient(Client client);
 }

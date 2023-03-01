@@ -1,9 +1,9 @@
 package org.pl.infrastructure.client;
 
-import org.pl.adapter.data.model.ClientEnt;
-
 import java.util.UUID;
+import org.pl.model.Client;
+
 
 public interface DeleteClientPort {
-    ClientEnt deleteClient(UUID uuid);
+    Client deleteClient(UUID uuid);
 }

@@ -1,9 +1,9 @@
 package org.pl.infrastructure.client;
 
-import org.pl.adapter.data.model.ClientEnt;
+import org.pl.model.Client;
 
 import java.util.List;
 
 public interface GetClientListPort {
-    List<ClientEnt> getClientList(boolean condition);
+    List<Client> getClientList(boolean condition);
 }
