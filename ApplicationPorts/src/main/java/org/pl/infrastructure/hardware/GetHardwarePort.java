@@ -1,6 +1,6 @@
 package org.pl.infrastructure.hardware;
 
-import org.pl.exceptions.RepositoryException;
+import org.pl.model.exceptions.RepositoryException;
 import org.pl.model.Hardware;
 
 import java.util.UUID;

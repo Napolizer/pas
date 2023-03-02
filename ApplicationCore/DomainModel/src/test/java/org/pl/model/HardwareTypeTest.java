@@ -6,7 +6,7 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.pl.exceptions.HardwareException;
+import org.pl.model.exceptions.HardwareException;
 
 import java.util.List;
 import java.util.UUID;

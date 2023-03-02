@@ -1,4 +1,4 @@
-package org.pl.exceptions;
+package org.pl.model.exceptions;
 
 import lombok.ToString;
 

@@ -9,7 +9,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.pl.exceptions.RepositoryException;
+import org.pl.model.exceptions.RepositoryException;
 import org.pl.model.Repair;
 import org.pl.providers.ETagProvider;
 import org.pl.services.RepairService;

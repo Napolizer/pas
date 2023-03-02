@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.pl.adapter.data.exceptions.HardwareEntException;
+import org.pl.adapter.data.model.exceptions.HardwareEntException;
 
 import java.io.Serializable;
 import java.util.Objects;

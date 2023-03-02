@@ -1,12 +1,12 @@
 package org.pl.adapter.data.aggregates;
 
 import jakarta.inject.Inject;
-import org.pl.adapter.data.exceptions.HardwareEntException;
-import org.pl.adapter.data.exceptions.RepositoryEntException;
+import org.pl.adapter.data.model.exceptions.HardwareEntException;
+import org.pl.adapter.data.model.exceptions.RepositoryEntException;
 import org.pl.adapter.data.model.RepairEnt;
 import org.pl.adapter.data.repositories.RepairEntRepository;
-import org.pl.exceptions.HardwareException;
-import org.pl.exceptions.RepositoryException;
+import org.pl.model.exceptions.HardwareException;
+import org.pl.model.exceptions.RepositoryException;
 import org.pl.infrastructure.repair.*;
 import org.pl.model.Repair;
 

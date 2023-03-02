@@ -2,7 +2,7 @@ package org.pl.infrastructure.client;
 
 import java.util.UUID;
 
-import org.pl.exceptions.RepositoryException;
+import org.pl.model.exceptions.RepositoryException;
 import org.pl.model.Client;
 
 

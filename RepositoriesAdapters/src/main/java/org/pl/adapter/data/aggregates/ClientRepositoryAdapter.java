@@ -1,10 +1,10 @@
 package org.pl.adapter.data.aggregates;
 
 import jakarta.inject.Inject;
-import org.pl.adapter.data.exceptions.RepositoryEntException;
+import org.pl.adapter.data.model.exceptions.RepositoryEntException;
 import org.pl.adapter.data.model.ClientEnt;
 import org.pl.adapter.data.repositories.ClientEntRepository;
-import org.pl.exceptions.RepositoryException;
+import org.pl.model.exceptions.RepositoryException;
 import org.pl.infrastructure.client.*;
 import org.pl.model.Client;
 

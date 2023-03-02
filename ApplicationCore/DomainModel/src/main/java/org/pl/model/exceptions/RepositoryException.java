@@ -1,9 +1,9 @@
-package org.pl.adapter.data.exceptions;
+package org.pl.model.exceptions;
 
 import lombok.ToString;
 
 @ToString
-public class RepositoryEntException extends Exception {
+public class RepositoryException extends Exception {
     public static final String REPOSITORY_ADD_INVALID_EXCEPTION = "Invalid attempt to add object to repository.";
     public static final String REPOSITORY_ADD_EXCEPTION = "Invalid attempt to add object to repository, object is already in repository.";
     public static final String REPOSITORY_ARCHIVE_EXCEPTION = "Trying to archive archived object.";
@@ -14,7 +14,7 @@ public class RepositoryEntException extends Exception {
     public static final String REPOSITORY_HARDWARE_IS_ARCHIVE_EXCEPTION = "Attempt to repair archived hardware.";
     public static final String REPOSITORY_MAX_REPAIRS_EXCEED = "Given client type achieved max amount of repairs.";
 
-    public RepositoryEntException(String message) {
+    public RepositoryException(String message) {
         super(message);
     }
 }

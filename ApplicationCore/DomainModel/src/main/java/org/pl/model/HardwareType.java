@@ -3,7 +3,7 @@ package org.pl.model;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.pl.exceptions.HardwareException;
+import org.pl.model.exceptions.HardwareException;
 
 import java.io.Serializable;
 import java.util.Objects;

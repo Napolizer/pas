@@ -9,7 +9,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.pl.exceptions.RepositoryException;
+import org.pl.model.exceptions.RepositoryException;
 import org.pl.model.HardwareType;
 import org.pl.services.HardwareService;
 

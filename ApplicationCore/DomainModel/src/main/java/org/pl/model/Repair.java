@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.pl.annotations.ValidDateRange;
-import org.pl.exceptions.HardwareException;
+import org.pl.model.exceptions.HardwareException;
 import org.pl.interfaces.RepairAdapterInterface;
 
 import java.io.Serializable;

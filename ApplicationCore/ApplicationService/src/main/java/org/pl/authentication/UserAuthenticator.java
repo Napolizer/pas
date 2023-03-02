@@ -2,10 +2,10 @@ package org.pl.authentication;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.pl.exceptions.RepositoryException;
-import org.pl.exceptions.authentication.InvalidCredentialsException;
-import org.pl.exceptions.authentication.UserIsArchiveException;
-import org.pl.exceptions.authentication.UserNotFoundException;
+import org.pl.model.exceptions.RepositoryException;
+import org.pl.model.exceptions.authentication.InvalidCredentialsException;
+import org.pl.model.exceptions.authentication.UserIsArchiveException;
+import org.pl.model.exceptions.authentication.UserNotFoundException;
 import org.pl.model.Client;
 import org.pl.model.UserCredentials;
 import org.pl.services.ClientService;

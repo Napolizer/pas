@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.pl.exceptions.ClientException;
+import org.pl.model.exceptions.ClientException;
 import org.pl.interfaces.ClientTypeAdapterInterface;
 
 import java.io.Serializable;

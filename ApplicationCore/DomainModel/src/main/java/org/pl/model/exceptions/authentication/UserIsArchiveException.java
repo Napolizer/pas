@@ -1,4 +1,4 @@
-package org.pl.exceptions.authentication;
+package org.pl.model.exceptions.authentication;
 
 public class UserIsArchiveException extends Exception {
     public UserIsArchiveException() {

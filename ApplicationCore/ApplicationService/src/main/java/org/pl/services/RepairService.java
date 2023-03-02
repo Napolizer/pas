@@ -4,9 +4,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.pl.exceptions.ClientException;
-import org.pl.exceptions.HardwareException;
-import org.pl.exceptions.RepositoryException;
+import org.pl.model.exceptions.ClientException;
+import org.pl.model.exceptions.HardwareException;
+import org.pl.model.exceptions.RepositoryException;
 import org.pl.infrastructure.repair.*;
 import org.pl.model.Repair;
 

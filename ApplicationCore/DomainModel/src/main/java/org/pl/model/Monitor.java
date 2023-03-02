@@ -3,7 +3,7 @@ package org.pl.model;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.pl.exceptions.HardwareException;
+import org.pl.model.exceptions.HardwareException;
 
 import java.io.Serializable;
 
