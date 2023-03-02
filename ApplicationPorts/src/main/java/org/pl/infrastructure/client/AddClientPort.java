@@ -4,5 +4,5 @@ import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 
 public interface AddClientPort {
-    Client createClient(Client client) throws Exception ;
+    Client createClient(Client client) throws RepositoryException;
 }
