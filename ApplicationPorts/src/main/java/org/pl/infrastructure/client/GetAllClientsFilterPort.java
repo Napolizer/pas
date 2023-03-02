@@ -6,5 +6,5 @@ import org.pl.exceptions.RepositoryException;
 import org.pl.model.Client;
 
 public interface GetAllClientsFilterPort {
-    List<Client> getAllClientsFilter(String substr) throws RepositoryException;
+    List<Client> getAllClientsFilter(String substr);
 }
