@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
+import org.pl.infrastructure.hardware.*;
 import org.pl.model.*;
-import org.pl.repositories.HardwareRepository;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,18 +19,32 @@ import java.util.UUID;
 @ApplicationScoped
 public class HardwareService {
     @Inject
-    private HardwareRepository hardwareRepository;
+    private AddHardwarePort addHardwarePort;
+    @Inject
+    private DeleteHardwarePort deleteHardwarePort;
+    @Inject
+    private GetAllHardwaresPort getAllHardwaresPort;
+    @Inject
+    private GetAllPresentHardwareFilterPort getAllPresentHardwareFilterPort;
+    @Inject
+    private GetAllPresentHardwaresPort getAllPresentHardwaresPort;
+    @Inject
+    private GetHardwareListPort getHardwareListPort;
+    @Inject
+    private GetHardwarePort getHardwarePort;
+    @Inject
+    private UpdateHardwarePort updateHardwarePort;
 
     public Hardware add(Hardware hardware) throws RepositoryException, HardwareException {
         if (hardware.getPrice() < 0)
             throw new HardwareException(HardwareException.HARDWARE_PRICE_EXCEPTION);
         if (Objects.equals(hardware.getHardwareType(), null))
             throw new HardwareException(HardwareException.HARDWARE_TYPE_EXCEPTION);
-        return hardwareRepository.saveHardware(hardware);
+        return addHardwarePort.createHardware(hardware);
     }
 
     public boolean isHardwareArchive(UUID id) throws RepositoryException {
-        Hardware hardware = hardwareRepository.getHardwareById(id);
+        Hardware hardware = getHardwarePort.getHardware(id);
         if (hardware == null) {
             return false;
         }
@@ -38,35 +52,35 @@ public class HardwareService {
     }
 
     public Hardware get(UUID id) throws RepositoryException {
-        return hardwareRepository.getHardwareById(id);
+        return getHardwarePort.getHardware(id);
     }
 
     public String getInfo(UUID id) throws RepositoryException {
-        return hardwareRepository.getHardwareById(id).toString();
+        return getHardwarePort.getHardware(id).toString();
     }
 
     public void archive(UUID id) throws RepositoryException {
-        hardwareRepository.deleteHardware(id);
+        deleteHardwarePort.deleteHardware(id);
     }
 
     public int getPresentSize() {
-        return hardwareRepository.getHardwareList(false).size();
+        return getHardwareListPort.getHardwareList(false).size();
     }
 
     public int getArchiveSize() {
-        return hardwareRepository.getHardwareList(true).size();
+        return getHardwareListPort.getHardwareList(true).size();
     }
 
     public List<Hardware> getAllHardwares() {
-        return hardwareRepository.getAllHardwares();
+        return getAllHardwaresPort.getAllHardwares();
     }
 
     public Hardware updateHardware(UUID uuid, Hardware hardware) throws RepositoryException {
-        return hardwareRepository.updateHardware(uuid, hardware);
+        return updateHardwarePort.updateHardware(uuid, hardware);
     }
 
     public HardwareType getHardwareTypeById(UUID uuid) throws RepositoryException {
-        List<Hardware> hardwares = hardwareRepository.getAllHardwares();
+        List<Hardware> hardwares = getAllHardwaresPort.getAllHardwares();
         for (Hardware hardware : hardwares) {
             if (hardware.getHardwareType().getId().equals(uuid)) {
                 return hardware.getHardwareType();
@@ -76,10 +90,10 @@ public class HardwareService {
     }
 
     public List<Hardware> getAllPresentHardware() {
-        return hardwareRepository.getAllPresentHardwares();
+        return getAllPresentHardwaresPort.getAllPresentHardwares();
     }
 
     public List<Hardware> getAllPresentHardwareFilter(String substr) {
-        return hardwareRepository.getAllPresentHardwareFilter(substr);
+        return getAllPresentHardwareFilterPort.getAllPresentHardwareFilter(substr);
     }
 }

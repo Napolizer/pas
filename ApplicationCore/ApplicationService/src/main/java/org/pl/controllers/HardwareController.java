@@ -15,7 +15,6 @@ import org.pl.exceptions.HardwareException;
 import org.pl.exceptions.RepositoryException;
 import org.pl.model.*;
 import org.pl.providers.ETagProvider;
-import org.pl.repositories.HardwareRepository;
 import org.pl.services.HardwareService;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +29,7 @@ public class HardwareController {
     private HttpHeaders httpHeaders;
 
     HardwareController() {
-        hardwareService = new HardwareService(new HardwareRepository());
+        hardwareService = new HardwareService();
     }
 
     @GET
