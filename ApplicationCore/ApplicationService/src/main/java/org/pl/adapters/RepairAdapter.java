@@ -5,13 +5,13 @@ import jakarta.json.*;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
+import org.pl.infrastructure.client.GetClientPort;
+import org.pl.infrastructure.hardware.GetHardwarePort;
 import org.pl.interfaces.RepairAdapterInterface;
 import org.pl.model.Client;
 import org.pl.model.DateRange;
 import org.pl.model.Hardware;
 import org.pl.model.Repair;
-import org.pl.repositories.ClientRepository;
-import org.pl.repositories.HardwareRepository;
 
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
@@ -24,9 +24,9 @@ import java.util.UUID;
 public class RepairAdapter implements RepairAdapterInterface {
 
     @Inject
-    HardwareRepository hardwareRepository;
+    private GetHardwarePort getHardwarePort;
     @Inject
-    ClientRepository clientRepository;
+    private GetClientPort getClientPort;
 
     @Override
     public JsonValue adaptToJson(Repair repair) throws Exception {
@@ -91,7 +91,7 @@ public class RepairAdapter implements RepairAdapterInterface {
 
         if (jsonObject.containsKey("hardwareId")) {
             String hardwareId = jsonObject.getString("hardwareId");
-            Hardware hardware = hardwareRepository.getHardwareById(UUID.fromString(hardwareId));
+            Hardware hardware = getHardwarePort.getHardware(UUID.fromString(hardwareId));
             if (hardware == null) {
                 throw new Exception();
             }
@@ -99,7 +99,7 @@ public class RepairAdapter implements RepairAdapterInterface {
         }
         if (jsonObject.containsKey("clientId")) {
             String clientId = jsonObject.getString("clientId");
-            Client client = clientRepository.getClientById(UUID.fromString(clientId));
+            Client client = getClientPort.getClient(UUID.fromString(clientId));
             if (client == null) {
                 throw new Exception();
             }
