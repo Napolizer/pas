@@ -1,7 +1,6 @@
 package org.pl.model;
 
 import jakarta.json.bind.annotation.JsonbTypeAdapter;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.pl.interfaces.HardwareTypeAdapterInterface;
@@ -16,9 +15,7 @@ import static org.pl.model.Condition.FINE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@jakarta.persistence.Entity
 public class Hardware implements Entity, Serializable {
-    @Id
     private UUID id;
     @NotNull
     private Boolean archive;

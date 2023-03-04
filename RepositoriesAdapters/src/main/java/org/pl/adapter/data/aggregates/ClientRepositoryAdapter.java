@@ -1,5 +1,7 @@
 package org.pl.adapter.data.aggregates;
 
+import jakarta.annotation.ManagedBean;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.pl.adapter.data.model.exceptions.RepositoryEntException;
 import org.pl.adapter.data.model.ClientEnt;
@@ -14,6 +16,7 @@ import java.util.UUID;
 
 import static org.apache.commons.beanutils.BeanUtils.copyProperties;
 
+@ApplicationScoped
 public class ClientRepositoryAdapter implements
         AddClientPort, ChangePasswordPort, DeleteClientPort,
         GetAllClientsFilterPort, GetAllClientsPort, GetClientByUsernamePort,
