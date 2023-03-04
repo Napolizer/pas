@@ -1,8 +1,8 @@
 package org.pl.adapter.data.aggregates;
 
-import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.pl.adapter.data.converters.ClientConverter;
 import org.pl.adapter.data.model.exceptions.RepositoryEntException;
 import org.pl.adapter.data.model.ClientEnt;
 import org.pl.adapter.data.repositories.ClientEntRepository;
@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.apache.commons.beanutils.BeanUtils.copyProperties;
-
 @ApplicationScoped
 public class ClientRepositoryAdapter implements
         AddClientPort, ChangePasswordPort, DeleteClientPort,
@@ -24,25 +22,15 @@ public class ClientRepositoryAdapter implements
         RestoreClientPort, UpdateClientPort {
     @Inject
     private ClientEntRepository clientEntRepository;
+    @Inject
+    private ClientConverter clientConverter;
 
     private ClientEnt convert(Client client) {
-        try {
-            ClientEnt clientEnt = new ClientEnt();
-            copyProperties(clientEnt, client);
-            return clientEnt;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return clientConverter.convert(client);
     }
 
     private Client convert(ClientEnt clientEnt) {
-        try {
-            Client client = new Client();
-            copyProperties(client, clientEnt);
-            return client;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return clientConverter.convert(clientEnt);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class ClientEnt implements EntityEnt, Serializable {
     private ClientTypeEnt clientTypeEnt;
     @Embedded
     private AddressEnt addressEnt;
-    private ClientAccessTypeEnt clientAccessType;
+    private ClientAccessTypeEnt clientAccessTypeEnt;
 
     public double calculateDiscount(int price) throws ClientEntException {
         return getClientTypeEnt().calculateDiscount(price);

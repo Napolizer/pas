@@ -71,7 +71,7 @@ public class ClientEntRepository {
             clientToChange.getClientTypeEnt().setType(client.getClientTypeEnt().getType());
             clientToChange.getClientTypeEnt().setFactor(client.getClientTypeEnt().getFactor());
             clientToChange.getClientTypeEnt().setMaxRepairs(client.getClientTypeEnt().getMaxRepairs());
-            clientToChange.setClientAccessType(client.getClientAccessType());
+            clientToChange.setClientAccessTypeEnt(client.getClientAccessTypeEnt());
             userTransaction.begin();
             entityManager.merge(clientToChange);
             userTransaction.commit();
