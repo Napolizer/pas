@@ -1,8 +1,8 @@
 package org.pl.adapter.data.aggregates;
 
-import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.pl.adapter.data.converters.RepairConverter;
 import org.pl.adapter.data.model.exceptions.HardwareEntException;
 import org.pl.adapter.data.model.exceptions.RepositoryEntException;
 import org.pl.adapter.data.model.RepairEnt;
@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.apache.commons.beanutils.BeanUtils.copyProperties;
-
 @ApplicationScoped
 public class RepairRepositoryAdapter implements
         AddRepairPort, DeleteRepairPort, GetAllRepairsPort,
@@ -26,30 +24,13 @@ public class RepairRepositoryAdapter implements
     @Inject
     private RepairEntRepository repairEntRepository;
 
-    private RepairEnt convert(Repair repair) {
-        try {
-            RepairEnt repairEnt = new RepairEnt();
-            copyProperties(repairEnt, repair);
-            return repairEnt;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Repair convert(RepairEnt repairEnt) {
-        try {
-            Repair repair = new Repair();
-            copyProperties(repair, repairEnt);
-            return repair;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    @Inject
+    private RepairConverter repairConverter;
 
     @Override
     public Repair createRepair(Repair repair) throws RepositoryException {
         try {
-            return convert(repairEntRepository.saveRepair(convert(repair)));
+            return repairConverter.convert(repairEntRepository.saveRepair(repairConverter.convert(repair)));
         } catch (RepositoryEntException e) {
             throw new RepositoryException(e.getMessage());
         }
@@ -58,7 +39,7 @@ public class RepairRepositoryAdapter implements
     @Override
     public Repair deleteRepair(UUID uuid) throws RepositoryException {
         try {
-            return convert(repairEntRepository.deleteRepair(uuid));
+            return repairConverter.convert(repairEntRepository.deleteRepair(uuid));
         } catch (RepositoryEntException e) {
             throw new RepositoryException(e.getMessage());
         }
@@ -68,7 +49,7 @@ public class RepairRepositoryAdapter implements
     public List<Repair> getAllRepairs() {
         List<Repair> repairList = new ArrayList<>();
         for (RepairEnt repair : repairEntRepository.getAllRepairs()) {
-            repairList.add(convert(repair));
+            repairList.add(repairConverter.convert(repair));
         }
         return repairList;
     }
@@ -78,7 +59,7 @@ public class RepairRepositoryAdapter implements
         List<Repair> repairList = new ArrayList<>();
         try {
             for (RepairEnt repair : repairEntRepository.getClientRepairs(clientId)) {
-                repairList.add(convert(repair));
+                repairList.add(repairConverter.convert(repair));
             }
             return repairList;
         } catch (RepositoryEntException e) {
@@ -90,7 +71,7 @@ public class RepairRepositoryAdapter implements
     public List<Repair> getRepairList(boolean condition) {
         List<Repair> repairList = new ArrayList<>();
         for (RepairEnt repair : repairEntRepository.getRepairs(condition)) {
-            repairList.add(convert(repair));
+            repairList.add(repairConverter.convert(repair));
         }
         return repairList;
     }
@@ -98,7 +79,7 @@ public class RepairRepositoryAdapter implements
     @Override
     public Repair getRepair(UUID uuid) throws RepositoryException {
         try {
-            return convert(repairEntRepository.getRepairById(uuid));
+            return repairConverter.convert(repairEntRepository.getRepairById(uuid));
         } catch (RepositoryEntException e) {
             throw new RepositoryException(e.getMessage());
         }
@@ -107,7 +88,7 @@ public class RepairRepositoryAdapter implements
     @Override
     public Repair repair(UUID uuid) throws RepositoryException, HardwareException {
         try {
-            return convert(repairEntRepository.repair(uuid));
+            return repairConverter.convert(repairEntRepository.repair(uuid));
         } catch (RepositoryEntException e) {
             throw new RepositoryException(e.getMessage());
         } catch (HardwareEntException e) {
@@ -118,7 +99,7 @@ public class RepairRepositoryAdapter implements
     @Override
     public Repair updateRepair(UUID uuid, Repair repair) throws RepositoryException {
         try {
-            return convert(repairEntRepository.updateRepair(uuid, convert(repair)));
+            return repairConverter.convert(repairEntRepository.updateRepair(uuid, repairConverter.convert(repair)));
         } catch (RepositoryEntException e) {
             throw new RepositoryException(e.getMessage());
         }
