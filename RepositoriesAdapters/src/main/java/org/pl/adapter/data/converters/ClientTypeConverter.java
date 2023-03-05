@@ -13,20 +13,24 @@ import org.pl.model.Vip;
 @ApplicationScoped
 public class ClientTypeConverter {
     public ClientTypeEnt convert(ClientType clientType) {
-        return switch (clientType.getType()) {
+        ClientTypeEnt clientTypeEnt = switch (clientType.getType()) {
             case "BASIC" -> new BasicEnt();
             case "PREMIUM" -> new PremiumEnt();
             case "VIP" -> new VipEnt();
             default -> throw new RuntimeException("Invalid client Type");
         };
+        clientTypeEnt.setId(clientType.getId());
+        return clientTypeEnt;
     }
 
     public ClientType convert(ClientTypeEnt clientTypeEnt) {
-        return switch (clientTypeEnt.getType()) {
+        ClientType clientType = switch (clientTypeEnt.getType()) {
             case "BASIC" -> new Basic();
             case "PREMIUM" -> new Premium();
             case "VIP" -> new Vip();
             default -> throw new RuntimeException("Invalid client Type");
         };
+        clientType.setId(clientTypeEnt.getId());
+        return clientType;
     }
 }
