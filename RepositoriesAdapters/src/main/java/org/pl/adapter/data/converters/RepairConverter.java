@@ -18,6 +18,7 @@ public class RepairConverter {
     @Inject
     private DateRangeConverter dateRangeConverter;
     public RepairEnt convert(Repair repair) {
+        if (repair == null) return null;
         try {
             ClientEnt clientEnt = clientConverter.convert(repair.getClient());
             HardwareEnt hardwareEnt = hardwareConverter.convert(repair.getHardware());
@@ -34,6 +35,7 @@ public class RepairConverter {
     }
 
     public Repair convert(RepairEnt repairEnt) {
+        if (repairEnt == null) return null;
         try {
             Client client = clientConverter.convert(repairEnt.getClientEnt());
             Hardware hardware = hardwareConverter.convert(repairEnt.getHardwareEnt());

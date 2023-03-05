@@ -13,6 +13,7 @@ import static org.apache.commons.beanutils.BeanUtils.copyProperties;
 @ApplicationScoped
 public class DateRangeConverter {
     public DateRangeEnt convert(DateRange dateRange) {
+        if (dateRange == null) return null;
         try {
             DateRangeEnt dateRangeEnt = new DateRangeEnt(dateRange.getStartDate(), dateRange.getEndDate());
             return dateRangeEnt;
@@ -22,6 +23,7 @@ public class DateRangeConverter {
     }
 
     public DateRange convert(DateRangeEnt dateRangeEnt) {
+        if (dateRangeEnt == null) return null;
         try {
             DateRange dateRange = new DateRange(dateRangeEnt.getStartDate(), dateRangeEnt.getEndDate());
             return dateRange;

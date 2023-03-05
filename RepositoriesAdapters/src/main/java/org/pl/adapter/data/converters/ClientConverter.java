@@ -14,6 +14,7 @@ public class ClientConverter {
     @Inject ClientAccessTypeConverter clientAccessTypeConverter;
 
     public ClientEnt convert(Client client) {
+        if (client == null) return null;
         try {
             return ClientEnt
                     .builder()
@@ -35,6 +36,7 @@ public class ClientConverter {
     }
 
     public Client convert(ClientEnt clientEnt) {
+        if (clientEnt == null) return null;
         try {
             return Client.builder()
                     .id(clientEnt.getId())

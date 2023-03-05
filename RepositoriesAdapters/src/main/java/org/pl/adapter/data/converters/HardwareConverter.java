@@ -11,6 +11,7 @@ public class HardwareConverter {
     @Inject
     HardwareTypeConverter hardwareTypeConverter;
     public HardwareEnt convert(Hardware hardware) {
+        if (hardware == null) return null;
         return HardwareEnt.builder()
                 .id(hardware.getId())
                 .archive(hardware.isArchive())
@@ -20,6 +21,7 @@ public class HardwareConverter {
     }
 
     public Hardware convert(HardwareEnt hardwareEnt) {
+        if (hardwareEnt == null) return null;
         return Hardware.builder()
                 .id(hardwareEnt.getId())
                 .archive(hardwareEnt.isArchive())

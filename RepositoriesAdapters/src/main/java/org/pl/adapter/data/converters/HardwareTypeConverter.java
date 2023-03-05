@@ -11,6 +11,7 @@ public class HardwareTypeConverter {
     @Inject
     private ConditionConverter conditionConverter;
     public HardwareTypeEnt convert(HardwareType hardwareType) {
+        if (hardwareType == null) return null;
         HardwareTypeEnt hardwareTypeEnt = switch (hardwareType.getType()) {
             case "COMPUTER" -> new ComputerEnt(conditionConverter.convert(hardwareType.getCondition()));
             case "CONSOLE" -> new ConsoleEnt(conditionConverter.convert(hardwareType.getCondition()));
@@ -23,6 +24,7 @@ public class HardwareTypeConverter {
     }
 
     public HardwareType convert(HardwareTypeEnt hardwareTypeEnt) {
+        if (hardwareTypeEnt == null) return null;
         HardwareType hardwareType = switch (hardwareTypeEnt.getType()) {
             case "COMPUTER" -> new Computer(conditionConverter.convert(hardwareTypeEnt.getCondition()));
             case "CONSOLE" -> new Console(conditionConverter.convert(hardwareTypeEnt.getCondition()));

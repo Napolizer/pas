@@ -13,6 +13,7 @@ import org.pl.model.Vip;
 @ApplicationScoped
 public class ClientTypeConverter {
     public ClientTypeEnt convert(ClientType clientType) {
+        if (clientType == null) return null;
         ClientTypeEnt clientTypeEnt = switch (clientType.getType()) {
             case "BASIC" -> new BasicEnt();
             case "PREMIUM" -> new PremiumEnt();
@@ -24,6 +25,7 @@ public class ClientTypeConverter {
     }
 
     public ClientType convert(ClientTypeEnt clientTypeEnt) {
+        if (clientTypeEnt == null) return null;
         ClientType clientType = switch (clientTypeEnt.getType()) {
             case "BASIC" -> new Basic();
             case "PREMIUM" -> new Premium();
