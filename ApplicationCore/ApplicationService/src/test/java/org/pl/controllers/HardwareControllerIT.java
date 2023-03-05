@@ -4,22 +4,19 @@ import org.junit.jupiter.api.Test;
 import org.microshed.testing.SharedContainerConfig;
 import org.microshed.testing.jupiter.MicroShedTest;
 
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.equalTo;
-
+import static io.restassured.RestAssured.given;
 
 @MicroShedTest
 @SharedContainerConfig(AppContainerConfig.class)
-public class HealthControllerIT {
+public class HardwareControllerIT {
     @Test
-    public void getAllHardwaresTest() {
+    void CreateHardwareEmptyBodyTest() {
         given()
+                .body("")
                 .when()
-                .get("/api/health")
+                .post("/api/hardware")
                 .then()
                 .assertThat()
-                .statusCode(200)
-                .contentType("text/plain")
-                .body(equalTo("OK"));
+                .statusCode(400);
     }
 }
