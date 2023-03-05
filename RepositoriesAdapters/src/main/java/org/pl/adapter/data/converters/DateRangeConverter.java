@@ -1,5 +1,6 @@
 package org.pl.adapter.data.converters;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import org.pl.adapter.data.model.ClientEnt;
 import org.pl.adapter.data.model.DateRangeEnt;
 import org.pl.adapter.data.model.HardwareEnt;
@@ -9,6 +10,7 @@ import org.pl.model.Repair;
 
 import static org.apache.commons.beanutils.BeanUtils.copyProperties;
 
+@ApplicationScoped
 public class DateRangeConverter {
     public DateRangeEnt convert(DateRange dateRange) {
         try {

@@ -28,7 +28,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>ApplicationService5</artifactId>
+    <artifactId>ApplicationService</artifactId>
     <packaging>jar</packaging>
 
 </project>
