@@ -1,31 +1,43 @@
 package org.pl.controllers;
 
-import org.junit.Test;
+import io.restassured.RestAssured;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.Test;
+import org.microshed.testing.SharedContainerConfig;
 import org.microshed.testing.jupiter.MicroShedTest;
-import org.microshed.testing.testcontainers.ApplicationContainer;
-import org.testcontainers.junit.jupiter.Container;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
 
 @MicroShedTest
+@SharedContainerConfig(AppContainerConfig.class)
 public class ClientControllerIT {
-    @Container
-    public static ApplicationContainer container = new ApplicationContainer()
-            .withAppContextRoot("/ApplicationService-1.0-SNAPSHOT")
-            .withReadinessPath("/ApplicationService-1.0-SNAPSHOT/api/health");
+
+    @BeforeClass
+    public static void setUp() {
+        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+    }
 
     @Test
     public void loginPositiveTest() {
+        Map<String, Object> credentials = new HashMap<>();
+        credentials.put("username", "admin");
+        credentials.put("password", "password");
         given()
+                .contentType(ContentType.JSON)
+                .body(credentials)
                 .when()
-                .header("Content-Type", "application/json")
-                .body("{\"username\":\"admin\",\"password\":\"password\"}")
-                .get("/api/client/login")
+                .post("/api/client/login")
                 .then()
                 .assertThat()
                 .statusCode(200)
-                .contentType("application/json")
+                .contentType(ContentType.JSON)
                 .body("token", is(instanceOf(String.class)));
     }
 }
