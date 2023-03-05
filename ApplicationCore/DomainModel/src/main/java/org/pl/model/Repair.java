@@ -1,6 +1,5 @@
 package org.pl.model;
 
-import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.pl.annotations.ValidDateRange;
 import org.pl.model.exceptions.HardwareException;
-import org.pl.interfaces.RepairAdapterInterface;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,7 +16,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonbTypeAdapter(RepairAdapterInterface.class)
+//@JsonbTypeAdapter(RepairAdapter.class)
 public class Repair implements Entity, Serializable {
     private UUID id;
     @NotNull

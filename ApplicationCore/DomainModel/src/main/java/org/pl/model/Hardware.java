@@ -3,7 +3,7 @@ package org.pl.model;
 import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.pl.interfaces.HardwareTypeAdapterInterface;
+import org.pl.adapters.HardwareTypeAdapter;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -22,7 +22,7 @@ public class Hardware implements Entity, Serializable {
     @NotNull
     private Integer price;
     @NotNull
-    @JsonbTypeAdapter(HardwareTypeAdapterInterface.class)
+    @JsonbTypeAdapter(HardwareTypeAdapter.class)
     private HardwareType hardwareType;
 
     public void repair() {

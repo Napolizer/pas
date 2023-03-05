@@ -3,13 +3,13 @@ package org.pl.adapters;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
-import org.pl.interfaces.ClientTypeAdapterInterface;
+import jakarta.json.bind.adapter.JsonbAdapter;
 import org.pl.model.Basic;
 import org.pl.model.ClientType;
 import org.pl.model.Premium;
 import org.pl.model.Vip;
 
-public class ClientTypeAdapter implements ClientTypeAdapterInterface {
+public class ClientTypeAdapter implements JsonbAdapter<ClientType, JsonValue> {
     @Override
     public JsonValue adaptToJson(ClientType clientType) throws Exception {
         var json = Json.createObjectBuilder();
