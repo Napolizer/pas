@@ -89,8 +89,8 @@ public class HardwareController {
                 return Response.status(412).entity(json.build()).build();
             }
 
-            hardwareService.updateHardware(uuid, hardware);
-            return Response.ok(hardware).build();
+            Hardware updatedHardware = hardwareService.updateHardware(uuid, hardware);
+            return Response.ok(updatedHardware).build();
         } catch (IllegalArgumentException | RepositoryException e) {
             json.add("error", e.getMessage());
             return Response.status(400).entity(json.build()).build();
