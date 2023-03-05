@@ -76,8 +76,14 @@ public class RepairEntRepository {
                 repairToChange.setArchive(repair.isArchive());
             } if (repair.getDateRangeEnt() != null) {
                 if (repair.getDateRangeEnt().getStartDate() != null) {
+                    if (repair.getDateRangeEnt().getStartDate().after(repairToChange.getDateRangeEnt().getEndDate())) {
+                        throw new RepositoryEntException("End date can't be before start date");
+                    }
                     repairToChange.getDateRangeEnt().setStartDate(repair.getDateRangeEnt().getStartDate());
                 } if (repair.getDateRangeEnt().getEndDate() != null) {
+                    if (repair.getDateRangeEnt().getEndDate().before(repairToChange.getDateRangeEnt().getStartDate())) {
+                        throw new RepositoryEntException("End date can't be before start date");
+                    }
                     repairToChange.getDateRangeEnt().setEndDate(repair.getDateRangeEnt().getEndDate());
                 }
             }

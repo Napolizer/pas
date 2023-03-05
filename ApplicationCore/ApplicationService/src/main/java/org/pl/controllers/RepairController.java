@@ -68,9 +68,7 @@ public class RepairController {
         }
         var json = Json.createObjectBuilder();
         try {
-            System.out.println(1);
             RepairApp createdRepair = repairAppConverter.convert(repairService.add(repairAppConverter.convert(repairApp)));
-            System.out.println(2);
             return Response.status(201).entity(createdRepair).build();
         } catch (RepositoryException e) {
             json.add("error", "Repair already exists");
@@ -92,7 +90,7 @@ public class RepairController {
             UUID uuid = UUID.fromString(id);
 
             Repair existingRepair = repairService.get(uuid);
-            if (!eTagProvider.generateETag(existingRepair).equals(etag)) {
+            if (!eTagProvider.generateETag(repairAppConverter.convert(existingRepair)).equals(etag)) {
                 json.add("error", "Invalid If-Match signature");
                 return Response.status(412).entity(json.build()).build();
             }
