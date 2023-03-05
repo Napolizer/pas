@@ -37,19 +37,7 @@ public class HardwareControllerIT {
                 .path("token");
     }
 
-//    @BeforeAll
-//    static void login() {
-//        Response response = given()
-//                .when()
-//                .contentType(ContentType.JSON)
-//                .header("Content-Type", "application/json")
-//                .body("{\"username\":\"admin\",\"password\":\"password\"}")
-//                .get("/api/client/login")
-//                .then()
-//                .extract()
-//                .response();
-//        token = response.path("token").toString();
-//    }
+
     @Test
     void CreateHardwareMissingBodyTest() {
         given()
