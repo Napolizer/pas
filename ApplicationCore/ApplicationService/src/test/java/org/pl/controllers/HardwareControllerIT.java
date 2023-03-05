@@ -16,7 +16,6 @@ import static org.hamcrest.CoreMatchers.*;
 @MicroShedTest
 @SharedContainerConfig(AppContainerConfig.class)
 public class HardwareControllerIT {
-    private String token = "";
     private HardwareType hardwareType;
     private Hardware testHardware;
     private String hardwareId;
