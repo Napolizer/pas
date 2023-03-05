@@ -1,22 +1,16 @@
 package org.pl.controllers;
 
 import org.junit.jupiter.api.Test;
+import org.microshed.testing.SharedContainerConfig;
 import org.microshed.testing.jupiter.MicroShedTest;
-import org.microshed.testing.testcontainers.ApplicationContainer;
-import org.testcontainers.junit.jupiter.Container;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.equalTo;
 
 
 @MicroShedTest
+@SharedContainerConfig(AppContainerConfig.class)
 public class HealthControllerIT {
-    @Container
-    public static ApplicationContainer container = new ApplicationContainer()
-            .withAppContextRoot("/ApplicationService-1.0-SNAPSHOT")
-            .withReadinessPath("/ApplicationService-1.0-SNAPSHOT/api/health");
-
-
     @Test
     void getAllHardwaresTest() {
         given()
