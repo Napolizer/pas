@@ -9,6 +9,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.pl.converters.RepairAppConverter;
+import org.pl.model.RepairApp;
 import org.pl.model.exceptions.RepositoryException;
 import org.pl.model.Repair;
 import org.pl.providers.ETagProvider;
@@ -25,6 +27,8 @@ public class RepairController {
     private Principal principal;
     @Inject
     private ETagProvider eTagProvider;
+    @Inject
+    private RepairAppConverter repairAppConverter;
     @Context
     private SecurityContext securityContext;
     @Context
@@ -38,10 +42,10 @@ public class RepairController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            Repair repair = repairService.get(uuid);
+            RepairApp repairApp = repairAppConverter.convert(repairService.get(uuid));
             return Response
-                    .ok(repair)
-                    .header("ETag", eTagProvider.generateETag(repair))
+                    .ok(repairApp)
+                    .header("ETag", eTagProvider.generateETag(repairAppConverter.convert(repairApp)))
                     .build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given id is invalid");
@@ -56,15 +60,17 @@ public class RepairController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
-    public Response addRepair(@NotNull @Valid Repair repair) {
+    public Response addRepair(@NotNull @Valid RepairApp repairApp) {
         if (securityContext.isUserInRole("USER")) {
-            if (!repair.getClient().getUsername().equals(principal.getName())) {
+            if (!repairApp.getClient().getUsername().equals(principal.getName())) {
                 return Response.status(403).build();
             }
         }
         var json = Json.createObjectBuilder();
         try {
-            Repair createdRepair = repairService.add(repair);
+            System.out.println(1);
+            RepairApp createdRepair = repairAppConverter.convert(repairService.add(repairAppConverter.convert(repairApp)));
+            System.out.println(2);
             return Response.status(201).entity(createdRepair).build();
         } catch (RepositoryException e) {
             json.add("error", "Repair already exists");
@@ -75,7 +81,7 @@ public class RepairController {
     @PUT
     @Path("id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateRepair(@NotNull Repair repair, @PathParam("id")String id) {
+    public Response updateRepair(@NotNull RepairApp repairApp, @PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
             String etag = httpHeaders.getHeaderString("If-Match");
@@ -91,7 +97,7 @@ public class RepairController {
                 return Response.status(412).entity(json.build()).build();
             }
 
-            Repair updatedRepair = repairService.updateRepair(uuid, repair);
+            RepairApp updatedRepair = repairAppConverter.convert(repairService.updateRepair(uuid, repairAppConverter.convert(repairApp)));
             return Response.ok(updatedRepair).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Invalid data in request");
@@ -110,7 +116,7 @@ public class RepairController {
         try {
             UUID uuid = UUID.fromString(id);
             if (!repairService.isRepairArchive(uuid)) {
-                Repair deletedRepair = repairService.repair(uuid);
+                RepairApp deletedRepair = repairAppConverter.convert(repairService.repair(uuid));
                 return Response.ok(deletedRepair).build();
             } else {
                 json.add("error", "Repair is already archive");

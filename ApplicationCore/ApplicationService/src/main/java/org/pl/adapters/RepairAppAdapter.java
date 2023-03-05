@@ -9,10 +9,7 @@ import jakarta.json.bind.JsonbConfig;
 import jakarta.json.bind.adapter.JsonbAdapter;
 import org.pl.infrastructure.client.GetClientPort;
 import org.pl.infrastructure.hardware.GetHardwarePort;
-import org.pl.model.Client;
-import org.pl.model.DateRange;
-import org.pl.model.Hardware;
-import org.pl.model.Repair;
+import org.pl.model.*;
 
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
@@ -23,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @ApplicationScoped
-public class RepairAdapter implements JsonbAdapter<Repair, JsonValue> {
+public class RepairAppAdapter implements JsonbAdapter<RepairApp, JsonValue> {
 
     @Inject
     private GetHardwarePort getHardwarePort;
@@ -31,7 +28,7 @@ public class RepairAdapter implements JsonbAdapter<Repair, JsonValue> {
     private GetClientPort getClientPort;
 
     @Override
-    public JsonValue adaptToJson(Repair repair) throws Exception {
+    public JsonValue adaptToJson(RepairApp repair) throws Exception {
         var json = Json.createObjectBuilder();
         if (repair.getId() != null) {
             json.add("id", repair.getId().toString());
@@ -66,8 +63,8 @@ public class RepairAdapter implements JsonbAdapter<Repair, JsonValue> {
     }
 
     @Override
-    public Repair adaptFromJson(JsonValue jsonValue) throws Exception {
-        Repair output = new Repair();
+    public RepairApp adaptFromJson(JsonValue jsonValue) throws Exception {
+        RepairApp output = new RepairApp();
         JsonObject jsonObject = jsonValue.asJsonObject();
 
         if (jsonObject.containsKey("id")) {
