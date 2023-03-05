@@ -1,10 +1,6 @@
 package org.pl.controllers;
 
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.microshed.testing.SharedContainerConfig;
@@ -16,28 +12,29 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.greaterThan;
 
 @MicroShedTest
 @SharedContainerConfig(AppContainerConfig.class)
 public class ClientControllerIT {
-    static Client admin;
+    String adminId;
+    String adminPassword;
 
-    @BeforeClass
-    public static void setUp() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        admin = given()
+    public ClientControllerIT() {
+        adminPassword = "password";
+        adminId = given()
                 .header("Authorization", "Bearer " + retrieveToken())
                 .when()
                 .get("/api/client/username/admin")
                 .then()
                 .extract()
-                .as(Client.class);
+                .path("id");
     }
 
-    private static String retrieveToken() {
+    private String retrieveToken() {
         Map<String, Object> credentials = new HashMap<>();
         credentials.put("username", "admin");
-        credentials.put("password", "password");
+        credentials.put("password", adminPassword);
         return given()
                 .contentType(ContentType.JSON)
                 .body(credentials)
@@ -273,33 +270,303 @@ public class ClientControllerIT {
         }
     }
 
-    @Test
-    public void getClientByUsername() {
-        given()
-                .when()
-                .header("Authorization", "Bearer " + retrieveToken())
-                .get("/api/client/username/admin")
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("username", is("admin"));
+    @Nested
+    class GetClient {
+        @Test
+        void getClientPositiveTest() {
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .when()
+                    .get("/api/client/id/" + adminId)
+                    .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .contentType(ContentType.JSON)
+                    .body("id", is(adminId))
+                    .body("archive", is(false))
+                    .body("balance", is(0.0F))
+                    .body("clientAccessType", is("ADMINISTRATORS"))
+                    .body("clientType.type", is("PREMIUM"))
+                    .body("firstName", is("Admin"))
+                    .body("lastName", is("Admin"))
+                    .body("phoneNumber", is("123456789"))
+                    .body("username", is("admin"))
+                    .body("password", is(equalTo(null)));
+        }
+
+        @Test
+        void getClientMissingIdTest() {
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .when()
+                    .get("/api/client/id/")
+                    .then()
+                    .assertThat()
+                    .statusCode(404);
+        }
+
+        @Test
+        void getClientNegativeIdTest() {
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .when()
+                    .get("/api/client/id/-1")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
+
+        @Test
+        void getClientWrongIdTest() {
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .when()
+                    .get("/api/client/id/abc")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
     }
 
-    @Test
-    public void loginPositiveTest() {
-        Map<String, Object> credentials = new HashMap<>();
-        credentials.put("username", "admin");
-        credentials.put("password", "password");
-        given()
-                .contentType(ContentType.JSON)
-                .body(credentials)
-                .when()
-                .post("/api/client/login")
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("token", is(instanceOf(String.class)));
+    @Nested
+    class GetAllClients {
+        @Test
+        void getAllClientsPositiveTest() {
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .when()
+                    .get("/api/clients")
+                    .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .contentType(ContentType.JSON)
+                    .body("size()", is(greaterThan(2)));
+        }
+    }
+
+    @Nested
+    class GetClientByUsername {
+        @Test
+        void getClientByUsernamePositiveTest() {
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .when()
+                    .get("/api/client/username/admin")
+                    .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .contentType(ContentType.JSON)
+                    .body("id", is(adminId))
+                    .body("archive", is(false))
+                    .body("balance", is(0.0F))
+                    .body("clientAccessType", is("ADMINISTRATORS"))
+                    .body("clientType.type", is("PREMIUM"))
+                    .body("firstName", is("Admin"))
+                    .body("lastName", is("Admin"))
+                    .body("phoneNumber", is("123456789"))
+                    .body("username", is("admin"))
+                    .body("password", is(equalTo(null)));
+        }
+
+        @Test
+        void getClientByUsernameMissingUsernameTest() {
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .when()
+                    .get("/api/client/username/")
+                    .then()
+                    .assertThat()
+                    .statusCode(404);
+        }
+
+        @Test
+        void getClientByUsernameWrongUsernameTest() {
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .when()
+                    .get("/api/client/username/abc")
+                    .then()
+                    .assertThat()
+                    .statusCode(404);
+        }
+    }
+
+    @Nested
+    class Login {
+        @Test
+        public void loginPositiveTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "admin");
+            credentials.put("password", "password");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/client/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .contentType(ContentType.JSON)
+                    .body("token", is(instanceOf(String.class)));
+        }
+
+        @Test
+        public void loginMissingUsernameTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("password", "password");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/client/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
+
+        @Test
+        public void loginMissingPasswordTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "admin");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/client/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
+
+        @Test
+        public void loginWrongUsernameTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "abc");
+            credentials.put("password", "password");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/client/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(404);
+        }
+
+        @Test
+        public void loginWrongPasswordTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "admin");
+            credentials.put("password", "abc");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/client/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(401);
+        }
+
+        @Test
+public void loginWrongUsernameAndPasswordTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "abc");
+            credentials.put("password", "abc");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/client/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(404);
+        }
+
+        @Test
+        public void loginWrongUsernameAndPasswordEmptyTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "");
+            credentials.put("password", "");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/client/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
+
+        @Test
+        public void loginWrongUsernameAndPasswordNullTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", null);
+            credentials.put("password", null);
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/client/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
+
+        @Test
+        public void loginWrongUsernameAndPasswordMissingTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/client/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
+    }
+
+    @Nested
+    class ChangePassword {
+        @Test
+        public void changePasswordPositiveTest() {
+            Map<String, Object> password = new HashMap<>();
+            password.put("newPassword", "newPassword");
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .contentType(ContentType.JSON)
+                    .body(password)
+                    .when()
+                    .put("/api/client/id/" + adminId + "/change_password")
+                    .then()
+                    .assertThat()
+                    .statusCode(200);
+            adminPassword = "newPassword";
+            password.put("newPassword", "password");
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .contentType(ContentType.JSON)
+                    .body(password)
+                    .when()
+                    .put("/api/client/id/" + adminId + "/change_password")
+                    .then()
+                    .assertThat()
+                    .statusCode(200);
+        }
+
+        @Test
+        public void changePasswordEmptyBody() {
+            Map<String, Object> body = new HashMap<>();
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .contentType(ContentType.JSON)
+                    .body(body)
+                    .when()
+                    .put("/api/client/id/" + adminId + "/change_password")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
     }
 }
