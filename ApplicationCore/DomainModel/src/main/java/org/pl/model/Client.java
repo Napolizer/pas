@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.pl.adapters.ClientTypeAdapter;
 import org.pl.model.exceptions.ClientException;
 import org.pl.interfaces.ClientTypeAdapterInterface;
 
@@ -39,7 +40,7 @@ public class Client implements Entity, Serializable {
     @NotBlank
     private String phoneNumber;
     @NotNull
-    @JsonbTypeAdapter(ClientTypeAdapterInterface.class)
+    @JsonbTypeAdapter(ClientTypeAdapter.class)
     private ClientType clientType;
     @NotNull
     @Valid

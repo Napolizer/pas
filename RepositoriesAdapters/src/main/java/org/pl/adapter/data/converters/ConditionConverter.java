@@ -1,8 +1,10 @@
 package org.pl.adapter.data.converters;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import org.pl.adapter.data.model.ConditionEnt;
 import org.pl.model.Condition;
 
+@ApplicationScoped
 public class ConditionConverter {
     public ConditionEnt convert(Condition condition) {
         return switch (condition) {

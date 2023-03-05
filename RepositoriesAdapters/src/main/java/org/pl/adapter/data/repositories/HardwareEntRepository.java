@@ -29,8 +29,12 @@ public class HardwareEntRepository {
     UserTransaction userTransaction;
 
     public HardwareEnt saveHardware(HardwareEnt hardware) throws RepositoryEntException {
+        System.out.println("hardware");
+        System.out.println(hardware);
         hardware.setId(UUID.randomUUID());
+        System.out.println("UUID");
         hardware.getHardwareTypeEnt().setId(UUID.randomUUID());
+        System.out.println("GET");
         try {
             if (!entityManager.contains(hardware)) {
                 userTransaction.begin();
@@ -39,8 +43,10 @@ public class HardwareEntRepository {
                 return hardware;
             }
         } catch (Exception e) {
+            System.out.println("REPO EXCEPTION");
             throw new RepositoryEntException(e.getMessage());
         }
+        System.out.println("ADD EXCEPTION");
         throw new RepositoryEntException(RepositoryEntException.REPOSITORY_ADD_EXCEPTION);
     }
 

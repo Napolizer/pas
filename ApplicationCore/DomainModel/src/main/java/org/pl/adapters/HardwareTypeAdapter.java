@@ -9,6 +9,7 @@ import org.pl.model.*;
 public class HardwareTypeAdapter implements HardwareTypeAdapterInterface {
     @Override
     public JsonValue adaptToJson(HardwareType hardwareType) throws Exception {
+        System.out.println("ADAPT TO");
         var json = Json.createObjectBuilder();
         if (hardwareType.getId() != null) {
             json.add("id", hardwareType.getId().toString());
@@ -26,6 +27,7 @@ public class HardwareTypeAdapter implements HardwareTypeAdapterInterface {
 
     @Override
     public HardwareType adaptFromJson(JsonValue jsonValue) {
+        System.out.println("ADAPT");
         HardwareType output;
         JsonObject jsonObject = jsonValue.asJsonObject();
 

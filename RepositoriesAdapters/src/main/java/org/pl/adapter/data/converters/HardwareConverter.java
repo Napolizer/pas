@@ -11,6 +11,7 @@ public class HardwareConverter {
     @Inject
     HardwareTypeConverter hardwareTypeConverter;
     public HardwareEnt convert(Hardware hardware) {
+        System.out.println("CONVERTING");
         return HardwareEnt.builder()
                 .id(hardware.getId())
                 .archive(hardware.isArchive())

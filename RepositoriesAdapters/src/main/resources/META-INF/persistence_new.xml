@@ -4,7 +4,7 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
              https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
              version="3.1">
-  <persistence-unit name="POSTGRES_REPAIR_PU_123" transaction-type="JTA">
+  <persistence-unit name="POSTGRES_REPAIR_PU" transaction-type="JTA">
     <class>org.pl.adapter.data.model.AddressEnt</class>
     <class>org.pl.adapter.data.model.ClientTypeEnt</class>
     <class>org.pl.adapter.data.model.BasicEnt</class>
