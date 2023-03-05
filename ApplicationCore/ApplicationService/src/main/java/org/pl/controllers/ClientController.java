@@ -13,6 +13,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.authentication.UserAuthenticator;
+import org.pl.converters.RepairAppConverter;
 import org.pl.model.exceptions.ClientException;
 import org.pl.model.exceptions.RepositoryException;
 import org.pl.model.exceptions.authentication.InvalidCredentialsException;
@@ -25,6 +26,7 @@ import org.pl.services.ClientService;
 import org.pl.services.RepairService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Path("/client")
 public class ClientController {
@@ -38,6 +40,8 @@ public class ClientController {
     private UserAuthenticator userAuthenticator;
     @Inject
     private ETagProvider eTagProvider;
+    @Inject
+    private RepairAppConverter repairAppConverter;
     @Context
     private HttpHeaders httpHeaders;
 
@@ -219,7 +223,10 @@ public class ClientController {
     public Response getClientsPastRepairs(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
-            List<Repair> repairs = repairService.getClientsPastRepairs(UUID.fromString(id));
+            List<RepairApp> repairs = repairService.getClientsPastRepairs(UUID.fromString(id))
+                    .stream()
+                    .map(repairAppConverter::convert)
+                    .collect(Collectors.toList());
             return Response.ok(repairs).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given client id is invalid");
@@ -237,7 +244,10 @@ public class ClientController {
     public Response getClientsPresentRepairs(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
-            List<Repair> repairs = repairService.getClientsPresentRepairs(UUID.fromString(id));
+            List<RepairApp> repairs = repairService.getClientsPresentRepairs(UUID.fromString(id))
+                    .stream()
+                    .map(repairAppConverter::convert)
+                    .collect(Collectors.toList());
             return Response.ok(repairs).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given client id is invalid");
