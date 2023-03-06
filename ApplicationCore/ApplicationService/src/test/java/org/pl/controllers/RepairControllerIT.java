@@ -120,23 +120,4 @@ public class RepairControllerIT {
         repairId = retrieveRepairId();
         repairETag = retrieveRepairETag();
     }
-
-//    @Test
-//    public void createRepairPositiveTest() {
-//        System.out.println(testRepair);
-//        given()
-//                .contentType(ContentType.JSON)
-//                .body(testRepair)
-//                .header("Authorization", "Bearer " + retrieveToken())
-//                .when()
-//                .post("/api/repair")
-//                .then()
-//                .assertThat()
-//                .statusCode(201)
-//                .body("archive", is(false))
-//                .body("startDate", is("13-02-2020 12:10:10"))
-//                .body("endDate", is("15-02-2020 12:10:10"))
-//                .body("hardwareId", is("nil"))
-//                .body("clientId", is("nil"));
-//    }
 }
