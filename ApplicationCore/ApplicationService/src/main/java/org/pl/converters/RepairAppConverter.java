@@ -28,7 +28,7 @@ public class RepairAppConverter {
             repairApp.setClient(repairApp.getClient());
             repairApp.setHardware(repairApp.getHardware());
             repairApp.setDateRange(repairApp.getDateRange());
-            return repair;
+            return repairApp;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
