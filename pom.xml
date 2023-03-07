@@ -20,6 +20,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <payara.version>5.2022.5</payara.version>
     </properties>
 
     <build>
@@ -41,6 +42,9 @@
                         <payara.randomHttpPort>false</payara.randomHttpPort>
                         <payara.autoBindHttp>false</payara.autoBindHttp>
                     </systemPropertyVariables>
+                    <environmentVariables>
+                        <MICRO_JAR>${user.dir}/target/payara-micro-${payara.version}.jar</MICRO_JAR>
+                    </environmentVariables>
                 </configuration>
             </plugin>
             <plugin>
@@ -66,6 +70,30 @@
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>fish.payara.extras</groupId>
+                                    <artifactId>payara-micro</artifactId>
+                                    <version>${payara.version}</version>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${user.dir}/target/</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -227,58 +255,6 @@
             <artifactId>microshed-testing-payara-micro</artifactId>
             <version>0.9.1</version>
         </dependency>
-<!--        BEGIN -->
-        <dependency>
-            <groupId>org.jboss.arquillian</groupId>
-            <artifactId>arquillian-bom</artifactId>
-            <version>1.7.0.Alpha10</version>
-            <scope>import</scope>
-            <type>pom</type>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.glassfish.main.extras</groupId>-->
-<!--            <artifactId>glassfish-embedded-all</artifactId>-->
-<!--            <version>3.1.2</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.arquillian.container</groupId>-->
-<!--            <artifactId>arquillian-glassfish-embedded-3.1</artifactId>-->
-<!--            <version>1.0.0.CR4</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.arquillian.junit</groupId>-->
-<!--            <artifactId>arquillian-junit-core</artifactId>-->
-<!--            <version>1.6.0.Final</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        -->
-        <dependency>
-            <groupId>org.jboss.arquillian.extension</groupId>
-            <artifactId>arquillian-drone-bom</artifactId>
-            <version>3.0.0-alpha.7</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.core</groupId>
-            <artifactId>arquillian-core-api</artifactId>
-            <version>1.7.0.Alpha13</version>
-            <scope>test</scope>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.eu.ingwar.tools</groupId>-->
-<!--            <artifactId>arquillian-suite-extension</artifactId>-->
-<!--            <version>1.2.2</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.reflections</groupId>-->
-<!--            <artifactId>reflections</artifactId>-->
-<!--            <version>0.9.9</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-standalone</artifactId>
@@ -292,163 +268,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.arquillian.junit5</groupId>
-            <artifactId>arquillian-junit5-container</artifactId>
-            <version>1.7.0.Alpha13</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.core</groupId>
-            <artifactId>arquillian-core-impl-base</artifactId>
-            <version>1.7.0.Alpha13</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.test</groupId>
-            <artifactId>arquillian-test-impl-base</artifactId>
-            <version>1.7.0.Alpha13</version>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.glassfish</groupId>-->
-<!--            <artifactId>jakarta.el</artifactId>-->
-<!--            <version>5.0.0-M1</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.hibernate</groupId>-->
-<!--            <artifactId>hibernate-validator-annotation-processor</artifactId>-->
-<!--            <version>8.0.0.Final</version>-->
-<!--        </dependency>-->
-<!--         <dependency>-->
-
-<!--            <groupId>org.jboss.shrinkwrap.resolver</groupId>-->
-
-<!--            <artifactId>shrinkwrap-resolver-impl-maven-embedded</artifactId>-->
-<!--             <version>3.1.4</version>-->
-
-<!--             <scope>test</scope>-->
-
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.arquillian.container</groupId>-->
-<!--            <artifactId>arquillian-glassfish-embedded-3</artifactId>-->
-<!--            <version>1.0.0.Alpha4.SP1</version>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.glassfish.extras</groupId>-->
-<!--            <artifactId>glassfish-embedded-all</artifactId>-->
-<!--            <version>3.1</version>-->
-<!--        </dependency>-->
-
-
-
-
-
-
-        <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>arquillian-payara-micro-managed</artifactId>
             <version>3.0.alpha7</version>
+            <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.jboss.arquillian.extension</groupId>
             <artifactId>arquillian-transaction-jta</artifactId>
             <version>1.0.2.Final</version>
         </dependency>
-
-
-
-
-<!--                <dependency>-->
-
-<!--            <groupId>org.jboss.arquillian.container</groupId>-->
-
-<!--            <artifactId>arquillian-tomcat-embedded-6</artifactId>-->
-<!--                    <version>1.2.0.Alpha1</version>-->
-
-<!--                    <scope>test</scope>-->
-
-<!--        </dependency>-->
-
-<!--      <dependency>-->
-
-<!--         <groupId>org.apache.tomcat</groupId>-->
-
-<!--         <artifactId>catalina</artifactId>-->
-<!--          <version>6.0.29</version>-->
-
-<!--          <scope>test</scope>-->
-
-<!--      </dependency>-->
-
-<!--      <dependency>-->
-
-<!--         <groupId>org.apache.tomcat</groupId>-->
-
-<!--         <artifactId>coyote</artifactId>-->
-
-<!--         <version>6.0.29</version>-->
-
-<!--         <scope>provided</scope>-->
-
-<!--      </dependency>-->
-
-<!--      <dependency>-->
-
-<!--         <groupId>org.apache.tomcat</groupId>-->
-
-<!--         <artifactId>jasper</artifactId>-->
-
-<!--         <version>6.0.29</version>-->
-
-<!--         <scope>provided</scope>-->
-
-<!--      </dependency>-->
-
-<!--      &lt;!&ndash; Weld servlet, EL and JSP required for testing CDI injections &ndash;&gt;-->
-
-<!--      <dependency>-->
-
-<!--         <groupId>org.jboss.weld.servlet</groupId>-->
-
-<!--         <artifactId>weld-servlet</artifactId>-->
-
-<!--         <version>1.0.1-Final</version>-->
-
-<!--         <scope>test</scope>-->
-
-<!--      </dependency>-->
-
-<!--      <dependency>-->
-
-<!--         <groupId>org.glassfish.web</groupId>-->
-
-<!--         <artifactId>el-impl</artifactId>-->
-
-<!--         <version>2.2</version>-->
-
-<!--         <scope>test</scope>-->
-
-<!--      </dependency>-->
-
-<!--      <dependency>-->
-
-<!--         <groupId>javax.servlet.jsp</groupId>-->
-
-<!--         <artifactId>jsp-api</artifactId>-->
-
-<!--         <version>2.2</version>-->
-
-<!--         <scope>test</scope>-->
-
-<!--      </dependency>-->
-<!--     <dependency>-->
-<!--          <groupId>org.slf4j</groupId>-->
-<!--          <artifactId>slf4j-api</artifactId>-->
-<!--          <version>1.5.10</version>-->
-<!--          <scope>test</scope>-->
-<!--      </dependency>-->
     </dependencies>
-
 </project>

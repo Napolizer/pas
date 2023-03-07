@@ -8,7 +8,7 @@
         <configuration>
             <property name="randomHttpPort">false</property>
             <property name="autoBindHttp">false</property>
-            <property name="microJar">/opt/payara-micro-5.2022.5.jar</property>
+            <property name="microJar">${env.MICRO_JAR}</property>
         </configuration>
     </container>
 </arquillian>
