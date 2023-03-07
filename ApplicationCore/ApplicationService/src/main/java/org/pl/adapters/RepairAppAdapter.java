@@ -40,7 +40,7 @@ public class RepairAppAdapter implements JsonbAdapter<RepairApp, JsonValue> {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         json.add("startDate", ldt.format(formatter));
         if (repair.getDateRange().getEndDate() != null) {
-            instant = repair.getDateRange().getStartDate().toInstant();
+            instant = repair.getDateRange().getEndDate().toInstant();
             ldt = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
             json.add("endDate", ldt.format(formatter));
         }

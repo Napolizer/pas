@@ -77,7 +77,7 @@ public class RepairControllerIT {
     }
 
     @BeforeEach
-    void beforeEach() throws ParseException {
+    void setup() throws ParseException {
         testHardwareType = Console.builder()
                 .condition(Condition.FINE)
                 .type("CONSOLE")

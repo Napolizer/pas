@@ -16,6 +16,8 @@ public class DateRange implements Serializable {
     @NotNull
     @JsonbDateFormat(value = "dd-MM-yyyy HH:mm:ss")
     private Date startDate;
+
+    @NotNull
     @JsonbDateFormat(value = "dd-MM-yyyy HH:mm:ss")
     private Date endDate;
 }
