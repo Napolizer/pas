@@ -11,7 +11,8 @@ public class ClientConverter {
     private ClientTypeConverter clientTypeConverter;
     @Inject
     private AddressConverter addressConverter;
-    @Inject ClientAccessTypeConverter clientAccessTypeConverter;
+    @Inject
+    private ClientAccessTypeConverter clientAccessTypeConverter;
 
     public ClientEnt convert(Client client) {
         if (client == null) return null;
