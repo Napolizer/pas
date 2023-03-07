@@ -46,6 +46,9 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.0.0-M3</version>
                 <configuration>
+                    <environmentVariables>
+                        <GLASSFISH_HOME>${project.build.directory}/glassfish7</GLASSFISH_HOME>
+                    </environmentVariables>
                     <skipTests>false</skipTests>
                     <rerunFailingTestsCount>3</rerunFailingTestsCount>
                     <includes>
@@ -61,6 +64,32 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-dependency-plugin</artifactId>
+                 <version>3.1.2</version>
+                 <executions>
+                     <execution>
+                         <id>unpack</id>
+                         <phase>pre-integration-test</phase>
+                         <goals>
+                             <goal>unpack</goal>
+                         </goals>
+                         <configuration>
+                             <artifactItems>
+                                 <artifactItem>
+                                     <groupId>org.glassfish.main.distributions</groupId>
+                                     <artifactId>glassfish</artifactId>
+                                     <version>7.0.2</version>
+                                     <type>zip</type>
+                                     <overWrite>false</overWrite>
+                                     <outputDirectory>${project.build.directory}</outputDirectory>
+                                 </artifactItem>
+                             </artifactItems>
+                         </configuration>
+                     </execution>
+                 </executions>
             </plugin>
         </plugins>
     </build>
@@ -220,6 +249,56 @@
             <artifactId>microshed-testing-payara-micro</artifactId>
             <version>0.9.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-sse</artifactId>
+            <version>3.1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-binding</artifactId>
+            <version>3.0.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>3.0.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>3.0.2</version>
+            <scope>test</scope>
+        </dependency>
+<!--        GLASSFISH        -->
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-glassfish-managed-6</artifactId>
+            <version>1.0.0.Alpha1</version>
+            <scope>test</scope>
+        </dependency>
+<!--        JUNIT -->
+        <dependency>
+            <groupId>org.junit</groupId>
+            <artifactId>junit-bom</artifactId>
+            <version>5.7.0</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
+            <version>1.7.0.Alpha13</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-
 </project>
