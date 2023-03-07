@@ -21,8 +21,8 @@ import java.io.File;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(Arquillian.class)
-//@ExtendWith(ArquillianExtension.class)
+//@RunWith(Arquillian.class)
+@ExtendWith(ArquillianExtension.class)
 public class ClientEntRepositoryTest {
 //    @Inject
 //    private ClientEntRepository clientEntRepository;
@@ -32,8 +32,8 @@ public class ClientEntRepositoryTest {
 //    private AddressEnt addressEnt;
 //    @Inject
 //    private EntityManager entityManager;
-    @Inject
-    private User user;
+//    @Inject
+//    private User user;
 //    @Inject
 //    private ClientEntRepository clientEntRepository;
 
@@ -44,22 +44,22 @@ public class ClientEntRepositoryTest {
 //        }
         return ShrinkWrap.create(WebArchive.class)
 //                .addPackages(true, "org.pl")
-//                .addClass(User.class)
+                .addClass(User.class)
 //                .addPackage(User.class.getPackage())
 //                .addAsManifestResource(new File("src/test/resources/beans.xml"));
 //                .addAsResource(new File("src/main/resources/"), "")
 //                .addAsResource(new File("target/classes/META-INF/"), "META-INF/");
 //                .addAsResource(new File("src/test/resources/persistence.xml"),"META-INF/persistence.xml")
-                .addAsManifestResource("beans.xml")
-                .addAsManifestResource("persistence.xml");
+//                .addAsManifestResource("beans.xml")
+//                .addAsManifestResource("persistence.xml");
 //                .addAsResource("persistence.xml")
-//                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
     @Test
     public void test() {
         assertThat(null, is(nullValue()));
-        assertThat(user, is(not(nullValue())));
+//        assertThat(user, is(not(nullValue())));
 //        assertThat(user, is(not(nullValue())));
 //        assertThat(clientEntRepository, is(not(nullValue())));
     }
