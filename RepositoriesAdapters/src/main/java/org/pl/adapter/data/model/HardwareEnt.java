@@ -21,9 +21,11 @@ import static org.pl.adapter.data.model.ConditionEnt.FINE;
 public class HardwareEnt implements EntityEnt, Serializable {
     @Id
     private UUID id;
+    @Column(nullable = false)
     private Boolean archive;
+    @Column(nullable = false)
     private Integer price;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private HardwareTypeEnt hardwareTypeEnt;
 
     public void repair() {
