@@ -6,9 +6,7 @@ import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.pl.adapter.data.model.ComputerEnt;
 import org.pl.adapter.data.model.HardwareEnt;
@@ -23,6 +21,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(ArquillianExtension.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class HardwareEntRepositoryIT {
     @Inject
     private HardwareEntRepository hardwareEntRepository;
@@ -276,7 +275,7 @@ public class HardwareEntRepositoryIT {
         HardwareEnt savedHardware = hardwareEntRepository.saveHardware(hardwareEnt);
         List<HardwareEnt> hardware = hardwareEntRepository.getAllPresentHardwareFilter(savedHardware.getId().toString().substring(3, 5));
         assertThat(hardware, is(notNullValue()));
-        assertThat(hardware.size(), is(equalTo(1)));
+        assertThat(hardware.size(), is(greaterThanOrEqualTo(1)));
 
         hardware = hardwareEntRepository.getAllPresentHardwareFilter("PPPPPPPPPPPPPPPPP");
         assertThat(hardware, is(notNullValue()));

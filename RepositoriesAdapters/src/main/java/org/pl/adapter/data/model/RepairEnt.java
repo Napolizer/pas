@@ -26,11 +26,13 @@ public class RepairEnt implements EntityEnt, Serializable {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID id;
+    @Column(nullable = false)
     private Boolean archive;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private ClientEnt clientEnt;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private HardwareEnt hardwareEnt;
+    @Column(nullable = false)
     private DateRangeEnt dateRangeEnt;
 
     public double calculateRepairCost() throws HardwareEntException {
