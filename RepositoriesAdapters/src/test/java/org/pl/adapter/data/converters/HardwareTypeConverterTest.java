@@ -1,11 +1,9 @@
 package org.pl.adapter.data.converters;
 
+import jakarta.inject.Inject;
+import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.pl.adapter.data.model.*;
 import org.pl.model.*;
 
@@ -14,11 +12,9 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(ArquillianExtension.class)
 public class HardwareTypeConverterTest {
-    @Mock
-    private ConditionConverter conditionConverter;
-    @InjectMocks
+    @Inject
     private HardwareTypeConverter hardwareTypeConverter;
 
     @Test

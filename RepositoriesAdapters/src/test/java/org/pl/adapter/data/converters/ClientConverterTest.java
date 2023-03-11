@@ -1,30 +1,44 @@
 package org.pl.adapter.data.converters;
 
+import jakarta.inject.Inject;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit5.ArquillianExtension;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.pl.adapter.data.model.*;
 import org.pl.model.*;
 
+import java.io.File;
 import java.util.UUID;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(ArquillianExtension.class)
 public class ClientConverterTest {
-    @Mock
-    private ClientTypeConverter clientTypeConverter;
-    @Mock
-    private AddressConverter addressConverter;
-    @Mock
-    private ClientAccessTypeConverter clientAccessTypeConverter;
-    @InjectMocks
-    private ClientConverter clientConverter = new ClientConverter();
+    @Inject
+    private ClientConverter clientConverter;
+
+    @Deployment
+    public static JavaArchive createDeployment() {
+        return ShrinkWrap.create(JavaArchive.class)
+                .addPackages(true, "org.pl")
+                .addPackages(true, "org.hamcrest")
+                .addAsResource(new File("src/main/resources/"),"")
+                .addAsResource(new File("target/classes/META-INF/"), "META-INF/")
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+    }
+
+    @Test
+    public void converterInjectionTest() {
+        assertThat(clientConverter, is(notNullValue()));
+    }
 
     @Test
     public void convertClientFromDomainToEntModelTest() {
@@ -51,10 +65,6 @@ public class ClientConverterTest {
                 .build();
 
         ClientEnt clientEnt = clientConverter.convert(client);
-
-        verify(clientTypeConverter).convert(basicClientType);
-        verify(addressConverter).convert(address);
-        verify(clientAccessTypeConverter).convert(ClientAccessType.ADMINISTRATORS);
 
         assertInstanceOf(ClientEnt.class, clientEnt);
         assertEquals(client.getId(), clientEnt.getId());
@@ -93,10 +103,6 @@ public class ClientConverterTest {
                 .build();
 
         Client client = clientConverter.convert(clientEnt);
-
-        verify(clientTypeConverter).convert(basicClientTypeEnt);
-        verify(addressConverter).convert(addressEnt);
-        verify(clientAccessTypeConverter).convert(ClientAccessTypeEnt.ADMINISTRATORS);
 
         assertInstanceOf(Client.class, client);
         assertEquals(clientEnt.getId(), client.getId());
