@@ -29,9 +29,14 @@ public class HardwareEntRepository {
     UserTransaction userTransaction;
 
     public HardwareEnt saveHardware(HardwareEnt hardware) throws RepositoryEntException {
-        hardware.setId(UUID.randomUUID());
-        hardware.getHardwareTypeEnt().setId(UUID.randomUUID());
         try {
+            if (hardware.getPrice() == null) {
+                hardware.setPrice(0);
+            } if (hardware.getArchive() == null) {
+                hardware.setArchive(false);
+            }
+            hardware.setId(UUID.randomUUID());
+            hardware.getHardwareTypeEnt().setId(UUID.randomUUID());
             if (!entityManager.contains(hardware)) {
                 userTransaction.begin();
                 entityManager.persist(hardware);

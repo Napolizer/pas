@@ -38,6 +38,12 @@ public class RepairEntRepository {
     ClientEntRepository clientEntRepository;
 
     public RepairEnt saveRepair(RepairEnt repair) throws RepositoryEntException {
+        if (repair.getClientEnt() == null || repair.getHardwareEnt() == null || repair.getDateRangeEnt() == null) {
+            throw new RepositoryEntException("One of the required fields is null");
+        }
+        if (repair.getArchive() == null) {
+            repair.setArchive(false);
+        }
         repair.setId(UUID.randomUUID());
         try {
             if (!entityManager.contains(repair)) {
