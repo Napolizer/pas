@@ -1,6 +1,7 @@
 package org.pl.adapter.data.repositories;
 
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.pl.adapter.data.model.*;
 import org.pl.adapter.data.model.exceptions.RepositoryEntException;
 
+import javax.transaction.*;
 import java.io.File;
 import java.util.UUID;
 
@@ -23,6 +25,12 @@ import static org.hamcrest.MatcherAssert.*;
 public class ClientEntRepositoryIT {
     @Inject
     private ClientEntRepository clientEntRepository;
+
+    @Inject
+    private UserTransaction userTransaction;
+
+    @Inject
+    private EntityManager entityManager;
 
     private ClientEnt validClient;
     private AddressEnt validAddress;
@@ -57,6 +65,16 @@ public class ClientEntRepositoryIT {
                 .addressEnt(validAddress)
                 .clientAccessTypeEnt(ClientAccessTypeEnt.EMPLOYEES)
                 .build();
+
+        try {
+            userTransaction.begin();
+            entityManager.clear();
+            userTransaction.commit();
+        } catch (Exception ignored) {
+
+        }
+
+
     }
 
     @Test
@@ -66,7 +84,6 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void saveClientPositiveTest() throws RepositoryEntException {
-        validClient.setUsername("Method1");
         ClientEnt savedClient = clientEntRepository.saveClient(validClient);
         assertThat(savedClient, is(notNullValue()));
         assertThat(savedClient.getId(), is(equalTo(validClient.getId())));
@@ -84,7 +101,6 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void saveClientNegativeTest() throws RepositoryEntException {
-        validClient.setUsername("Method2");
         ClientEnt savedClient = clientEntRepository.saveClient(validClient);
         assertThat(savedClient, is(notNullValue()));
         Assertions.assertThrows(RepositoryEntException.class, () -> clientEntRepository.saveClient(validClient));
@@ -92,7 +108,6 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void getClientByIdPositiveTest() throws RepositoryEntException {
-        validClient.setUsername("Method3");
         ClientEnt savedClient = clientEntRepository.saveClient(validClient);
         assertThat(savedClient, is(notNullValue()));
         assertThat(clientEntRepository.getClientById(savedClient.getId()), is(notNullValue()));
@@ -123,7 +138,6 @@ public class ClientEntRepositoryIT {
                         .build())
                 .clientAccessTypeEnt(ClientAccessTypeEnt.ADMINISTRATORS)
                 .build();
-        validClient.setUsername("Method4");
         ClientEnt savedClient = clientEntRepository.saveClient(validClient);
         assertThat(savedClient, is(notNullValue()));
         ClientEnt updatedClient = clientEntRepository.updateClient(savedClient.getId(), clientEnt);
@@ -146,7 +160,6 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void updateClientNegativeTest() throws RepositoryEntException {
-        validClient.setUsername("Method5");
         ClientEnt savedClient = clientEntRepository.saveClient(validClient);
         assertThat(savedClient, is(notNullValue()));
         Assertions.assertThrows(RepositoryEntException.class, () -> clientEntRepository.updateClient(UUID.randomUUID(), validClient));
@@ -155,7 +168,6 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void changePasswordPositiveTest() throws RepositoryEntException {
-        validClient.setUsername("Method6");
         ClientEnt savedClient = clientEntRepository.saveClient(validClient);
         assertThat(savedClient, is(notNullValue()));
         ClientEnt updatedClient = clientEntRepository.changePassword(validClient.getId(), "haslo123");
@@ -178,7 +190,6 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void changePasswordNegativeTest() throws RepositoryEntException {
-        validClient.setUsername("Method7");
         ClientEnt savedClient = clientEntRepository.saveClient(validClient);
         assertThat(savedClient, is(notNullValue()));
         Assertions.assertThrows(RepositoryEntException.class, () -> clientEntRepository.changePassword(UUID.randomUUID(), "haslo"));
@@ -187,7 +198,6 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void deleteClientPositiveTest() throws RepositoryEntException {
-        validClient.setUsername("Method8");
         ClientEnt savedClient = clientEntRepository.saveClient(validClient);
         assertThat(savedClient, is(notNullValue()));
         ClientEnt deletedClient = clientEntRepository.deleteClient(savedClient.getId());
@@ -198,7 +208,6 @@ public class ClientEntRepositoryIT {
     @Test
     public void deleteClientNegativeTest() throws RepositoryEntException {
         validClient.setArchive(true);
-        validClient.setUsername("Method9");
         ClientEnt savedClient = clientEntRepository.saveClient(validClient);
         assertThat(savedClient, is(notNullValue()));
         Assertions.assertThrows(RepositoryEntException.class, () -> clientEntRepository.deleteClient(validClient.getId()));
@@ -208,11 +217,9 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void getClientsPositiveTest() throws RepositoryEntException {
-        validClient.setUsername("Method10_1");
         ClientEnt savedClient1 = clientEntRepository.saveClient(validClient);
         assertThat(savedClient1, is(notNullValue()));
         savedClient1.setId(UUID.randomUUID());
-        savedClient1.setUsername("Method10_2");
         savedClient1.setArchive(true);
         ClientEnt savedClient2 = clientEntRepository.saveClient(savedClient1);
         assertThat(savedClient2, is(notNullValue()));
@@ -222,12 +229,10 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void getAllClientsPositiveTest() throws RepositoryEntException {
-        validClient.setUsername("Method11_1");
         ClientEnt savedClient1 = clientEntRepository.saveClient(validClient);
         assertThat(savedClient1, is(notNullValue()));
         assertThat(clientEntRepository.getAllClients(), is(notNullValue()));
         savedClient1.setId(UUID.randomUUID());
-        savedClient1.setUsername("Method11_2");
         ClientEnt savedClient2 = clientEntRepository.saveClient(savedClient1);
         assertThat(savedClient2, is(notNullValue()));
         assertThat(clientEntRepository.getAllClients(), is(notNullValue()));
@@ -235,7 +240,6 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void getClientByUsernamePositiveTest() throws RepositoryEntException {
-        validClient.setUsername("Method12_1");
         ClientEnt savedClient1 = clientEntRepository.saveClient(validClient);
         assertThat(savedClient1, is(notNullValue()));
         assertThat(clientEntRepository.getClientByUsername(savedClient1.getUsername()), is(equalTo(savedClient1)));
@@ -250,7 +254,6 @@ public class ClientEntRepositoryIT {
     @Test
     public void getAllClientsFilterPositiveTest() throws RepositoryEntException {
         assertThat(clientEntRepository.getAllClientsFilter("1234567890123456789012345678901234567890").size(), is(equalTo(0)));
-        validClient.setUsername("Method13");
         ClientEnt savedClient1 = clientEntRepository.saveClient(validClient);
         assertThat(savedClient1, is(notNullValue()));
         assertThat(clientEntRepository.getAllClientsFilter("").size(), is(notNullValue()));
@@ -277,7 +280,6 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void restoreClientPositiveTest() throws RepositoryEntException {
-        validClient.setUsername("Method14");
         validClient.setArchive(true);
         ClientEnt savedClient = clientEntRepository.saveClient(validClient);
         assertThat(savedClient, is(notNullValue()));
@@ -287,7 +289,6 @@ public class ClientEntRepositoryIT {
 
     @Test
     public void restoreClientNegativeTest() throws RepositoryEntException {
-        validClient.setUsername("Method15");
         ClientEnt savedClient = clientEntRepository.saveClient(validClient);
         assertThat(savedClient, is(notNullValue()));
         Assertions.assertThrows(RepositoryEntException.class, () -> clientEntRepository.restoreClient(savedClient.getId()));
