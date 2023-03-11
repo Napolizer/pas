@@ -7,9 +7,9 @@ import org.pl.model.Hardware;
 
 @ApplicationScoped
 public class HardwareConverter {
-
     @Inject
     HardwareTypeConverter hardwareTypeConverter;
+
     public HardwareEnt convert(Hardware hardware) {
         if (hardware == null) return null;
         HardwareEnt hardwareEnt = new HardwareEnt();

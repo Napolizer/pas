@@ -8,7 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-public class AddressConverterTest {
+public class AddressConverterIT {
     private final AddressConverter addressConverter = new AddressConverter();
     @Test
     void convertAddressFromDomainToEntModelTest() {

@@ -6,7 +6,7 @@ import org.pl.model.Condition;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-public class ConditionConverterTest {
+public class ConditionConverterIT {
     private final ConditionConverter conditionConverter = new ConditionConverter();
     @Test
     void convertConditionFromDomainToEntModelTest() {

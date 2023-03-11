@@ -6,7 +6,7 @@ import org.pl.model.ClientAccessType;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ClientAccessTypeConverterTest {
+public class ClientAccessTypeConverterIT {
     private final ClientAccessTypeConverter clientAccessTypeConverter = new ClientAccessTypeConverter();
 
     @Test

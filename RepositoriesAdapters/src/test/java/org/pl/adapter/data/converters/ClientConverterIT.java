@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 @ExtendWith(ArquillianExtension.class)
-public class ClientConverterTest {
+public class ClientConverterIT {
     @Inject
     private ClientConverter clientConverter;
 
@@ -67,6 +67,8 @@ public class ClientConverterTest {
         ClientEnt clientEnt = clientConverter.convert(client);
 
         assertInstanceOf(ClientEnt.class, clientEnt);
+        assertInstanceOf(BasicEnt.class, clientEnt.getClientTypeEnt());
+        assertEquals(ClientAccessTypeEnt.ADMINISTRATORS, clientEnt.getClientAccessTypeEnt());
         assertEquals(client.getId(), clientEnt.getId());
         assertEquals(client.getFirstName(), clientEnt.getFirstName());
         assertEquals(client.getLastName(), clientEnt.getLastName());
@@ -74,8 +76,13 @@ public class ClientConverterTest {
         assertEquals(client.getPassword(), clientEnt.getPassword());
         assertEquals(client.getPhoneNumber(), clientEnt.getPhoneNumber());
         assertEquals(client.isArchive(), clientEnt.isArchive());
-        assertEquals(client.getPhoneNumber(), clientEnt.getPhoneNumber());
         assertEquals(client.getBalance(), clientEnt.getBalance());
+        assertEquals(client.getClientType().getType(), clientEnt.getClientTypeEnt().getType());
+        assertEquals(client.getClientType().getFactor(), clientEnt.getClientTypeEnt().getFactor());
+        assertEquals(client.getClientType().getMaxRepairs(), clientEnt.getClientTypeEnt().getMaxRepairs());
+        assertEquals(client.getAddress().getCity(), clientEnt.getAddressEnt().getCity());
+        assertEquals(client.getAddress().getNumber(), clientEnt.getAddressEnt().getNumber());
+        assertEquals(client.getAddress().getStreet(), clientEnt.getAddressEnt().getStreet());
     }
 
     @Test
@@ -105,6 +112,8 @@ public class ClientConverterTest {
         Client client = clientConverter.convert(clientEnt);
 
         assertInstanceOf(Client.class, client);
+        assertInstanceOf(Basic.class, client.getClientType());
+        assertEquals(ClientAccessType.ADMINISTRATORS, client.getClientAccessType());
         assertEquals(clientEnt.getId(), client.getId());
         assertEquals(clientEnt.getFirstName(), client.getFirstName());
         assertEquals(clientEnt.getLastName(), client.getLastName());
@@ -112,7 +121,12 @@ public class ClientConverterTest {
         assertEquals(clientEnt.getPassword(), client.getPassword());
         assertEquals(clientEnt.getPhoneNumber(), client.getPhoneNumber());
         assertEquals(clientEnt.isArchive(), client.isArchive());
-        assertEquals(clientEnt.getPhoneNumber(), client.getPhoneNumber());
         assertEquals(clientEnt.getBalance(), client.getBalance());
+        assertEquals(clientEnt.getClientTypeEnt().getType(), client.getClientType().getType());
+        assertEquals(clientEnt.getClientTypeEnt().getFactor(), client.getClientType().getFactor());
+        assertEquals(clientEnt.getClientTypeEnt().getMaxRepairs(), client.getClientType().getMaxRepairs());
+        assertEquals(clientEnt.getAddressEnt().getCity(), client.getAddress().getCity());
+        assertEquals(clientEnt.getAddressEnt().getNumber(), client.getAddress().getNumber());
+        assertEquals(clientEnt.getAddressEnt().getStreet(), client.getAddress().getStreet());
     }
 }

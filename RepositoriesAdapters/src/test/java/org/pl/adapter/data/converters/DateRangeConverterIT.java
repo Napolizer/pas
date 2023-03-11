@@ -9,7 +9,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-public class DateRangeConverterTest {
+public class DateRangeConverterIT {
     private final DateRangeConverter dateRangeConverter = new DateRangeConverter();
 
     @Test

@@ -1,21 +1,36 @@
 package org.pl.adapter.data.converters;
 
 import jakarta.inject.Inject;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit5.ArquillianExtension;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.pl.adapter.data.model.*;
 import org.pl.model.*;
 
+import java.io.File;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 @ExtendWith(ArquillianExtension.class)
-public class HardwareTypeConverterTest {
+public class HardwareTypeConverterIT {
     @Inject
     private HardwareTypeConverter hardwareTypeConverter;
+
+    @Deployment
+    public static JavaArchive createDeployment() {
+        return ShrinkWrap.create(JavaArchive.class)
+                .addPackages(true, "org.pl")
+                .addPackages(true, "org.hamcrest")
+                .addAsResource(new File("src/main/resources/"),"")
+                .addAsResource(new File("target/classes/META-INF/"), "META-INF/")
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+    }
 
     @Test
     void convertHardwareTypeFromDomainToEntModelTest() {
