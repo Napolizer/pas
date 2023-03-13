@@ -15,11 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class ClientRepositoryAdapter implements
-        AddClientPort, ChangePasswordPort, DeleteClientPort,
-        GetAllClientsFilterPort, GetAllClientsPort, GetClientByUsernamePort,
-        GetClientListPort, GetClientPort, GetClientsByUsernamePort,
-        RestoreClientPort, UpdateClientPort {
+public class ClientRepositoryAdapter implements ReadClientPort, WriteClientPort {
     @Inject
     private ClientEntRepository clientEntRepository;
     @Inject

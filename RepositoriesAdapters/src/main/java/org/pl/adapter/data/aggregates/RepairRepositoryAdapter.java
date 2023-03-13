@@ -17,10 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class RepairRepositoryAdapter implements
-        AddRepairPort, DeleteRepairPort, GetAllRepairsPort,
-        GetClientRepairsPort, GetRepairListPort, GetRepairPort,
-        RepairPort, UpdateRepairPort {
+public class RepairRepositoryAdapter implements ReadRepairPort, WriteRepairPort {
     @Inject
     private RepairEntRepository repairEntRepository;
 

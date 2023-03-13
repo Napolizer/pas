@@ -15,10 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class HardwareRepositoryAdapter implements
-        AddHardwarePort, DeleteHardwarePort, GetAllHardwaresPort,
-        GetAllPresentHardwareFilterPort, GetAllPresentHardwaresPort,
-        GetHardwareListPort, GetHardwarePort, UpdateHardwarePort {
+public class HardwareRepositoryAdapter implements ReadHardwarePort, WriteHardwarePort {
     @Inject
     private HardwareEntRepository hardwareEntRepository;
     @Inject

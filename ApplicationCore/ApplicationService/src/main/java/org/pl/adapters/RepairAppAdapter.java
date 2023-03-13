@@ -7,8 +7,8 @@ import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.json.bind.adapter.JsonbAdapter;
-import org.pl.infrastructure.client.GetClientPort;
-import org.pl.infrastructure.hardware.GetHardwarePort;
+import org.pl.infrastructure.client.ReadClientPort;
+import org.pl.infrastructure.hardware.ReadHardwarePort;
 import org.pl.model.*;
 
 import java.io.StringReader;
@@ -23,12 +23,12 @@ import java.util.UUID;
 public class RepairAppAdapter implements JsonbAdapter<RepairApp, JsonValue> {
 
     @Inject
-    private GetHardwarePort getHardwarePort;
+    private ReadHardwarePort readHardwarePort;
     @Inject
-    private GetClientPort getClientPort;
+    private ReadClientPort readClientPort;
 
     @Override
-    public JsonValue adaptToJson(RepairApp repair) throws Exception {
+    public JsonValue adaptToJson(RepairApp repair) {
         var json = Json.createObjectBuilder();
         if (repair.getId() != null) {
             json.add("id", repair.getId().toString());
@@ -90,7 +90,7 @@ public class RepairAppAdapter implements JsonbAdapter<RepairApp, JsonValue> {
 
         if (jsonObject.containsKey("hardwareId")) {
             String hardwareId = jsonObject.getString("hardwareId");
-            Hardware hardware = getHardwarePort.getHardware(UUID.fromString(hardwareId));
+            Hardware hardware = readHardwarePort.getHardware(UUID.fromString(hardwareId));
             if (hardware == null) {
                 throw new Exception();
             }
@@ -98,7 +98,7 @@ public class RepairAppAdapter implements JsonbAdapter<RepairApp, JsonValue> {
         }
         if (jsonObject.containsKey("clientId")) {
             String clientId = jsonObject.getString("clientId");
-            Client client = getClientPort.getClient(UUID.fromString(clientId));
+            Client client = readClientPort.getClient(UUID.fromString(clientId));
             if (client == null) {
                 throw new Exception();
             }

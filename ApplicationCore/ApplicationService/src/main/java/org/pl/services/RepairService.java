@@ -17,60 +17,48 @@ import java.util.*;
 @ApplicationScoped
 public class RepairService {
     @Inject
-    private AddRepairPort addRepairPort;
-    @Inject
-    private DeleteRepairPort deleteRepairPort;
-    @Inject
-    private GetAllRepairsPort getAllRepairsPort;
-    @Inject
-    private GetClientRepairsPort getClientRepairsPort;
-    @Inject
-    private GetRepairListPort getRepairListPort;
-    @Inject
-    private GetRepairPort getRepairPort;
-    @Inject
-    private RepairPort repairPort;
-    @Inject
-    private UpdateRepairPort updateRepairPort;
+    private ReadRepairPort readRepairPort;
 
+    @Inject
+    private WriteRepairPort writeRepairPort;
     public Repair add(Repair repair) throws RepositoryException {
-        return addRepairPort.createRepair(repair);
+        return writeRepairPort.createRepair(repair);
     }
 
     public Repair get(UUID id) throws RepositoryException {
-        return getRepairPort.getRepair(id);
+        return readRepairPort.getRepair(id);
     }
 
     public String getInfo(UUID id) throws RepositoryException {
-        return getRepairPort.getRepair(id).toString();
+        return readRepairPort.getRepair(id).toString();
     }
 
     public List<Repair> getAllClientRepairs(UUID clientId) throws RepositoryException {
-        return getClientRepairsPort.getClientRepairs(clientId);
+        return readRepairPort.getClientRepairs(clientId);
     }
 
     public boolean isRepairArchive(UUID id) throws RepositoryException {
-        return getRepairPort.getRepair(id).isArchive();
+        return readRepairPort.getRepair(id).isArchive();
     }
     public Repair archivize(UUID id) throws RepositoryException {
-        return deleteRepairPort.deleteRepair(id);
+        return writeRepairPort.deleteRepair(id);
     }
 
     public Repair repair(UUID id) throws HardwareException, RepositoryException, ClientException {
-        return repairPort.repair(id);
+        return writeRepairPort.repair(id);
     }
 
     public int getPresentSize() {
-        return getRepairListPort.getRepairList(false).size();
+        return readRepairPort.getRepairList(false).size();
     }
 
     public int getArchiveSize() {
-        return getRepairListPort.getRepairList(true).size();
+        return readRepairPort.getRepairList(true).size();
     }
 
     public List<Repair> getClientsPastRepairs(UUID uuid) throws RepositoryException {
         List<Repair> pastRepairs = new ArrayList<>();
-        List<Repair> repairs = getClientRepairsPort.getClientRepairs(uuid);
+        List<Repair> repairs = readRepairPort.getClientRepairs(uuid);
         for (Repair repair : repairs) {
             if (repair.isArchive()) {
                 pastRepairs.add(repair);
@@ -81,7 +69,7 @@ public class RepairService {
 
     public List<Repair> getClientsPresentRepairs(UUID uuid) throws RepositoryException {
         List<Repair> presentRepairs = new ArrayList<>();
-        List<Repair> repairs = getClientRepairsPort.getClientRepairs(uuid);
+        List<Repair> repairs = readRepairPort.getClientRepairs(uuid);
         for (Repair repair : repairs) {
             if (!repair.isArchive()) {
                 presentRepairs.add(repair);
@@ -91,10 +79,10 @@ public class RepairService {
     }
 
     public List<Repair> getAllRepairs() {
-        return getAllRepairsPort.getAllRepairs();
+        return readRepairPort.getAllRepairs();
     }
 
     public Repair updateRepair(UUID uuid, Repair repair) throws RepositoryException {
-        return updateRepairPort.updateRepair(uuid, repair);
+        return writeRepairPort.updateRepair(uuid, repair);
     }
 }
