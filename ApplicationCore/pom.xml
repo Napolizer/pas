@@ -30,13 +30,34 @@
                         </goals>
                     </execution>
                 </executions>
-<!--                  <configuration>-->
-<!--                    <webXml>ApplicationService/src/main/webapp/WEB-INF/web.xml</webXml>-->
-<!--                  </configuration>-->
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.expressly</groupId>
+            <artifactId>expressly</artifactId>
+        </dependency>
+    </dependencies>
 </project>
