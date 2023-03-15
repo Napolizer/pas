@@ -8,8 +8,6 @@ import org.pl.adapter.data.model.RepairEnt;
 import org.pl.model.DateRange;
 import org.pl.model.Repair;
 
-import static org.apache.commons.beanutils.BeanUtils.copyProperties;
-
 @ApplicationScoped
 public class DateRangeConverter {
     public DateRangeEnt convert(DateRange dateRange) {

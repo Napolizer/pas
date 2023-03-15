@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(ArquillianExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -146,7 +146,7 @@ public class RepairEntRepositoryIT {
                 .hardwareEnt(hardwareEnt)
                 .dateRangeEnt(validDateRange)
                 .build();
-        Assertions.assertThrows(RepositoryEntException.class, () -> repairEntRepository.saveRepair(repairEnt));
+        assertThrows(RepositoryEntException.class, () -> repairEntRepository.saveRepair(repairEnt));
     }
 
     @Test
@@ -161,7 +161,7 @@ public class RepairEntRepositoryIT {
                 .hardwareEnt(HardwareEnt.builder().build())
                 .dateRangeEnt(validDateRange)
                 .build();
-        Assertions.assertThrows(RepositoryEntException.class, () -> repairEntRepository.saveRepair(repairEnt));
+        assertThrows(RepositoryEntException.class, () -> repairEntRepository.saveRepair(repairEnt));
     }
 
     @Test
@@ -176,7 +176,7 @@ public class RepairEntRepositoryIT {
                 .dateRangeEnt(validDateRange)
                 .hardwareEnt(null)
                 .build();
-        Assertions.assertThrows(RepositoryEntException.class, () -> repairEntRepository.saveRepair(repairEnt));
+        assertThrows(RepositoryEntException.class, () -> repairEntRepository.saveRepair(repairEnt));
     }
 
     @Test
@@ -190,7 +190,7 @@ public class RepairEntRepositoryIT {
                 .hardwareEnt(hardwareEnt)
                 .dateRangeEnt(validDateRange)
                 .build();
-        Assertions.assertThrows(RepositoryEntException.class, () -> repairEntRepository.saveRepair(repairEnt));
+        assertThrows(RepositoryEntException.class, () -> repairEntRepository.saveRepair(repairEnt));
     }
 
     @Test
@@ -201,7 +201,7 @@ public class RepairEntRepositoryIT {
                 .clientEnt(userEnt)
                 .hardwareEnt(hardwareEnt)
                 .build();
-        Assertions.assertThrows(RepositoryEntException.class, () -> repairEntRepository.saveRepair(repairEnt));
+        assertThrows(RepositoryEntException.class, () -> repairEntRepository.saveRepair(repairEnt));
     }
 
     @Test
