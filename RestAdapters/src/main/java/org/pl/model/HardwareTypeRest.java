@@ -1,8 +1,9 @@
 package org.pl.model;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.pl.model.exceptions.HardwareException;
+import org.pl.model.exceptions.HardwareRestException;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -12,24 +13,26 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class HardwareType implements Serializable {
+public abstract class HardwareTypeRest implements Serializable {
     protected UUID id = UUID.randomUUID();
-    public Condition condition;
+    @NotNull
+    public ConditionRest condition;
+    @NotNull
     @Setter(AccessLevel.PROTECTED)
     protected String type;
 
-    public HardwareType(Condition condition) {
+    public HardwareTypeRest(ConditionRest condition) {
         setCondition(condition);
     }
 
-    public abstract double calculateRepairCost(double price) throws HardwareException;
+    public abstract double calculateRepairCost(double price) throws HardwareRestException;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        HardwareType that = (HardwareType) o;
+        HardwareTypeRest that = (HardwareTypeRest) o;
 
         return Objects.equals(id, that.id);
     }

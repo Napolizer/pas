@@ -1,28 +1,32 @@
 package org.pl.model;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.pl.model.exceptions.HardwareException;
 
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+import static org.pl.model.ConditionRest.FINE;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Repair implements Entity, Serializable {
+public class HardwareRest implements Entity, Serializable {
     private UUID id;
+    @NotNull
     private Boolean archive;
-    private Client client;
-    private Hardware hardware;
-    private DateRange dateRange;
+    @NotNull
+    private Integer price;
+    @NotNull
+    private HardwareTypeRest hardwareType;
 
-    public double calculateRepairCost() throws HardwareException {
-        return getHardware().getHardwareType().calculateRepairCost(getHardware().getPrice());
+    public void repair() {
+        hardwareType.setCondition(FINE);
     }
 
     @Override
@@ -45,9 +49,9 @@ public class Repair implements Entity, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Repair repair = (Repair) o;
+        HardwareRest hardware = (HardwareRest) o;
 
-        return Objects.equals(id, repair.id);
+        return Objects.equals(id, hardware.id);
     }
 
     @Override

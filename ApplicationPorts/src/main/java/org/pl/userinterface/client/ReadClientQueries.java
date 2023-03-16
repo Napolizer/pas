@@ -18,4 +18,5 @@ public interface ReadClientQueries {
     List<Client> getAllClientsFilter(String substr);
     List<Client> getClientsByUsername(String username);
     ClientType getClientTypeById(UUID id) throws RepositoryException;
+    Client getClientByUsername(String username) throws RepositoryException;
 }

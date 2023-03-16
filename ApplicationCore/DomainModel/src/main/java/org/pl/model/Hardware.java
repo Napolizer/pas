@@ -1,9 +1,6 @@
 package org.pl.model;
 
-import jakarta.json.bind.annotation.JsonbTypeAdapter;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.pl.adapters.HardwareTypeAdapter;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -17,12 +14,8 @@ import static org.pl.model.Condition.FINE;
 @AllArgsConstructor
 public class Hardware implements Entity, Serializable {
     private UUID id;
-    @NotNull
     private Boolean archive;
-    @NotNull
     private Integer price;
-    @NotNull
-    @JsonbTypeAdapter(HardwareTypeAdapter.class)
     private HardwareType hardwareType;
 
     public void repair() {

@@ -1,5 +1,6 @@
 package org.pl.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,9 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCredentials implements Serializable {
+public class UserRestCredentials implements Serializable {
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
 }

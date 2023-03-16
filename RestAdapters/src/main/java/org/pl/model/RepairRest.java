@@ -1,10 +1,12 @@
 package org.pl.model;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.pl.model.exceptions.HardwareException;
+import org.pl.annotations.ValidDateRange;
+import org.pl.model.exceptions.HardwareRestException;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -14,14 +16,19 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Repair implements Entity, Serializable {
+public class RepairRest implements EntityRest, Serializable {
     private UUID id;
+    @NotNull
     private Boolean archive;
-    private Client client;
-    private Hardware hardware;
-    private DateRange dateRange;
+    @NotNull
+    private ClientRest client;
+    @NotNull
+    private HardwareRest hardware;
+    @NotNull
+    @ValidDateRange
+    private DateRangeRest dateRange;
 
-    public double calculateRepairCost() throws HardwareException {
+    public double calculateRepairCost() throws HardwareRestException {
         return getHardware().getHardwareType().calculateRepairCost(getHardware().getPrice());
     }
 
@@ -45,7 +52,7 @@ public class Repair implements Entity, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Repair repair = (Repair) o;
+        RepairRest repair = (RepairRest) o;
 
         return Objects.equals(id, repair.id);
     }
