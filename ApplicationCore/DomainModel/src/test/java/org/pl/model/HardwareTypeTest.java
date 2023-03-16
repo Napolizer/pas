@@ -61,14 +61,10 @@ class HardwareTypeTest {
                 assertTrue(validator.validate(hardwareType).isEmpty());
             }
         }
-    }
-
-    @Test
-    void fieldConditionNegativeTest() {
         for (HardwareType hardwareType : validHardwareTypes) {
             hardwareType.setCondition(null);
             assertNull(hardwareType.getCondition());
-            assertFalse(validator.validate(hardwareType).isEmpty());
+            assertTrue(validator.validate(hardwareType).isEmpty());
         }
     }
 

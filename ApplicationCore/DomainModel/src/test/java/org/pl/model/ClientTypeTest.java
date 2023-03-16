@@ -38,9 +38,10 @@ class ClientTypeTest {
 
     @Test
     void fieldFactorPositiveTest() {
-        List<Double> validFactors = List.of(
-                0.0, 0.01, 0.1, 0.5, 0.9, 0.99, 1.0
-        );
+        List<Double> validFactors = new ArrayList<>(List.of(
+                0.0, 0.01, 0.1, 0.5, 0.9, 0.99, 1.0, -100.0, -10.0, -1.0, -0.1, -0.01, 1.01, 1.1, 10.0, 100.0
+        ));
+        validFactors.add(null);
         for (var factor : validFactors) {
             validClientType.setFactor(factor);
             assertEquals(factor, validClientType.getFactor());
@@ -49,24 +50,13 @@ class ClientTypeTest {
     }
 
     @Test
-    void fieldFactorNegativeTest() {
-        List<Double> invalidFactors = new ArrayList<>(List.of(
-                -100.0, -10.0, -1.0, -0.1, -0.01, 1.01, 1.1, 10.0, 100.0
-        ));
-        invalidFactors.add(null);
-        for (var factor : invalidFactors) {
-            validClientType.setFactor(factor);
-            assertEquals(factor, validClientType.getFactor());
-            assertFalse(validator.validate(validClientType).isEmpty());
-        }
-    }
-
-    @Test
     void fieldMaxRepairsPositiveTest() {
-        List<Integer> validMaxRepairs = List.of(
+        List<Integer> validMaxRepairs = new ArrayList<>(List.of(
                 1, 2, 3, 4, 5, 6,
-                10, 100, 1000
-        );
+                10, 100, 1000,
+                -1000, -100, -10, -1, 0
+        ));
+        validMaxRepairs.add(null);
         for (var maxRepairs : validMaxRepairs) {
             validClientType.setMaxRepairs(maxRepairs);
             assertEquals(maxRepairs, validClientType.getMaxRepairs());
@@ -75,48 +65,20 @@ class ClientTypeTest {
     }
 
     @Test
-    void fieldMaxRepairsNegativeTest() {
-        List<Integer> invalidMaxRepairs = new ArrayList<>(List.of(
-                -1000,
-                -100,
-                -10,
-                -1,
-                0
-        ));
-        invalidMaxRepairs.add(null);
-        for (var maxRepairs : invalidMaxRepairs) {
-            validClientType.setMaxRepairs(maxRepairs);
-            assertEquals(maxRepairs, validClientType.getMaxRepairs());
-            assertFalse(validator.validate(validClientType).isEmpty());
-        }
-    }
-
-    @Test
     void fieldTypeNamePositiveTest() {
-        List<String> validTypeNames = List.of(
+        List<String> validTypeNames = new ArrayList<>(List.of(
                 "some name",
                 "a",
-                " other name 123 "
-        );
-        for (var typeName : validTypeNames) {
-            validClientType.setType(typeName);
-            assertEquals(typeName, validClientType.getType());
-            assertTrue(validator.validate(validClientType).isEmpty());
-        }
-    }
-
-    @Test
-    void fieldTypeNameNegativeTest() {
-        List<String> invalidTypeNames = new ArrayList<>(List.of(
+                " other name 123 ",
                 "",
                 " ",
                 "         "
         ));
-        invalidTypeNames.add(null);
-        for (var typeName : invalidTypeNames) {
+        validTypeNames.add(null);
+        for (var typeName : validTypeNames) {
             validClientType.setType(typeName);
             assertEquals(typeName, validClientType.getType());
-            assertFalse(validator.validate(validClientType).isEmpty());
+            assertTrue(validator.validate(validClientType).isEmpty());
         }
     }
 

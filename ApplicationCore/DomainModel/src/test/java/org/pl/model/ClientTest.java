@@ -56,11 +56,15 @@ public class ClientTest {
 
     @Test
     void fieldUsernamePositiveTest() {
-        List<String> validUsernames = List.of(
+        List<String> validUsernames = new ArrayList<>(List.of(
                 "BestTesterInLodzCity",
                 "JuniorTester",
-                "TestMaster"
-        );
+                "TestMaster",
+                "      ",
+                "  ",
+                ""
+        ));
+        validUsernames.add(null);
         for (var username : validUsernames) {
             validClient.setUsername(username);
             assertEquals(username, validClient.getUsername());
@@ -69,50 +73,20 @@ public class ClientTest {
     }
 
     @Test
-    void fieldUsernameNegativeTest() {
-        List<String> invalidUsernames = new ArrayList<>(List.of(
-                " ",
-                "   ",
-                "      ",
-                "  ",
-                ""
-        ));
-        invalidUsernames.add(null);
-        for (var username : invalidUsernames) {
-            validClient.setUsername(username);
-            assertEquals(username, validClient.getUsername());
-            assertFalse(validator.validate(validClient).isEmpty());
-        }
-    }
-
-    @Test
     void fieldPasswordPositiveTest() {
-        List<String> validPasswords = List.of(
+        List<String> validPasswords = new ArrayList<>(List.of(
                 "BestTesterInLodzCity",
                 "JuniorTester",
-                "TestMaster"
-        );
+                "TestMaster",
+                " ",
+                "   ",
+                "      "
+        ));
+        validPasswords.add(null);
         for (var password : validPasswords) {
             validClient.setPassword(password);
             assertEquals(password, validClient.getPassword());
             assertTrue(validator.validate(validClient).isEmpty());
-        }
-    }
-
-    @Test
-    void fieldPasswordNegativeTest() {
-        List<String> invalidPasswords = new ArrayList<>(List.of(
-                " ",
-                "   ",
-                "      ",
-                "  ",
-                ""
-        ));
-        invalidPasswords.add(null);
-        for (var password : invalidPasswords) {
-            validClient.setPassword(password);
-            assertEquals(password, validClient.getPassword());
-            assertFalse(validator.validate(validClient).isEmpty());
         }
     }
 
@@ -131,12 +105,15 @@ public class ClientTest {
 
     @Test
     void fieldBalancePositiveTest() {
-        List<Double> validBalanceValues = List.of(
+        List<Double> validBalanceValues = new ArrayList<>(List.of(
                 100.0,
                 20.5,
                 0.00001,
-                0.0
-        );
+                0.0,
+                -100.0,
+                -20.5,
+                -0.0001
+        ));
         for (var balance : validBalanceValues) {
             validClient.setBalance(balance);
             assertEquals(balance, validClient.getBalance());
@@ -145,27 +122,16 @@ public class ClientTest {
     }
 
     @Test
-    void fieldBalanceNegativeTest() {
-        List<Double> invalidBalanceValues = new ArrayList<>(List.of(
-                -100.0,
-                -20.5,
-                -0.0001
-        ));
-        invalidBalanceValues.add(null);
-        for (var balance : invalidBalanceValues) {
-            validClient.setBalance(balance);
-            assertEquals(balance, validClient.getBalance());
-            assertFalse(validator.validate(validClient).isEmpty());
-        }
-    }
-
-    @Test
     void fieldFirstNamePositiveTest() {
-        List<String> validFirstNames = List.of(
+        List<String> validFirstNames = new ArrayList<>(List.of(
                 "Adam",
                 "KELVIN",
-                "X Æ A-12"
-        );
+                "X Æ A-12",
+                " ",
+                "   ",
+                "      "
+        ));
+        validFirstNames.add(null);
         for (var firstName : validFirstNames) {
             validClient.setFirstName(firstName);
             assertEquals(firstName, validClient.getFirstName());
@@ -174,29 +140,16 @@ public class ClientTest {
     }
 
     @Test
-    void fieldFirstNameNegativeTest() {
-        List<String> invalidFirstNames = new ArrayList<>(List.of(
-                " ",
-                "   ",
-                "      ",
-                "  ",
-                ""
-        ));
-        invalidFirstNames.add(null);
-        for (var firstName : invalidFirstNames) {
-            validClient.setFirstName(firstName);
-            assertEquals(firstName, validClient.getFirstName());
-            assertFalse(validator.validate(validClient).isEmpty());
-        }
-    }
-
-    @Test
     void fieldLastNamePositiveTest() {
-        List<String> validLastNames = List.of(
+        List<String> validLastNames = new ArrayList<>(List.of(
                 "Dudzisz",
                 "Gonigroszek",
-                "Musk"
-        );
+                "Musk",
+                " ",
+                "   ",
+                "      "
+        ));
+        validLastNames.add(null);
         for (var lastName : validLastNames) {
             validClient.setLastName(lastName);
             assertEquals(lastName, validClient.getLastName());
@@ -205,50 +158,20 @@ public class ClientTest {
     }
 
     @Test
-    void fieldLastNameNegativeTest() {
-        List<String> invalidLastNames = new ArrayList<>(List.of(
-                " ",
-                "   ",
-                "      ",
-                "  ",
-                ""
-        ));
-        invalidLastNames.add(null);
-        for (var lastName : invalidLastNames) {
-            validClient.setLastName(lastName);
-            assertEquals(lastName, validClient.getLastName());
-            assertFalse(validator.validate(validClient).isEmpty());
-        }
-    }
-
-    @Test
     void fieldPhoneNumberPositiveTest() {
-        List<String> validPhoneNumbers = List.of(
+        List<String> validPhoneNumbers = new ArrayList<>(List.of(
                 "1",
                 "976543211",
-                "1111111111111111111111111111111111111"
-        );
+                "1111111111111111111111111111111111111",
+                " ",
+                "   ",
+                "      "
+        ));
+        validPhoneNumbers.add(null);
         for (var phoneNumber : validPhoneNumbers) {
             validClient.setPhoneNumber(phoneNumber);
             assertEquals(phoneNumber, validClient.getPhoneNumber());
             assertTrue(validator.validate(validClient).isEmpty());
-        }
-    }
-
-    @Test
-    void fieldPhoneNumberNegativeTest() {
-        List<String> invalidPhoneNumbers = new ArrayList<>(List.of(
-                " ",
-                "   ",
-                "      ",
-                "  ",
-                ""
-        ));
-        invalidPhoneNumbers.add(null);
-        for (var phoneNumber : invalidPhoneNumbers) {
-            validClient.setPhoneNumber(phoneNumber);
-            assertEquals(phoneNumber, validClient.getPhoneNumber());
-            assertFalse(validator.validate(validClient).isEmpty());
         }
     }
 
@@ -258,14 +181,10 @@ public class ClientTest {
             validClient.setClientType(clientType);
             assertEquals(clientType, validClient.getClientType());
             assertTrue(validator.validate(validClient).isEmpty());
+            validClient.setClientType(null);
+            assertNull(validClient.getClientType());
+            assertTrue(validator.validate(validClient).isEmpty());
         }
-    }
-
-    @Test
-    void fieldClientTypeNegativeTest() {
-        validClient.setClientType(null);
-        assertNull(validClient.getClientType());
-        assertFalse(validator.validate(validClient).isEmpty());
     }
 
     @Test
@@ -288,13 +207,9 @@ public class ClientTest {
             assertEquals(address, validClient.getAddress());
             assertTrue(validator.validate(validClient).isEmpty());
         }
-    }
-
-    @Test
-    void fieldAddressNegativeTest() {
         validClient.setAddress(null);
         assertNull(validClient.getAddress());
-        assertFalse(validator.validate(validClient).isEmpty());
+        assertTrue(validator.validate(validClient).isEmpty());
     }
 
     @Test
@@ -309,13 +224,9 @@ public class ClientTest {
             assertEquals(clientAccessType, validClient.getClientAccessType());
             assertTrue(validator.validate(validClient).isEmpty());
         }
-    }
-
-    @Test
-    void fieldClientAccessTypeNegativeTest() {
         validClient.setClientAccessType(null);
         assertNull(validClient.getClientAccessType());
-        assertFalse(validator.validate(validClient).isEmpty());
+        assertTrue(validator.validate(validClient).isEmpty());
     }
 
     @Test

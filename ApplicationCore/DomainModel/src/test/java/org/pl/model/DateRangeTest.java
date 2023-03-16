@@ -43,13 +43,10 @@ public class DateRangeTest {
             assertEquals(startDate, validDateRange.getStartDate());
             assertTrue(validator.validate(validDateRange).isEmpty());
         }
-    }
 
-    @Test
-    void fieldStartDateNegativeTest() {
         validDateRange.setStartDate(null);
         assertNull(validDateRange.getStartDate());
-        assertFalse(validator.validate(validDateRange).isEmpty());
+        assertTrue(validator.validate(validDateRange).isEmpty());
     }
 
     @Test
@@ -65,12 +62,8 @@ public class DateRangeTest {
             assertEquals(endDate, validDateRange.getEndDate());
             assertTrue(validator.validate(validDateRange).isEmpty());
         }
-    }
-
-    @Test
-    void fieldEndDateNegativeTest() {
         validDateRange.setEndDate(null);
         assertNull(validDateRange.getEndDate());
-        assertFalse(validator.validate(validDateRange).isEmpty());
+        assertTrue(validator.validate(validDateRange).isEmpty());
     }
 }

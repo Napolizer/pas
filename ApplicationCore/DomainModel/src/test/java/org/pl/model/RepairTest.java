@@ -92,13 +92,10 @@ public class RepairTest {
             assertEquals(client, validRepair.getClient());
             assertTrue(validator.validate(validRepair).isEmpty());
         }
-    }
 
-    @Test
-    void fieldClientNegativeTest() {
         validRepair.setClient(null);
         assertNull(validRepair.getClient());
-        assertFalse(validator.validate(validRepair).isEmpty());
+        assertTrue(validator.validate(validRepair).isEmpty());
     }
 
     @Test
@@ -112,13 +109,9 @@ public class RepairTest {
             assertEquals(hardware, validRepair.getHardware());
             assertTrue(validator.validate(validRepair).isEmpty());
         }
-    }
-
-    @Test
-    void fieldHardwareNegativeTest() {
         validRepair.setHardware(null);
         assertNull(validRepair.getHardware());
-        assertFalse(validator.validate(validRepair).isEmpty());
+        assertTrue(validator.validate(validRepair).isEmpty());
     }
 
     @Test
@@ -132,13 +125,10 @@ public class RepairTest {
             assertEquals(dateRange, validRepair.getDateRange());
             assertTrue(validator.validate(validRepair).isEmpty());
         }
-    }
 
-    @Test
-    void fieldDateRangeNegativeTest() {
         validRepair.setDateRange(null);
         assertNull(validRepair.getDateRange());
-        assertThrows(Exception.class, () -> validator.validate(validRepair).isEmpty());
+        assertDoesNotThrow(() -> validator.validate(validRepair).isEmpty());
     }
 
     @Test

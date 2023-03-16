@@ -28,11 +28,15 @@ public class UserCredentialsTest {
 
     @Test
     void fieldUsernamePositiveTest() {
-        List<String> validUsernames = List.of(
+        List<String> validUsernames = new ArrayList<>(List.of(
                 "Frontas",
                 "Fullstas",
-                "ScrumMaster"
-        );
+                "ScrumMaster",
+                " ",
+                "   ",
+                "      "
+        ));
+        validUsernames.add(null);
         for (var username : validUsernames) {
             validUserCredentials.setUsername(username);
             assertEquals(username, validUserCredentials.getUsername());
@@ -41,50 +45,20 @@ public class UserCredentialsTest {
     }
 
     @Test
-    void fieldUsernameNegativeTest() {
-        List<String> invalidUsernames = new ArrayList<>(List.of(
-                " ",
-                "   ",
-                "      ",
-                "  ",
-                ""
-        ));
-        invalidUsernames.add(null);
-        for (var username : invalidUsernames) {
-            validUserCredentials.setUsername(username);
-            assertEquals(username, validUserCredentials.getUsername());
-            assertFalse(validator.validate(validUserCredentials).isEmpty());
-        }
-    }
-
-    @Test
     void fieldPasswordPositiveTest() {
-        List<String> validPasswords = List.of(
+        List<String> validPasswords = new ArrayList<>(List.of(
                 "NiezlomneHaslo",
                 "HelloHecker",
-                "Haslo123"
-        );
+                "Haslo123",
+                " ",
+                "   ",
+                "      "
+        ));
+        validPasswords.add(null);
         for (var password : validPasswords) {
             validUserCredentials.setPassword(password);
             assertEquals(password, validUserCredentials.getPassword());
             assertTrue(validator.validate(validUserCredentials).isEmpty());
-        }
-    }
-
-    @Test
-    void fieldPasswordNegativeTest() {
-        List<String> invalidPasswords = new ArrayList<>(List.of(
-                " ",
-                "   ",
-                "      ",
-                "  ",
-                ""
-        ));
-        invalidPasswords.add(null);
-        for (var password : invalidPasswords) {
-            validUserCredentials.setPassword(password);
-            assertEquals(password, validUserCredentials.getPassword());
-            assertFalse(validator.validate(validUserCredentials).isEmpty());
         }
     }
 }

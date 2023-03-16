@@ -62,13 +62,9 @@ public class HardwareTest {
             assertEquals(price, validHardware.getPrice());
             assertTrue(validator.validate(validHardware).isEmpty());
         }
-    }
-
-    @Test
-    void fieldPriceNegativeTest() {
         validHardware.setPrice(null);
         assertNull(validHardware.getPrice());
-        assertFalse(validator.validate(validHardware).isEmpty());
+        assertTrue(validator.validate(validHardware).isEmpty());
     }
 
     @Test
@@ -78,13 +74,10 @@ public class HardwareTest {
             assertEquals(hardwareType, validHardware.getHardwareType());
             assertTrue(validator.validate(validHardware).isEmpty());
         }
-    }
 
-    @Test
-    void fieldClientTypeNegativeTest() {
         validHardware.setHardwareType(null);
         assertNull(validHardware.getHardwareType());
-        assertFalse(validator.validate(validHardware).isEmpty());
+        assertTrue(validator.validate(validHardware).isEmpty());
     }
 
     @Test

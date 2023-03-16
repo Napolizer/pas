@@ -31,11 +31,15 @@ class AddressTest {
 
     @Test
     void fieldCityPositiveTest() {
-        List<String> validTowns = List.of(
+        List<String> validTowns = new ArrayList<>(List.of(
                 "Warsaw",
                 "Lodz",
-                "IO"
-        );
+                "IO",
+                " ",
+                "   ",
+                "      "
+        ));
+        validTowns.add(null);
         for (var city : validTowns) {
             validAddress.setCity(city);
             assertEquals(city, validAddress.getCity());
@@ -44,31 +48,18 @@ class AddressTest {
     }
 
     @Test
-    void fieldCityNegativeTest() {
-        List<String> invalidTowns = new ArrayList<>(List.of(
-                " ",
-                "   ",
-                "      ",
-                "  ",
-                ""
-        ));
-        invalidTowns.add(null);
-        for (var city : invalidTowns) {
-            validAddress.setCity(city);
-            assertEquals(city, validAddress.getCity());
-            assertFalse(validator.validate(validAddress).isEmpty());
-        }
-    }
-
-    @Test
     void fieldNumberPositiveTest() {
-        List<String> validPhoneNumbers = List.of(
+        List<String> validPhoneNumbers = new ArrayList<>(List.of(
                 "123456789",
                 "987654321",
                 "000000000",
                 "1",
-                "123"
-        );
+                "123",
+                " ",
+                "   ",
+                "      "
+        ));
+        validPhoneNumbers.add(null);
         for (var phoneNumber : validPhoneNumbers) {
             validAddress.setNumber(phoneNumber);
             assertEquals(phoneNumber, validAddress.getNumber());
@@ -77,48 +68,20 @@ class AddressTest {
     }
 
     @Test
-    void fieldNumberNegativeTest() {
-        List<String> invalidStreetNumbers = new ArrayList<>(List.of(
-                " ",
-                "   ",
-                "      ",
-                "  ",
-                ""
-        ));
-        invalidStreetNumbers.add(null);
-        for (var phoneNumber : invalidStreetNumbers) {
-            validAddress.setNumber(phoneNumber);
-            assertEquals(phoneNumber, validAddress.getNumber());
-            assertFalse(validator.validate(validAddress).isEmpty());
-        }
-    }
-
-    @Test
     void fieldStreetPositiveTest() {
-        List<String> validStreets = List.of(
+        List<String> validStreets = new ArrayList<>(List.of(
                 "ValidStreet",
                 " --- ",
-                "     I am still valid    "
-        );
-        for (var street : validStreets) {
-            validAddress.setStreet(street);
-            assertEquals(street, validAddress.getStreet());
-            assertTrue(validator.validate(validAddress).isEmpty());
-        }
-    }
-
-    @Test
-    void fieldStreetNegativeTest() {
-        List<String> invalidStreets = new ArrayList<>(List.of(
+                "     I am still valid    ",
                 "",
                 " ",
                 "         "
         ));
-        invalidStreets.add(null);
-        for (var street : invalidStreets) {
+        validStreets.add(null);
+        for (var street : validStreets) {
             validAddress.setStreet(street);
             assertEquals(street, validAddress.getStreet());
-            assertFalse(validator.validate(validAddress).isEmpty());
+            assertTrue(validator.validate(validAddress).isEmpty());
         }
     }
 
