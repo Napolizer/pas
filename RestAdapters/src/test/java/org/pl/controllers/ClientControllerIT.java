@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.microshed.testing.SharedContainerConfig;
 import org.microshed.testing.jupiter.MicroShedTest;
-import org.pl.model.*;
+import org.pl.model.Address;
+import org.pl.model.Basic;
+import org.pl.model.Client;
+import org.pl.model.ClientAccessType;
 
 import java.net.http.HttpRequest;
 import java.util.HashMap;

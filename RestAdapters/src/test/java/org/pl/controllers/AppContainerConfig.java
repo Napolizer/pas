@@ -7,6 +7,6 @@ import org.testcontainers.junit.jupiter.Container;
 public class AppContainerConfig implements SharedContainerConfiguration {
     @Container
     public static ApplicationContainer container = new ApplicationContainer()
-            .withAppContextRoot("/ApplicationService-1.0-SNAPSHOT")
-            .withReadinessPath("/ApplicationService-1.0-SNAPSHOT/api/health");
+            .withAppContextRoot("/RestAdapters-1.0-SNAPSHOT")
+            .withReadinessPath("/RestAdapters-1.0-SNAPSHOT/api/health");
 }

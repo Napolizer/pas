@@ -1,12 +1,12 @@
 package org.pl.filters;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.container.ContainerResponseFilter;
-import jakarta.ws.rs.ext.Provider;
 
-@Provider
+@ApplicationScoped
 public class CorsResponseFilter implements ContainerResponseFilter {
 
     @Override
