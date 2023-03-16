@@ -30,9 +30,6 @@
                         </goals>
                     </execution>
                 </executions>
-<!--                  <configuration>-->
-<!--                    <webXml>ApplicationService/src/main/webapp/WEB-INF/web.xml</webXml>-->
-<!--                  </configuration>-->
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>

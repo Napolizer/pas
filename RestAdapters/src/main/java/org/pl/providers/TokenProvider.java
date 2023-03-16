@@ -4,11 +4,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.inject.Inject;
+import jakarta.validation.ValidationException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.pl.model.ClientRest;
 import org.pl.model.TokenClaims;
 
-import javax.validation.ValidationException;
 import java.util.Date;
 
 public class TokenProvider {
