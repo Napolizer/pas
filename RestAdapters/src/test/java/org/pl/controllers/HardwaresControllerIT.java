@@ -15,10 +15,10 @@ import static org.hamcrest.CoreMatchers.*;
 @MicroShedTest
 @SharedContainerConfig(AppContainerConfig.class)
 public class HardwaresControllerIT {
-    private HardwareType testComputer;
-    private HardwareType testConsole;
-    private Hardware testHardware;
-    private Hardware testHardware2;
+    private HardwareTypeRest testComputer;
+    private HardwareTypeRest testConsole;
+    private HardwareRest testHardware;
+    private HardwareRest testHardware2;
 
     private String retrieveToken() {
         Map<String, Object> credentials = new HashMap<>();
@@ -40,20 +40,20 @@ public class HardwaresControllerIT {
 
     @Test
     void getAllHardwaresPositiveTest() {
-        testComputer = Computer.builder()
-                        .condition(Condition.FINE)
+        testComputer = ComputerRest.builder()
+                        .condition(ConditionRest.FINE)
                         .type("COMPUTER")
                         .build();
-        testConsole = Console.builder()
-                        .condition(Condition.AVERAGE)
+        testConsole = ConsoleRest.builder()
+                        .condition(ConditionRest.AVERAGE)
                         .type("CONSOLE")
                         .build();
-        testHardware = Hardware.builder()
+        testHardware = HardwareRest.builder()
                         .archive(false)
                                 .price(100)
                                         .hardwareType(testComputer)
                                                 .build();
-        testHardware2 = Hardware.builder()
+        testHardware2 = HardwareRest.builder()
                         .archive(false)
                                 .price(200)
                                         .hardwareType(testConsole)

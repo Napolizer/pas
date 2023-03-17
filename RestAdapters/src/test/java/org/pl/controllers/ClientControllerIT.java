@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.microshed.testing.SharedContainerConfig;
 import org.microshed.testing.jupiter.MicroShedTest;
-import org.pl.model.Address;
-import org.pl.model.Basic;
-import org.pl.model.Client;
-import org.pl.model.ClientAccessType;
+import org.pl.model.AddressRest;
+import org.pl.model.BasicRest;
+import org.pl.model.ClientAccessTypeRest;
+import org.pl.model.ClientRest;
 
 import java.net.http.HttpRequest;
 import java.util.HashMap;
@@ -83,8 +83,8 @@ public class ClientControllerIT {
 
     @Nested
     class CreateClient {
-        Client testClient = Client.builder()
-                .address(Address
+        ClientRest testClient = ClientRest.builder()
+                .address(AddressRest
                         .builder()
                         .city("Lodz")
                         .number("123")
@@ -92,8 +92,8 @@ public class ClientControllerIT {
                         .build())
                 .archive(false)
                 .balance(100.0)
-                .clientAccessType(ClientAccessType.USERS)
-                .clientType(new Basic())
+                .clientAccessType(ClientAccessTypeRest.USERS)
+                .clientType(new BasicRest())
                 .firstName("Janusz")
                 .lastName("Kowalski")
                 .phoneNumber("123456789")
@@ -887,7 +887,7 @@ public class ClientControllerIT {
                     .then()
                     .assertThat()
                     .statusCode(200);
-            // Should not be able to login using old password
+            // Should not be able to log in using old password
             Map<String, Object> credentials = new HashMap<>();
             credentials.put("username", "admin");
             credentials.put("password", "password");

@@ -2,6 +2,7 @@ package org.pl.controllers;
 
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.microshed.testing.SharedContainerConfig;
 import org.microshed.testing.jupiter.MicroShedTest;
 import org.pl.model.*;
@@ -19,12 +20,12 @@ import static org.hamcrest.CoreMatchers.is;
 @MicroShedTest
 @SharedContainerConfig(AppContainerConfig.class)
 public class RepairControllerIT {
-    private Repair testRepair;
-    private Client testClient;
-    private Hardware testHardware;
+    private RepairRest testRepair;
+    private ClientRest testClient;
+    private HardwareRest testHardware;
     private String repairId;
     private String repairETag;
-    private HardwareType testHardwareType;
+    private HardwareTypeRest testHardwareType;
 
     private static String retrieveToken() {
         Map<String, Object> credentials = new HashMap<>();
@@ -76,20 +77,20 @@ public class RepairControllerIT {
 
     @BeforeEach
     void setup() throws ParseException {
-        testHardwareType = Console.builder()
-                .condition(Condition.FINE)
+        testHardwareType = ConsoleRest.builder()
+                .condition(ConditionRest.FINE)
                 .type("CONSOLE")
                 .build();
 
-        testHardware = Hardware.builder()
+        testHardware = HardwareRest.builder()
                 .archive(false)
                 .price(100)
                 .hardwareType(testHardwareType)
                 .build();
 
-        testClient = Client.builder()
+        testClient = ClientRest.builder()
                 .id(UUID.randomUUID())
-                .address(Address
+                .address(AddressRest
                         .builder()
                         .city("Lodz")
                         .number("123")
@@ -97,8 +98,8 @@ public class RepairControllerIT {
                         .build())
                 .archive(false)
                 .balance(100.0)
-                .clientAccessType(ClientAccessType.USERS)
-                .clientType(new Basic())
+                .clientAccessType(ClientAccessTypeRest.USERS)
+                .clientType(new BasicRest())
                 .firstName("Janusz")
                 .lastName("Kowalski")
                 .phoneNumber("123456789")
@@ -106,16 +107,21 @@ public class RepairControllerIT {
                 .password("januszek")
                 .build();
 
-        testRepair = Repair.builder()
+        testRepair = RepairRest.builder()
                 .id(UUID.randomUUID())
                 .archive(false)
                 .hardware(testHardware)
                 .client(testClient)
-                .dateRange(new DateRange(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse("13-02-2020 12:10:10"),
+                .dateRange(new DateRangeRest(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse("13-02-2020 12:10:10"),
                         new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse("15-02-2020 12:10:10")))
                 .build();
 
         repairId = retrieveRepairId();
         repairETag = retrieveRepairETag();
+    }
+
+    @Test
+    void sprawdzamCzyDziala() {
+        
     }
 }

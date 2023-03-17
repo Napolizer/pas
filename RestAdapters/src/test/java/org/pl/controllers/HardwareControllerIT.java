@@ -16,8 +16,8 @@ import static org.hamcrest.CoreMatchers.*;
 @MicroShedTest
 @SharedContainerConfig(AppContainerConfig.class)
 public class HardwareControllerIT {
-    private HardwareType hardwareType;
-    private Hardware testHardware;
+    private HardwareTypeRest hardwareType;
+    private HardwareRest testHardware;
     private String hardwareId;
     private String hardwareETag;
 
@@ -71,12 +71,12 @@ public class HardwareControllerIT {
 
     @BeforeEach
     void beforeEach() {
-        hardwareType = Console.builder()
-                .condition(Condition.FINE)
+        hardwareType = ConsoleRest.builder()
+                .condition(ConditionRest.FINE)
                 .type("CONSOLE")
                 .build();
 
-        testHardware = Hardware.builder()
+        testHardware = HardwareRest.builder()
                 .archive(false)
                 .price(100)
                 .hardwareType(hardwareType)
@@ -255,8 +255,8 @@ public class HardwareControllerIT {
     void updateHardwareAllFieldsTest() {
         testHardware.setArchive(true);
         testHardware.setPrice(200);
-        HardwareType newComputer = Computer.builder()
-                .condition(Condition.AVERAGE)
+        HardwareTypeRest newComputer = ComputerRest.builder()
+                .condition(ConditionRest.AVERAGE)
                 .type("COMPUTER")
                 .build();
         testHardware.setHardwareType(newComputer);
@@ -279,8 +279,8 @@ public class HardwareControllerIT {
 
     @Test
     void updateHardwareFieldHardwareTypeTest() {
-        HardwareType newComputer = Computer.builder()
-                .condition(Condition.AVERAGE)
+        HardwareTypeRest newComputer = ComputerRest.builder()
+                .condition(ConditionRest.AVERAGE)
                 .type("COMPUTER")
                 .build();
         testHardware.setHardwareType(newComputer);

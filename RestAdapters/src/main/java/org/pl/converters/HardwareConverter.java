@@ -12,21 +12,21 @@ public class HardwareConverter {
 
     public HardwareRest convert(Hardware hardware) {
         if (hardware == null) return null;
-        HardwareRest hardwareEnt = new HardwareRest();
-        if (hardware.getId() != null) hardwareEnt.setId(hardware.getId());
-        if (hardware.getArchive() != null) hardwareEnt.setArchive(hardware.isArchive());
-        if (hardware.getPrice() != null) hardwareEnt.setPrice(hardware.getPrice());
-        if (hardware.getHardwareType() != null) hardwareEnt.setHardwareType(hardwareTypeConverter.convert(hardware.getHardwareType()));
-        return hardwareEnt;
+        HardwareRest hardwareRest = new HardwareRest();
+        if (hardware.getId() != null) hardwareRest.setId(hardware.getId());
+        if (hardware.getArchive() != null) hardwareRest.setArchive(hardware.isArchive());
+        if (hardware.getPrice() != null) hardwareRest.setPrice(hardware.getPrice());
+        if (hardware.getHardwareType() != null) hardwareRest.setHardwareType(hardwareTypeConverter.convert(hardware.getHardwareType()));
+        return hardwareRest;
     }
 
-    public Hardware convert(HardwareRest hardwareEnt) {
-        if (hardwareEnt == null) return null;
+    public Hardware convert(HardwareRest hardwareRest) {
+        if (hardwareRest == null) return null;
         Hardware hardware = new Hardware();
-        hardware.setId(hardwareEnt.getId());
-        hardware.setArchive(hardwareEnt.isArchive());
-        hardware.setPrice(hardwareEnt.getPrice());
-        hardware.setHardwareType(hardwareTypeConverter.convert(hardwareEnt.getHardwareType()));
+        hardware.setId(hardwareRest.getId());
+        hardware.setArchive(hardwareRest.isArchive());
+        hardware.setPrice(hardwareRest.getPrice());
+        hardware.setHardwareType(hardwareTypeConverter.convert(hardwareRest.getHardwareType()));
         return hardware;
     }
 }

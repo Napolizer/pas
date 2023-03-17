@@ -1,10 +1,12 @@
 package org.pl.model;
 
+import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.pl.adapters.RepairAdapter;
 import org.pl.annotations.ValidDateRange;
 import org.pl.model.exceptions.HardwareRestException;
 
@@ -16,6 +18,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonbTypeAdapter(RepairAdapter.class)
 public class RepairRest implements EntityRest, Serializable {
     private UUID id;
     @NotNull

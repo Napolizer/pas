@@ -1,10 +1,12 @@
 package org.pl.model;
 
+import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.pl.adapters.HardwareTypeRestAdapter;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -23,6 +25,7 @@ public class HardwareRest implements Entity, Serializable {
     @NotNull
     private Integer price;
     @NotNull
+    @JsonbTypeAdapter(HardwareTypeRestAdapter.class)
     private HardwareTypeRest hardwareType;
 
     public void repair() {
