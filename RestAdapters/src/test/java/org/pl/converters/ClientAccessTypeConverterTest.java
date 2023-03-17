@@ -1,12 +1,12 @@
-package org.pl.adapter.data.converters;
+package org.pl.converters;
 
 import org.junit.jupiter.api.Test;
-import org.pl.adapter.data.model.ClientAccessTypeEnt;
 import org.pl.model.ClientAccessType;
+import org.pl.model.ClientAccessTypeRest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ClientAccessTypeConverterIT {
+public class ClientAccessTypeConverterTest {
     private final ClientAccessTypeConverter clientAccessTypeConverter = new ClientAccessTypeConverter();
 
     @Test
@@ -14,19 +14,19 @@ public class ClientAccessTypeConverterIT {
         ClientAccessType clientAccessTypeAdministrator = ClientAccessType.ADMINISTRATORS;
         ClientAccessType clientAccessTypeEmployee = ClientAccessType.EMPLOYEES;
         ClientAccessType clientAccessTypeUser = ClientAccessType.USERS;
-        ClientAccessTypeEnt clientAccessTypeAdministratorEnt = clientAccessTypeConverter.convert(clientAccessTypeAdministrator);
-        ClientAccessTypeEnt clientAccessTypeEmployeeEnt = clientAccessTypeConverter.convert(clientAccessTypeEmployee);
-        ClientAccessTypeEnt clientAccessTypeUserEnt = clientAccessTypeConverter.convert(clientAccessTypeUser);
-        assertEquals(ClientAccessTypeEnt.ADMINISTRATORS, clientAccessTypeAdministratorEnt);
-        assertEquals(ClientAccessTypeEnt.EMPLOYEES, clientAccessTypeEmployeeEnt);
-        assertEquals(ClientAccessTypeEnt.USERS, clientAccessTypeUserEnt);
+        ClientAccessTypeRest clientAccessTypeAdministratorEnt = clientAccessTypeConverter.convert(clientAccessTypeAdministrator);
+        ClientAccessTypeRest clientAccessTypeEmployeeEnt = clientAccessTypeConverter.convert(clientAccessTypeEmployee);
+        ClientAccessTypeRest clientAccessTypeUserEnt = clientAccessTypeConverter.convert(clientAccessTypeUser);
+        assertEquals(ClientAccessTypeRest.ADMINISTRATORS, clientAccessTypeAdministratorEnt);
+        assertEquals(ClientAccessTypeRest.EMPLOYEES, clientAccessTypeEmployeeEnt);
+        assertEquals(ClientAccessTypeRest.USERS, clientAccessTypeUserEnt);
     }
 
     @Test
     void convertClientAccessTypeFromEntToDomainModelTest() {
-        ClientAccessTypeEnt clientAccessTypeAdministratorEnt = ClientAccessTypeEnt.ADMINISTRATORS;
-        ClientAccessTypeEnt clientAccessTypeEmployeeEnt = ClientAccessTypeEnt.EMPLOYEES;
-        ClientAccessTypeEnt clientAccessTypeUserEnt = ClientAccessTypeEnt.USERS;
+        ClientAccessTypeRest clientAccessTypeAdministratorEnt = ClientAccessTypeRest.ADMINISTRATORS;
+        ClientAccessTypeRest clientAccessTypeEmployeeEnt = ClientAccessTypeRest.EMPLOYEES;
+        ClientAccessTypeRest clientAccessTypeUserEnt = ClientAccessTypeRest.USERS;
         ClientAccessType clientAccessTypeAdministrator = clientAccessTypeConverter.convert(clientAccessTypeAdministratorEnt);
         ClientAccessType clientAccessTypeEmployee = clientAccessTypeConverter.convert(clientAccessTypeEmployeeEnt);
         ClientAccessType clientAccessTypeUser = clientAccessTypeConverter.convert(clientAccessTypeUserEnt);

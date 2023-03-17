@@ -9,7 +9,7 @@ import org.pl.model.ClientType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-public class ClientTypeConverterIT {
+public class ClientTypeConverterTest {
     private final ClientTypeConverter clientTypeConverter = new ClientTypeConverter();
     @Test
     void convertClientTypeFromDomainToEntModelTest() {

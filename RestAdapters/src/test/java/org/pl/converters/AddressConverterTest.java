@@ -1,14 +1,13 @@
-package org.pl.adapter.data.converters;
+package org.pl.converters;
 
 import org.junit.jupiter.api.Test;
-import org.pl.adapter.data.model.AddressEnt;
 import org.pl.model.Address;
+import org.pl.model.AddressRest;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-public class AddressConverterIT {
+public class AddressConverterTest {
     private final AddressConverter addressConverter = new AddressConverter();
     @Test
     void convertAddressFromDomainToEntModelTest() {
@@ -17,16 +16,16 @@ public class AddressConverterIT {
                 .number("7")
                 .street("street")
                 .build();
-        AddressEnt addressEnt = addressConverter.convert(address);
-        assertEquals(address.getCity(), addressEnt.getCity());
-        assertEquals(address.getNumber(), addressEnt.getNumber());
-        assertEquals(address.getStreet(), addressEnt.getStreet());
-        assertInstanceOf(AddressEnt.class, addressEnt);
+        AddressRest addressRest = addressConverter.convert(address);
+        assertEquals(address.getCity(), addressRest.getCity());
+        assertEquals(address.getNumber(), addressRest.getNumber());
+        assertEquals(address.getStreet(), addressRest.getStreet());
+        assertInstanceOf(AddressRest.class, addressRest);
     }
 
     @Test
     void convertAddressFromEntToDomainModelTest() {
-        AddressEnt addressEnt = AddressEnt.builder()
+        AddressRest addressEnt = AddressRest.builder()
                 .city("city")
                 .number("7")
                 .street("street")
