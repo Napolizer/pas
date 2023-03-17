@@ -23,7 +23,7 @@ public class Hardware implements Entity, Serializable {
     }
 
     @Override
-    public void setArchive(boolean archive) {
+    public void setArchive(Boolean archive) {
         this.archive = archive;
     }
 

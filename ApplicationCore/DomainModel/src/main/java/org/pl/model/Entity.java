@@ -3,7 +3,7 @@ package org.pl.model;
 import java.util.UUID;
 
 public interface Entity {
-    void setArchive(boolean archive);
+    void setArchive(Boolean archive);
     boolean isArchive();
     UUID getId();
 }

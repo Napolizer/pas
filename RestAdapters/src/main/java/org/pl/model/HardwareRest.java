@@ -18,7 +18,7 @@ import static org.pl.model.ConditionRest.FINE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HardwareRest implements Entity, Serializable {
+public class HardwareRest implements EntityRest, Serializable {
     private UUID id;
     @NotNull
     private Boolean archive;
@@ -33,7 +33,7 @@ public class HardwareRest implements Entity, Serializable {
     }
 
     @Override
-    public void setArchive(boolean archive) {
+    public void setArchive(Boolean archive) {
         this.archive = archive;
     }
 
