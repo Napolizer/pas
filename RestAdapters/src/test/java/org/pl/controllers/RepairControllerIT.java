@@ -116,12 +116,7 @@ public class RepairControllerIT {
                         new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse("15-02-2020 12:10:10")))
                 .build();
 
-        repairId = retrieveRepairId();
-        repairETag = retrieveRepairETag();
-    }
-
-    @Test
-    void sprawdzamCzyDziala() {
-        
+//        repairId = retrieveRepairId();
+//        repairETag = retrieveRepairETag();
     }
 }
