@@ -94,7 +94,7 @@ public class ClientRepositoryAdapterIT {
         assertNotNull(createdClient.getId());
         assertEquals(validClient.getUsername(), createdClient.getUsername());
         assertEquals(validClient.getPassword(), createdClient.getPassword());
-        assertEquals(validClient.isArchive(), createdClient.isArchive());
+        assertEquals(validClient.getArchive(), createdClient.getArchive());
         assertEquals(validClient.getBalance(), createdClient.getBalance());
         assertEquals(validClient.getFirstName(), createdClient.getFirstName());
         assertEquals(validClient.getLastName(), createdClient.getLastName());
@@ -139,7 +139,7 @@ public class ClientRepositoryAdapterIT {
         Client createdClient = clientRepositoryAdapter.createClient(validClient);
         assertNotNull(clientRepositoryAdapter.getClient(createdClient.getId()));
         Client createdClient2 = clientRepositoryAdapter.deleteClient(createdClient.getId());
-        assertTrue(clientRepositoryAdapter.getClient(createdClient2.getId()).isArchive());
+        assertTrue(clientRepositoryAdapter.getClient(createdClient2.getId()).getArchive());
     }
 
     @Test
@@ -199,9 +199,9 @@ public class ClientRepositoryAdapterIT {
     void restoreClientPositiveTest() throws RepositoryException {
         Client createdClient = clientRepositoryAdapter.createClient(validClient);
         clientRepositoryAdapter.deleteClient(createdClient.getId());
-        assertTrue(clientRepositoryAdapter.getClient(createdClient.getId()).isArchive());
+        assertTrue(clientRepositoryAdapter.getClient(createdClient.getId()).getArchive());
         clientRepositoryAdapter.restoreClient(createdClient.getId());
-        assertFalse(clientRepositoryAdapter.getClient(createdClient.getId()).isArchive());
+        assertFalse(clientRepositoryAdapter.getClient(createdClient.getId()).getArchive());
     }
 
     @Test
@@ -218,7 +218,7 @@ public class ClientRepositoryAdapterIT {
         assertEquals(createdClient.getId(), createdClient.getId());
         assertEquals(createdClient.getPassword(), updatedClient.getPassword());
         assertEquals(validClient2.getUsername(), updatedClient.getUsername());
-        assertEquals(validClient2.isArchive(), updatedClient.isArchive());
+        assertEquals(validClient2.getArchive(), updatedClient.getArchive());
         assertEquals(validClient2.getBalance(), updatedClient.getBalance());
         assertEquals(validClient2.getFirstName(), updatedClient.getFirstName());
         assertEquals(validClient2.getLastName(), updatedClient.getLastName());

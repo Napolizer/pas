@@ -21,7 +21,7 @@ public class UserAuthenticator {
     public ClientRest authenticate(UserRestCredentials userCredentials) throws InvalidCredentialsException, UserIsArchiveException, UserNotFoundException {
         try {
             ClientRest client = clientConverter.convert(readClientQueries.getClientByUsername(userCredentials.getUsername()));
-            if (client.isArchive()) {
+            if (client.getArchive()) {
                 throw new UserIsArchiveException();
             }
             if (!client.getPassword().equals(userCredentials.getPassword())) {

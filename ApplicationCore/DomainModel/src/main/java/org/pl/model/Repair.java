@@ -31,11 +31,6 @@ public class Repair implements Entity, Serializable {
     }
 
     @Override
-    public boolean isArchive() {
-        return getArchive();
-    }
-
-    @Override
     public UUID getId() {
         return id;
     }

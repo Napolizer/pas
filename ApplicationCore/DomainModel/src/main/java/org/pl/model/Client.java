@@ -42,11 +42,6 @@ public class Client implements Entity, Serializable {
     }
 
     @Override
-    public boolean isArchive() {
-        return archive;
-    }
-
-    @Override
     public UUID getId() {
         return id;
     }

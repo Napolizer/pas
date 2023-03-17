@@ -37,10 +37,6 @@ public class HardwareRest implements EntityRest, Serializable {
         this.archive = archive;
     }
 
-    @Override
-    public boolean isArchive() {
-        return getArchive();
-    }
 
     @Override
     public UUID getId() {

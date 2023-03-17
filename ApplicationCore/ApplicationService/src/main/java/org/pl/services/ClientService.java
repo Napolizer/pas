@@ -51,7 +51,7 @@ public class ClientService implements WriteClientQueries, ReadClientQueries {
     }
 
     public boolean isClientArchive(UUID id) throws RepositoryException {
-        return readClientPort.getClient(id).isArchive();
+        return readClientPort.getClient(id).getArchive();
     }
 
     public Client archive(UUID id) throws RepositoryException {

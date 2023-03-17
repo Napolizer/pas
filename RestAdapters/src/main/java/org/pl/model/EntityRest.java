@@ -4,6 +4,6 @@ import java.util.UUID;
 
 public interface EntityRest {
     void setArchive(Boolean archive);
-    boolean isArchive();
+    Boolean getArchive();
     UUID getId();
 }

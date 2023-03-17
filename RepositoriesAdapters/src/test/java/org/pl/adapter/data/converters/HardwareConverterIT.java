@@ -58,7 +58,7 @@ public class HardwareConverterIT {
         assertInstanceOf(ComputerEnt.class, hardwareEnt.getHardwareTypeEnt());
         assertEquals(hardware.getId(), hardwareEnt.getId());
         assertEquals(hardware.getPrice(), hardwareEnt.getPrice());
-        assertEquals(hardware.isArchive(), hardwareEnt.isArchive());
+        assertEquals(hardware.getArchive(), hardwareEnt.isArchive());
         assertEquals(hardware.getHardwareType().getType(), hardwareEnt.getHardwareTypeEnt().getType());
         assertEquals(ConditionEnt.AVERAGE, hardwareEnt.getHardwareTypeEnt().getCondition());
     }
@@ -83,7 +83,7 @@ public class HardwareConverterIT {
         assertInstanceOf(Computer.class, hardware.getHardwareType());
         assertEquals(hardwareEnt.getId(), hardware.getId());
         assertEquals(hardwareEnt.getPrice(), hardware.getPrice());
-        assertEquals(hardwareEnt.isArchive(), hardware.isArchive());
+        assertEquals(hardwareEnt.isArchive(), hardware.getArchive());
         assertEquals(hardwareEnt.getHardwareTypeEnt().getType(), hardware.getHardwareType().getType());
         assertEquals(Condition.AVERAGE, hardware.getHardwareType().getCondition());
     }

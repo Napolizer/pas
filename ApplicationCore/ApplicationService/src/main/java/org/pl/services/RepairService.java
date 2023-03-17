@@ -40,7 +40,7 @@ public class RepairService implements ReadRepairQueries, WriteRepairQueries {
     }
 
     public boolean isRepairArchive(UUID id) throws RepositoryException {
-        return readRepairPort.getRepair(id).isArchive();
+        return readRepairPort.getRepair(id).getArchive();
     }
     public Repair archivize(UUID id) throws RepositoryException {
         return writeRepairPort.deleteRepair(id);
@@ -62,7 +62,7 @@ public class RepairService implements ReadRepairQueries, WriteRepairQueries {
         List<Repair> pastRepairs = new ArrayList<>();
         List<Repair> repairs = readRepairPort.getClientRepairs(uuid);
         for (Repair repair : repairs) {
-            if (repair.isArchive()) {
+            if (repair.getArchive()) {
                 pastRepairs.add(repair);
             }
         }
@@ -73,7 +73,7 @@ public class RepairService implements ReadRepairQueries, WriteRepairQueries {
         List<Repair> presentRepairs = new ArrayList<>();
         List<Repair> repairs = readRepairPort.getClientRepairs(uuid);
         for (Repair repair : repairs) {
-            if (!repair.isArchive()) {
+            if (!repair.getArchive()) {
                 presentRepairs.add(repair);
             }
         }

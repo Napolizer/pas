@@ -62,11 +62,6 @@ public class ClientRest implements EntityRest, Serializable {
     }
 
     @Override
-    public boolean isArchive() {
-        return archive;
-    }
-
-    @Override
     public UUID getId() {
         return id;
     }

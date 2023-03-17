@@ -78,7 +78,7 @@ public class HardwareRepositoryAdapterIT {
     void createHardwarePositiveTest() throws RepositoryException {
         Hardware createdHardware = hardwareRepositoryAdapter.createHardware(validHardware);
         assertNotNull(createdHardware.getId());
-        assertEquals(validHardware.isArchive(), createdHardware.isArchive());
+        assertEquals(validHardware.getArchive(), createdHardware.getArchive());
         assertEquals(validHardware.getPrice(), createdHardware.getPrice());
         assertEquals(validHardware.getHardwareType(), createdHardware.getHardwareType());
     }
@@ -103,9 +103,9 @@ public class HardwareRepositoryAdapterIT {
     @Test
     void deleteHardwarePositiveTest() throws RepositoryException {
         Hardware createdHardware = hardwareRepositoryAdapter.createHardware(validHardware);
-        assertFalse(hardwareRepositoryAdapter.getHardware(createdHardware.getId()).isArchive());
+        assertFalse(hardwareRepositoryAdapter.getHardware(createdHardware.getId()).getArchive());
         hardwareRepositoryAdapter.deleteHardware(createdHardware.getId());
-        assertTrue(hardwareRepositoryAdapter.getHardware(createdHardware.getId()).isArchive());
+        assertTrue(hardwareRepositoryAdapter.getHardware(createdHardware.getId()).getArchive());
     }
 
     @Test
@@ -157,7 +157,7 @@ public class HardwareRepositoryAdapterIT {
         Hardware createdHardware = hardwareRepositoryAdapter.createHardware(validHardware);
         Hardware updatedHardware = hardwareRepositoryAdapter.updateHardware(createdHardware.getId(), validHardware2);
         assertEquals(createdHardware.getId(), updatedHardware.getId());
-        assertEquals(validHardware2.isArchive(), updatedHardware.isArchive());
+        assertEquals(validHardware2.getArchive(), updatedHardware.getArchive());
         assertEquals(validHardware2.getPrice(), updatedHardware.getPrice());
         assertEquals(validHardware2.getHardwareType().getType(), updatedHardware.getHardwareType().getType());
         assertEquals(validHardware2.getHardwareType().getCondition(), updatedHardware.getHardwareType().getCondition());

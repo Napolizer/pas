@@ -24,7 +24,7 @@ public class RepairConverter {
             HardwareEnt hardwareEnt = hardwareConverter.convert(repair.getHardware());
             return RepairEnt.builder()
                     .id(repair.getId())
-                    .archive(repair.isArchive())
+                    .archive(repair.getArchive())
                     .clientEnt(clientEnt)
                     .hardwareEnt(hardwareEnt)
                     .dateRangeEnt(dateRangeConverter.convert(repair.getDateRange()))

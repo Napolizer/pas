@@ -19,7 +19,7 @@ public class RepairConverter {
             HardwareRest hardwareEnt = hardwareConverter.convert(repair.getHardware());
             return RepairRest.builder()
                     .id(repair.getId())
-                    .archive(repair.isArchive())
+                    .archive(repair.getArchive())
                     .client(clientEnt)
                     .hardware(hardwareEnt)
                     .dateRange(dateRangeConverter.convert(repair.getDateRange()))
@@ -36,7 +36,7 @@ public class RepairConverter {
             Hardware hardware = hardwareConverter.convert(repairRest.getHardware());
             return Repair.builder()
                     .id(repairRest.getId())
-                    .archive(repairRest.isArchive())
+                    .archive(repairRest.getArchive())
                     .client(client)
                     .hardware(hardware)
                     .dateRange(dateRangeConverter.convert(repairRest.getDateRange()))

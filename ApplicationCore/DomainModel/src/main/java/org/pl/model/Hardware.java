@@ -27,15 +27,6 @@ public class Hardware implements Entity, Serializable {
         this.archive = archive;
     }
 
-    @Override
-    public boolean isArchive() {
-        return getArchive();
-    }
-
-    @Override
-    public UUID getId() {
-        return id;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -75,7 +75,7 @@ public class ClientConverterIT {
         assertEquals(client.getUsername(), clientEnt.getUsername());
         assertEquals(client.getPassword(), clientEnt.getPassword());
         assertEquals(client.getPhoneNumber(), clientEnt.getPhoneNumber());
-        assertEquals(client.isArchive(), clientEnt.isArchive());
+        assertEquals(client.getArchive(), clientEnt.isArchive());
         assertEquals(client.getBalance(), clientEnt.getBalance());
         assertEquals(client.getClientType().getType(), clientEnt.getClientTypeEnt().getType());
         assertEquals(client.getClientType().getFactor(), clientEnt.getClientTypeEnt().getFactor());
@@ -120,7 +120,7 @@ public class ClientConverterIT {
         assertEquals(clientEnt.getUsername(), client.getUsername());
         assertEquals(clientEnt.getPassword(), client.getPassword());
         assertEquals(clientEnt.getPhoneNumber(), client.getPhoneNumber());
-        assertEquals(clientEnt.isArchive(), client.isArchive());
+        assertEquals(clientEnt.isArchive(), client.getArchive());
         assertEquals(clientEnt.getBalance(), client.getBalance());
         assertEquals(clientEnt.getClientTypeEnt().getType(), client.getClientType().getType());
         assertEquals(clientEnt.getClientTypeEnt().getFactor(), client.getClientType().getFactor());

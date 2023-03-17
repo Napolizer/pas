@@ -206,7 +206,7 @@ public class HardwareControllerIT {
                 .assertThat()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("archive", equalTo(testHardware.isArchive()))
+                .body("archive", equalTo(testHardware.getArchive()))
                 .body("price", equalTo(testHardware.getPrice()))
                 .body("hardwareType.condition", equalTo(testHardware.getHardwareType().getCondition().toString()))
                 .body("hardwareType.type", equalTo(testHardware.getHardwareType().getType()));
@@ -271,7 +271,7 @@ public class HardwareControllerIT {
                 .assertThat()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("archive", equalTo(testHardware.isArchive()))
+                .body("archive", equalTo(testHardware.getArchive()))
                 .body("price", equalTo(testHardware.getPrice()))
                 .body("hardwareType.condition", equalTo(testHardware.getHardwareType().getCondition().toString()))
                 .body("hardwareType.type", equalTo(testHardware.getHardwareType().getType()));
@@ -295,7 +295,7 @@ public class HardwareControllerIT {
                 .assertThat()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("archive", equalTo(testHardware.isArchive()))
+                .body("archive", equalTo(testHardware.getArchive()))
                 .body("price", equalTo(testHardware.getPrice()))
                 .body("hardwareType.condition", equalTo(testHardware.getHardwareType().getCondition().toString()))
                 .body("hardwareType.type", equalTo(testHardware.getHardwareType().getType()));
@@ -315,7 +315,7 @@ public class HardwareControllerIT {
                 .assertThat()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("archive", equalTo(testHardware.isArchive()))
+                .body("archive", equalTo(testHardware.getArchive()))
                 .body("price", equalTo(testHardware.getPrice()))
                 .body("hardwareType.condition", equalTo(testHardware.getHardwareType().getCondition().toString()))
                 .body("hardwareType.type", equalTo(testHardware.getHardwareType().getType()));
@@ -335,7 +335,7 @@ public class HardwareControllerIT {
                 .assertThat()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("archive", equalTo(testHardware.isArchive()))
+                .body("archive", equalTo(testHardware.getArchive()))
                 .body("price", equalTo(testHardware.getPrice()))
                 .body("hardwareType.condition", equalTo(testHardware.getHardwareType().getCondition().toString()))
                 .body("hardwareType.type", equalTo(testHardware.getHardwareType().getType()));

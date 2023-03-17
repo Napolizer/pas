@@ -131,7 +131,7 @@ public class RepairRepositoryAdapterIT {
     void createRepairPositiveTest() throws RepositoryException {
         Repair createdRepair = repairRepositoryAdapter.createRepair(validRepair);
         assertNotNull(createdRepair.getId());
-        assertEquals(validRepair.isArchive(), createdRepair.isArchive());
+        assertEquals(validRepair.getArchive(), createdRepair.getArchive());
         assertEquals(validRepair.getClient(), createdRepair.getClient());
         assertEquals(validRepair.getHardware(), createdRepair.getHardware());
         assertEquals(validRepair.getDateRange(), createdRepair.getDateRange());
@@ -157,9 +157,9 @@ public class RepairRepositoryAdapterIT {
     @Test
     void deleteRepairPositiveTest() throws RepositoryException {
         Repair createdRepair = repairRepositoryAdapter.createRepair(validRepair);
-        assertFalse(repairRepositoryAdapter.getRepair(createdRepair.getId()).isArchive());
+        assertFalse(repairRepositoryAdapter.getRepair(createdRepair.getId()).getArchive());
         repairRepositoryAdapter.deleteRepair(createdRepair.getId());
-        assertTrue(repairRepositoryAdapter.getRepair(createdRepair.getId()).isArchive());
+        assertTrue(repairRepositoryAdapter.getRepair(createdRepair.getId()).getArchive());
     }
 
     @Test
@@ -193,7 +193,7 @@ public class RepairRepositoryAdapterIT {
         Repair createdRepair = repairRepositoryAdapter.createRepair(validRepair);
         Repair updatedRepair = repairRepositoryAdapter.updateRepair(createdRepair.getId(), validRepair2);
         assertEquals(createdRepair.getId(), updatedRepair.getId());
-        assertEquals(validRepair2.isArchive(), updatedRepair.isArchive());
+        assertEquals(validRepair2.getArchive(), updatedRepair.getArchive());
         assertEquals(validRepair2.getClient(), updatedRepair.getClient());
         assertEquals(validRepair2.getHardware(), updatedRepair.getHardware());
         assertEquals(validRepair2.getDateRange(), updatedRepair.getDateRange());

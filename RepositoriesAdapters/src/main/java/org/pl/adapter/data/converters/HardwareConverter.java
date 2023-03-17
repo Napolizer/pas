@@ -14,7 +14,7 @@ public class HardwareConverter {
         if (hardware == null) return null;
         HardwareEnt hardwareEnt = new HardwareEnt();
         if (hardware.getId() != null) hardwareEnt.setId(hardware.getId());
-        if (hardware.getArchive() != null) hardwareEnt.setArchive(hardware.isArchive());
+        if (hardware.getArchive() != null) hardwareEnt.setArchive(hardware.getArchive());
         if (hardware.getPrice() != null) hardwareEnt.setPrice(hardware.getPrice());
         if (hardware.getHardwareType() != null) hardwareEnt.setHardwareTypeEnt(hardwareTypeConverter.convert(hardware.getHardwareType()));
         return hardwareEnt;
