@@ -15,6 +15,7 @@
         <module>RepositoriesAdapters</module>
         <module>ApplicationPorts</module>
         <module>RestAdapters</module>
+        <module>SoapAdapters</module>
     </modules>
 
     <properties>
