@@ -1,6 +1,7 @@
 package org.pl.services;
 
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -18,6 +19,7 @@ import org.pl.model.ClientAccessType;
 import org.pl.model.exceptions.ClientException;
 import org.pl.model.exceptions.RepositoryException;
 
+import javax.transaction.UserTransaction;
 import java.io.File;
 import java.util.UUID;
 
@@ -27,6 +29,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class ClientServiceIT {
     @Inject
     private ClientService clientService;
+    @Inject
+    private UserTransaction userTransaction;
+    @Inject
+    private EntityManager entityManager;
     private Address validAddress;
     private Client validClient;
 
@@ -60,6 +66,13 @@ class ClientServiceIT {
                 .address(validAddress)
                 .clientAccessType(ClientAccessType.EMPLOYEES)
                 .build();
+        try {
+            userTransaction.begin();
+            entityManager.clear();
+            userTransaction.commit();
+        } catch (Exception ignored) {
+
+        }
     }
 
     @Test
@@ -105,7 +118,6 @@ class ClientServiceIT {
 
     @Test
     void getClientPositiveTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username1");
         Client createdClient = clientService.add(validClient);
         assertEquals(validClient.getFirstName(), clientService.get(createdClient.getId()).getFirstName());
         assertEquals(validClient.getLastName(), clientService.get(createdClient.getId()).getLastName());
@@ -122,8 +134,12 @@ class ClientServiceIT {
     }
 
     @Test
+    void getClientNegativeTest() {
+        assertThrows(RepositoryException.class, () -> clientService.get(validClient.getId()));
+    }
+
+    @Test
     void getClientInfoTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username2");
         Client createdClient = clientService.add(validClient);
         String clientInfo = createdClient.toString();
         assertEquals(clientInfo, clientService.getInfo(createdClient.getId()));
@@ -131,7 +147,6 @@ class ClientServiceIT {
 
     @Test
     void getClientBalanceTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username3");
         Client createdClient = clientService.add(validClient);
         Double clientBalance = validClient.getBalance();
         assertEquals(clientBalance, clientService.getClientBalance(createdClient.getId()));
@@ -139,7 +154,6 @@ class ClientServiceIT {
 
     @Test
     void isClientArchive() throws RepositoryException, ClientException {
-        validClient.setUsername("Username4");
         Client createdClient = clientService.add(validClient);
         Boolean isClientArchive = createdClient.getArchive();
         assertEquals(isClientArchive, clientService.isClientArchive(createdClient.getId()));
@@ -147,7 +161,6 @@ class ClientServiceIT {
 
     @Test
     void archiveClientPositiveTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username5");
         Client createdClient = clientService.add(validClient);
         assertFalse(clientService.get(createdClient.getId()).getArchive());
         clientService.archive(createdClient.getId());
@@ -156,7 +169,6 @@ class ClientServiceIT {
 
     @Test
     void getAllClientsTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username6");
         Client validClient2 = Client.builder()
                 .id(UUID.randomUUID())
                 .username("Username7")
@@ -178,7 +190,6 @@ class ClientServiceIT {
 
     @Test
     void getClientByUsernameTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username8");
         Client createdClient = clientService.add(validClient);
         String clientUsername = validClient.getUsername();
         assertEquals(createdClient, clientService.getClientByUsername(clientUsername));
@@ -186,40 +197,71 @@ class ClientServiceIT {
 
     @Test
     void getPresentAndArchiveSizeTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username9");
+        assertEquals(0, clientService.getPresentSize());
+        assertEquals(0, clientService.getArchiveSize());
         Client createdClient = clientService.add(validClient);
-        assertTrue(clientService.getPresentSize() > 0);
+        assertEquals(1, clientService.getPresentSize());
+        assertEquals(0, clientService.getArchiveSize());
         clientService.archive(createdClient.getId());
-        assertTrue(clientService.getArchiveSize() > 0);
+        assertEquals(0, clientService.getPresentSize());
+        assertEquals(1, clientService.getArchiveSize());
+
     }
 
     @Test
     void getAllClientsFilterTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username10");
+        Client validClient2 = Client.builder()
+                .id(UUID.randomUUID())
+                .username("Username7")
+                .password("Password")
+                .archive(false)
+                .balance(100.0)
+                .firstName("Tester")
+                .lastName("Testowy")
+                .phoneNumber("123456789")
+                .clientType(new Basic())
+                .address(validAddress)
+                .clientAccessType(ClientAccessType.EMPLOYEES)
+                .build();
         assertEquals(0, clientService.getAllClientsFilter("123454").size());
         Client createdClient = clientService.add(validClient);
-        assertTrue(clientService.getAllClientsFilter("").size() > 0);
-        assertTrue(clientService.getAllClientsFilter(createdClient.getId().toString()).size() > 0);
+        Client createdClient2 = clientService.add(validClient2);
+        assertEquals(2, clientService.getAllClientsFilter("").size());
+        assertEquals(1, clientService.getAllClientsFilter(createdClient.getId().toString()).size());
     }
 
     @Test
     void getClientsByUsernameTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username11");
+        Client validClient2 = Client.builder()
+                .id(UUID.randomUUID())
+                .username("Username7")
+                .password("Password")
+                .archive(false)
+                .balance(100.0)
+                .firstName("Tester")
+                .lastName("Testowy")
+                .phoneNumber("123456789")
+                .clientType(new Basic())
+                .address(validAddress)
+                .clientAccessType(ClientAccessType.EMPLOYEES)
+                .build();
         clientService.add(validClient);
-        assertTrue(clientService.getClientsByUsername("").size() > 0);
-        assertTrue(clientService.getClientsByUsername("User").size() > 0);
+        clientService.add(validClient2);
+        assertEquals(2, clientService.getClientsByUsername("").size());
+        assertEquals(2, clientService.getClientsByUsername("User").size());
+        assertEquals(1, clientService.getClientsByUsername("Username7").size());
         assertEquals(0, clientService.getClientsByUsername("Usernameeee").size());
     }
 
     @Test
     void updateClientPositiveTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username12");
         Client createdClient = clientService.add(validClient);
         createdClient.setUsername("newUsername");
         createdClient.setPhoneNumber("54321");
         clientService.updateClient(createdClient.getId(), createdClient);
         assertEquals("newUsername", clientService.get(createdClient.getId()).getUsername());
         assertEquals("54321", clientService.get(createdClient.getId()).getPhoneNumber());
+        assertEquals(validClient.getPassword(), clientService.get(createdClient.getId()).getPassword());
     }
 
     @Test
@@ -229,7 +271,6 @@ class ClientServiceIT {
 
     @Test
     void updatePasswordPositiveTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username13");
         Client createdClient = clientService.add(validClient);
         assertEquals("Password", clientService.get(createdClient.getId()).getPassword());
         clientService.updatePassword(createdClient.getId(), "newPassword");
@@ -243,7 +284,6 @@ class ClientServiceIT {
 
     @Test
     void dearchivePositiveTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username14");
         validClient.setArchive(true);
         Client createdClient = clientService.add(validClient);
         assertTrue(clientService.get(createdClient.getId()).getArchive());
@@ -253,7 +293,6 @@ class ClientServiceIT {
 
     @Test
     void dearchiveNegativeTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username15");
         Client createdClient = clientService.add(validClient);
         assertFalse(clientService.get(createdClient.getId()).getArchive());
         assertThrows(RepositoryException.class, () -> clientService.dearchive(createdClient.getId()));
@@ -261,7 +300,6 @@ class ClientServiceIT {
 
     @Test
     void getClientTypeByIdPositiveTest() throws RepositoryException, ClientException {
-        validClient.setUsername("Username16");
         Client createdClient = clientService.add(validClient);
         assertEquals(createdClient.getClientType(), clientService.getClientTypeById(createdClient.getClientType().getId()));
     }
