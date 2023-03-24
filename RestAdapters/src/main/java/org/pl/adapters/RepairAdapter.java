@@ -17,8 +17,8 @@ import org.pl.model.Client;
 import org.pl.model.DateRange;
 import org.pl.model.Hardware;
 import org.pl.model.RepairRest;
-import org.pl.userinterface.client.ReadClientQueries;
-import org.pl.userinterface.hardware.ReadHardwareQueries;
+import org.pl.userinterface.client.ReadClientUseCases;
+import org.pl.userinterface.hardware.ReadHardwareUseCases;
 
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
@@ -33,11 +33,11 @@ public class RepairAdapter implements JsonbAdapter<RepairRest, JsonValue> {
     @Inject
     private DateRangeConverter dateRangeConverter;
     @Inject
-    private ReadHardwareQueries readHardwareQueries;
+    private ReadHardwareUseCases readHardwareUseCases;
     @Inject
     private HardwareConverter hardwareConverter;
     @Inject
-    private ReadClientQueries readClientQueries;
+    private ReadClientUseCases readClientUseCases;
     @Inject
     private ClientConverter clientConverter;
     @Override
@@ -103,7 +103,7 @@ public class RepairAdapter implements JsonbAdapter<RepairRest, JsonValue> {
 
         if (jsonObject.containsKey("hardwareId")) {
             String hardwareId = jsonObject.getString("hardwareId");
-            Hardware hardware = readHardwareQueries.get(UUID.fromString(hardwareId));
+            Hardware hardware = readHardwareUseCases.get(UUID.fromString(hardwareId));
             if (hardware == null) {
                 throw new Exception();
             }
@@ -111,7 +111,7 @@ public class RepairAdapter implements JsonbAdapter<RepairRest, JsonValue> {
         }
         if (jsonObject.containsKey("clientId")) {
             String clientId = jsonObject.getString("clientId");
-            Client client = readClientQueries.get(UUID.fromString(clientId));
+            Client client = readClientUseCases.get(UUID.fromString(clientId));
             if (client == null) {
                 throw new Exception();
             }

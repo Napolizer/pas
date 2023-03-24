@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 import org.pl.converters.HardwareTypeConverter;
 import org.pl.model.HardwareTypeRest;
 import org.pl.model.exceptions.RepositoryException;
-import org.pl.userinterface.hardware.ReadHardwareQueries;
+import org.pl.userinterface.hardware.ReadHardwareUseCases;
 
 
 import java.util.UUID;
@@ -21,7 +21,7 @@ import java.util.UUID;
 @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
 public class HardwareTypeController {
     @Inject
-    private ReadHardwareQueries readHardwareQueries;
+    private ReadHardwareUseCases readHardwareUseCases;
     @Inject
     private HardwareTypeConverter hardwareTypeConverter;
 
@@ -32,7 +32,7 @@ public class HardwareTypeController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            HardwareTypeRest hardwareType = hardwareTypeConverter.convert(readHardwareQueries.getHardwareTypeById(uuid));
+            HardwareTypeRest hardwareType = hardwareTypeConverter.convert(readHardwareUseCases.getHardwareTypeById(uuid));
             return Response.ok(hardwareType).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given id is invalid");

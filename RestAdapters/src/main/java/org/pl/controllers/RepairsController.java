@@ -9,7 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.converters.RepairConverter;
 import org.pl.model.RepairRest;
-import org.pl.userinterface.repair.ReadRepairQueries;
+import org.pl.userinterface.repair.ReadRepairUseCases;
 
 import java.util.List;
 
@@ -17,14 +17,14 @@ import java.util.List;
 @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
 public class RepairsController {
     @Inject
-    private ReadRepairQueries readRepairQueries;
+    private ReadRepairUseCases readRepairUseCases;
 
     @Inject
     private RepairConverter repairConverter;
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllRepairs() {
-        List<RepairRest> repairs = readRepairQueries.getAllRepairs()
+        List<RepairRest> repairs = readRepairUseCases.getAllRepairs()
                 .stream()
                 .map(repairConverter::convert)
                 .toList();

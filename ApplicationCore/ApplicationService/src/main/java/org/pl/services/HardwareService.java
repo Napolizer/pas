@@ -8,8 +8,8 @@ import org.pl.model.exceptions.HardwareException;
 import org.pl.model.exceptions.RepositoryException;
 import org.pl.infrastructure.hardware.*;
 import org.pl.model.*;
-import org.pl.userinterface.hardware.ReadHardwareQueries;
-import org.pl.userinterface.hardware.WriteHardwareQueries;
+import org.pl.userinterface.hardware.ReadHardwareUseCases;
+import org.pl.userinterface.hardware.WriteHardwareUseCases;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @ApplicationScoped
-public class HardwareService implements ReadHardwareQueries, WriteHardwareQueries {
+public class HardwareService implements ReadHardwareUseCases, WriteHardwareUseCases {
     @Inject
     private ReadHardwarePort readHardwarePort;
 

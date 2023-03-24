@@ -9,15 +9,15 @@ import org.pl.model.exceptions.HardwareException;
 import org.pl.model.exceptions.RepositoryException;
 import org.pl.infrastructure.repair.*;
 import org.pl.model.Repair;
-import org.pl.userinterface.repair.ReadRepairQueries;
-import org.pl.userinterface.repair.WriteRepairQueries;
+import org.pl.userinterface.repair.ReadRepairUseCases;
+import org.pl.userinterface.repair.WriteRepairUseCases;
 
 import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @ApplicationScoped
-public class RepairService implements ReadRepairQueries, WriteRepairQueries {
+public class RepairService implements ReadRepairUseCases, WriteRepairUseCases {
     @Inject
     private ReadRepairPort readRepairPort;
 

@@ -9,7 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.converters.HardwareConverter;
 import org.pl.model.HardwareRest;
-import org.pl.userinterface.hardware.ReadHardwareQueries;
+import org.pl.userinterface.hardware.ReadHardwareUseCases;
 
 import java.util.List;
 
@@ -17,14 +17,14 @@ import java.util.List;
 @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
 public class HardwaresController {
     @Inject
-    private ReadHardwareQueries readHardwareQueries;
+    private ReadHardwareUseCases readHardwareUseCases;
     @Inject
     private HardwareConverter hardwareConverter;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllHardware() {
-        List<HardwareRest> hardwareList = readHardwareQueries.getAllHardwares()
+        List<HardwareRest> hardwareList = readHardwareUseCases.getAllHardwares()
                 .stream()
                 .map(hardwareConverter::convert)
                 .toList();

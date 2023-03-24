@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 import org.pl.converters.ClientTypeConverter;
 import org.pl.model.ClientTypeRest;
 import org.pl.model.exceptions.RepositoryException;
-import org.pl.userinterface.client.ReadClientQueries;
+import org.pl.userinterface.client.ReadClientUseCases;
 
 import java.util.UUID;
 
@@ -20,7 +20,7 @@ import java.util.UUID;
 @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
 public class ClientTypeController {
     @Inject
-    private ReadClientQueries readClientQueries;
+    private ReadClientUseCases readClientUseCases;
     @Inject
     private ClientTypeConverter clientTypeConverter;
 
@@ -31,7 +31,7 @@ public class ClientTypeController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            ClientTypeRest clientType = clientTypeConverter.convert(readClientQueries.getClientTypeById(uuid));
+            ClientTypeRest clientType = clientTypeConverter.convert(readClientUseCases.getClientTypeById(uuid));
             return Response.ok(clientType).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given id is invalid");

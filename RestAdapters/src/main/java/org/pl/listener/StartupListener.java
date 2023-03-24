@@ -7,7 +7,7 @@ import jakarta.servlet.annotation.WebListener;
 
 import org.pl.converters.ClientConverter;
 import org.pl.model.*;
-import org.pl.userinterface.client.WriteClientQueries;
+import org.pl.userinterface.client.WriteClientUseCases;
 
 import java.util.logging.Logger;
 
@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class StartupListener implements ServletContextListener {
     private static final Logger LOGGER = Logger.getLogger(StartupListener.class.getName());
     @Inject
-    private WriteClientQueries writeClientQueries;
+    private WriteClientUseCases writeClientUseCases;
     @Inject
     private ClientConverter clientConverter;
     @Override
@@ -70,19 +70,19 @@ public class StartupListener implements ServletContextListener {
                 .build();
         try {
             LOGGER.info("Creating admin client");
-            writeClientQueries.add(clientConverter.convert(admin));
+            writeClientUseCases.add(clientConverter.convert(admin));
         } catch (Exception e) {
             LOGGER.warning("Could not create admin account: " + e.getMessage());
         }
         try {
             LOGGER.info("Creating employee account");
-            writeClientQueries.add(clientConverter.convert(employee));
+            writeClientUseCases.add(clientConverter.convert(employee));
         } catch (Exception e) {
             LOGGER.warning("Could not create employee account: " + e.getMessage());
         }
         try {
             LOGGER.info("Creating user account");
-            writeClientQueries.add(clientConverter.convert(user));
+            writeClientUseCases.add(clientConverter.convert(user));
         } catch (Exception e) {
             LOGGER.warning("Could not create user account: " + e.getMessage());
         }
