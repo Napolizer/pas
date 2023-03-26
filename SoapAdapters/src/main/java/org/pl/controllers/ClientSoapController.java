@@ -3,6 +3,7 @@ package org.pl.controllers;
 import jakarta.inject.Inject;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
+import org.pl.model.BasicSoap;
 import org.pl.userinterface.client.ReadClientUseCases;
 import org.pl.userinterface.client.WriteClientUseCases;
 
@@ -14,7 +15,7 @@ public class ClientSoapController {
     private ReadClientUseCases readClientUseCases;
 
     @WebMethod
-    public String hello() {
-        return "HelloWorld!";
+    public BasicSoap hello() {
+        return new BasicSoap();
     }
 }
