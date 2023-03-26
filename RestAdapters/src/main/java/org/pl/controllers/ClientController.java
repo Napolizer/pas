@@ -27,9 +27,9 @@ import org.pl.model.exceptions.authentication.UserIsArchiveException;
 import org.pl.model.exceptions.authentication.UserNotFoundException;
 import org.pl.providers.ETagProvider;
 import org.pl.providers.TokenProvider;
-import org.pl.userinterface.client.ReadClientQueries;
-import org.pl.userinterface.client.WriteClientQueries;
-import org.pl.userinterface.repair.ReadRepairQueries;
+import org.pl.userinterface.client.ReadClientUseCases;
+import org.pl.userinterface.client.WriteClientUseCases;
+import org.pl.userinterface.repair.ReadRepairUseCases;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,11 +37,11 @@ import java.util.stream.Collectors;
 @Path("/client")
 public class ClientController {
     @Inject
-    private ReadClientQueries readClientQueries;
+    private ReadClientUseCases readClientUseCases;
     @Inject
-    private WriteClientQueries writeClientQueries;
+    private WriteClientUseCases writeClientUseCases;
     @Inject
-    private ReadRepairQueries readRepairQueries;
+    private ReadRepairUseCases readRepairUseCases;
     @Inject
     private ClientConverter clientConverter;
     @Inject
@@ -63,7 +63,7 @@ public class ClientController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            ClientRest client = clientConverter.convert(readClientQueries.get(uuid));
+            ClientRest client = clientConverter.convert(readClientUseCases.get(uuid));
             if (client == null) {
                 throw new RepositoryRestException("");
             }
@@ -88,13 +88,13 @@ public class ClientController {
         var json = Json.createObjectBuilder();
         try {
             if (Objects.equals(strict, "false")) {
-                List<ClientRest> clients = readClientQueries.getClientsByUsername(username)
+                List<ClientRest> clients = readClientUseCases.getClientsByUsername(username)
                         .stream()
                         .map(clientConverter::convert)
                         .toList();
                 return Response.ok(clients).build();
             } else {
-                ClientRest client = clientConverter.convert(readClientQueries.getClientByUsername(username));
+                ClientRest client = clientConverter.convert(readClientUseCases.getClientByUsername(username));
                 if (client == null) {
                     throw new RepositoryException("");
                 }
@@ -113,7 +113,7 @@ public class ClientController {
     public Response addClient(@Valid @NotNull ClientRest client) {
         var json = Json.createObjectBuilder();
         try {
-            Client createdClient = writeClientQueries.add(clientConverter.convert(client));
+            Client createdClient = writeClientUseCases.add(clientConverter.convert(client));
             return Response.status(201).entity(clientConverter.convert(createdClient)).build();
         } catch (RepositoryException e) {
             json.add("error", "Client already exists");
@@ -137,13 +137,13 @@ public class ClientController {
             }
             UUID uuid = UUID.fromString(id);
 
-            Client existingClient = readClientQueries.get(uuid);
+            Client existingClient = readClientUseCases.get(uuid);
             if (!eTagProvider.generateETag(existingClient).equals(etag)) {
                 json.add("error", "Invalid If-Match signature");
                 return Response.status(412).entity(json.build()).build();
             }
 
-            Client updatedClient = writeClientQueries.updateClient(uuid, clientConverter.convert(client));
+            Client updatedClient = writeClientUseCases.updateClient(uuid, clientConverter.convert(client));
             return Response.ok(clientConverter.convert(updatedClient)).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Invalid data in request");
@@ -162,7 +162,7 @@ public class ClientController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            Client client = writeClientQueries.archive(uuid);
+            Client client = writeClientUseCases.archive(uuid);
             return Response.ok(clientConverter.convert(client)).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Invalid data in request");
@@ -190,7 +190,7 @@ public class ClientController {
             UUID uuid = UUID.fromString(id);
             if (body.containsKey("newPassword")) {
                 String newPassword = body.getString("newPassword");
-                Client client = writeClientQueries.updatePassword(uuid, newPassword);
+                Client client = writeClientUseCases.updatePassword(uuid, newPassword);
                 return Response.ok(clientConverter.convert(client)).build();
             } else {
                 json.add("error", "Invalid data in request");
@@ -213,7 +213,7 @@ public class ClientController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            Client client = writeClientQueries.dearchive(uuid);
+            Client client = writeClientUseCases.dearchive(uuid);
             return Response.ok(clientConverter.convert(client)).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Invalid data in request");
@@ -236,7 +236,7 @@ public class ClientController {
     public Response getClientsPastRepairs(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
-            List<RepairRest> repairs = readRepairQueries.getClientsPastRepairs(UUID.fromString(id))
+            List<RepairRest> repairs = readRepairUseCases.getClientsPastRepairs(UUID.fromString(id))
                     .stream()
                     .map(repairConverter::convert)
                     .collect(Collectors.toList());
@@ -257,7 +257,7 @@ public class ClientController {
     public Response getClientsPresentRepairs(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
-            List<RepairRest> repairs = readRepairQueries.getClientsPresentRepairs(UUID.fromString(id))
+            List<RepairRest> repairs = readRepairUseCases.getClientsPresentRepairs(UUID.fromString(id))
                     .stream()
                     .map(repairConverter::convert)
                     .collect(Collectors.toList());
@@ -276,7 +276,7 @@ public class ClientController {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
     public Response getAllClientsFilter(@PathParam("substr")String substr) {
-        List<ClientRest> clients = readClientQueries.getAllClientsFilter(substr)
+        List<ClientRest> clients = readClientUseCases.getAllClientsFilter(substr)
                 .stream()
                 .map(clientConverter::convert)
                 .toList();

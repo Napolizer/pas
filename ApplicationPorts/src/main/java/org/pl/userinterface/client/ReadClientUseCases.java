@@ -7,7 +7,7 @@ import org.pl.model.exceptions.RepositoryException;
 import java.util.List;
 import java.util.UUID;
 
-public interface ReadClientQueries {
+public interface ReadClientUseCases {
     Client get(UUID id) throws RepositoryException;
     String getInfo(UUID id) throws RepositoryException;
     double getClientBalance(UUID id) throws RepositoryException;

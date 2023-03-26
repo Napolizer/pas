@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.converters.ClientConverter;
 import org.pl.model.ClientRest;
-import org.pl.userinterface.client.ReadClientQueries;
+import org.pl.userinterface.client.ReadClientUseCases;
 
 import java.util.List;
 
@@ -18,14 +18,14 @@ import java.util.List;
 @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
 public class ClientsController {
     @Inject
-    private ReadClientQueries readClientQueries;
+    private ReadClientUseCases readClientUseCases;
     @Inject
     private ClientConverter clientConverter;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllClients() {
-        List<ClientRest> clients = readClientQueries.getAllClients()
+        List<ClientRest> clients = readClientUseCases.getAllClients()
                 .stream()
                 .map(clientConverter::convert)
                 .toList();

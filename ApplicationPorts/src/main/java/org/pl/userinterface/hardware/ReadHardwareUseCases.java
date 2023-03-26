@@ -7,7 +7,7 @@ import org.pl.model.exceptions.RepositoryException;
 import java.util.List;
 import java.util.UUID;
 
-public interface ReadHardwareQueries {
+public interface ReadHardwareUseCases {
     boolean isHardwareArchive(UUID id) throws RepositoryException;
     Hardware get(UUID id) throws RepositoryException;
     String getInfo(UUID id) throws RepositoryException;

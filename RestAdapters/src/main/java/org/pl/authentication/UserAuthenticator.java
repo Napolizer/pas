@@ -9,18 +9,18 @@ import org.pl.model.exceptions.RepositoryException;
 import org.pl.model.exceptions.authentication.InvalidCredentialsException;
 import org.pl.model.exceptions.authentication.UserIsArchiveException;
 import org.pl.model.exceptions.authentication.UserNotFoundException;
-import org.pl.userinterface.client.ReadClientQueries;
+import org.pl.userinterface.client.ReadClientUseCases;
 
 @ApplicationScoped
 public class UserAuthenticator {
     @Inject
-    private ReadClientQueries readClientQueries;
+    private ReadClientUseCases readClientUseCases;
     @Inject
     private ClientConverter clientConverter;
 
     public ClientRest authenticate(UserRestCredentials userCredentials) throws InvalidCredentialsException, UserIsArchiveException, UserNotFoundException {
         try {
-            ClientRest client = clientConverter.convert(readClientQueries.getClientByUsername(userCredentials.getUsername()));
+            ClientRest client = clientConverter.convert(readClientUseCases.getClientByUsername(userCredentials.getUsername()));
             if (client.getArchive()) {
                 throw new UserIsArchiveException();
             }

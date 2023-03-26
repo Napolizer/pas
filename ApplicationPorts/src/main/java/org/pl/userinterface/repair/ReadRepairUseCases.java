@@ -7,7 +7,7 @@ import org.pl.model.exceptions.RepositoryException;
 import java.util.List;
 import java.util.UUID;
 
-public interface ReadRepairQueries {
+public interface ReadRepairUseCases {
     Repair get(UUID id) throws RepositoryException;
     String getInfo(UUID id) throws RepositoryException;
     List<Repair> getAllClientRepairs(UUID clientId) throws RepositoryException;

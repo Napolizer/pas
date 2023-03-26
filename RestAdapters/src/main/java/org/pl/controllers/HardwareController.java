@@ -16,8 +16,8 @@ import org.pl.model.HardwareRest;
 import org.pl.model.exceptions.HardwareException;
 import org.pl.model.exceptions.RepositoryException;
 import org.pl.providers.ETagProvider;
-import org.pl.userinterface.hardware.ReadHardwareQueries;
-import org.pl.userinterface.hardware.WriteHardwareQueries;
+import org.pl.userinterface.hardware.ReadHardwareUseCases;
+import org.pl.userinterface.hardware.WriteHardwareUseCases;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,9 +25,9 @@ import java.util.UUID;
 @Path("/hardware")
 public class HardwareController {
     @Inject
-    private ReadHardwareQueries readHardwareQueries;
+    private ReadHardwareUseCases readHardwareUseCases;
     @Inject
-    private WriteHardwareQueries writeHardwareQueries;
+    private WriteHardwareUseCases writeHardwareUseCases;
     @Inject
     private HardwareConverter hardwareConverter;
     @Inject
@@ -43,7 +43,7 @@ public class HardwareController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            HardwareRest hardware = hardwareConverter.convert(readHardwareQueries.get(uuid));
+            HardwareRest hardware = hardwareConverter.convert(readHardwareUseCases.get(uuid));
             if (hardware == null) {
                 json.add("error", "Hardware with given id not found");
                 return Response.status(404).entity(json.build()).build();
@@ -65,7 +65,7 @@ public class HardwareController {
     public Response addHardware(@Valid @NotNull HardwareRest hardware) {
         var json = Json.createObjectBuilder();
         try {
-            HardwareRest createdHardware = hardwareConverter.convert(writeHardwareQueries.add(hardwareConverter.convert(hardware)));
+            HardwareRest createdHardware = hardwareConverter.convert(writeHardwareUseCases.add(hardwareConverter.convert(hardware)));
             return Response.status(201).entity(createdHardware).build();
         } catch (RepositoryException | HardwareException | JsonbException e) {
             json.add("error", e.getMessage());
@@ -86,13 +86,13 @@ public class HardwareController {
             }
             UUID uuid = UUID.fromString(id);
 
-            HardwareRest existingHardware = hardwareConverter.convert(readHardwareQueries.get(uuid));
+            HardwareRest existingHardware = hardwareConverter.convert(readHardwareUseCases.get(uuid));
             if (!eTagProvider.generateETag(existingHardware).equals(etag)) {
                 json.add("error", "Invalid If-Match signature");
                 return Response.status(412).entity(json.build()).build();
             }
 
-            HardwareRest updatedHardware = hardwareConverter.convert(writeHardwareQueries.updateHardware(uuid, hardwareConverter.convert(hardware)));
+            HardwareRest updatedHardware = hardwareConverter.convert(writeHardwareUseCases.updateHardware(uuid, hardwareConverter.convert(hardware)));
             return Response.ok(updatedHardware).build();
         } catch (IllegalArgumentException | RepositoryException e) {
             json.add("error", e.getMessage());
@@ -108,8 +108,8 @@ public class HardwareController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            if (!readHardwareQueries.isHardwareArchive(uuid)) {
-                writeHardwareQueries.archive(uuid);
+            if (!readHardwareUseCases.isHardwareArchive(uuid)) {
+                writeHardwareUseCases.archive(uuid);
                 json.add("message", "Hardware deleted successfully");
                 return Response.ok(json.build()).build();
             } else
@@ -126,7 +126,7 @@ public class HardwareController {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getAllPresentHardware() {
-        List<HardwareRest> hardware = readHardwareQueries.getAllPresentHardware()
+        List<HardwareRest> hardware = readHardwareUseCases.getAllPresentHardware()
                 .stream()
                 .map(hardwareConverter::convert)
                 .toList();
@@ -138,7 +138,7 @@ public class HardwareController {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getAllPresentHardwareFilter(@PathParam("substr")String substr) {
-        List<HardwareRest> hardware = readHardwareQueries.getAllPresentHardwareFilter(substr)
+        List<HardwareRest> hardware = readHardwareUseCases.getAllPresentHardwareFilter(substr)
                 .stream()
                 .map(hardwareConverter::convert)
                 .toList();

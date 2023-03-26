@@ -6,7 +6,7 @@ import org.pl.model.exceptions.RepositoryException;
 
 import java.util.UUID;
 
-public interface WriteClientQueries {
+public interface WriteClientUseCases {
     Client add(Client client) throws RepositoryException, ClientException;
     Client archive(UUID id) throws RepositoryException;
     Client updateClient(UUID id, Client client) throws RepositoryException;

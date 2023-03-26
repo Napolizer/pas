@@ -7,7 +7,7 @@ import org.pl.model.exceptions.RepositoryException;
 
 import java.util.UUID;
 
-public interface WriteRepairQueries {
+public interface WriteRepairUseCases {
     Repair add(Repair repair) throws RepositoryException;
     Repair archivize(UUID id) throws RepositoryException;
     Repair repair(UUID id) throws HardwareException, RepositoryException, ClientException;

@@ -9,8 +9,8 @@ import org.pl.model.exceptions.RepositoryException;
 import org.pl.infrastructure.client.*;
 import org.pl.model.Client;
 import org.pl.model.ClientType;
-import org.pl.userinterface.client.ReadClientQueries;
-import org.pl.userinterface.client.WriteClientQueries;
+import org.pl.userinterface.client.ReadClientUseCases;
+import org.pl.userinterface.client.WriteClientUseCases;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApplicationScoped
-public class ClientService implements WriteClientQueries, ReadClientQueries {
+public class ClientService implements WriteClientUseCases, ReadClientUseCases {
     @Inject
     private ReadClientPort readClientPort;
 
