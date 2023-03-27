@@ -37,7 +37,7 @@ public class HardwareService implements ReadHardwareUseCases, WriteHardwareUseCa
     public boolean isHardwareArchive(UUID id) throws RepositoryException {
         Hardware hardware = readHardwarePort.getHardware(id);
         if (hardware == null) {
-            return true;
+            throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
         }
         return hardware.getArchive();
     }

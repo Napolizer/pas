@@ -94,7 +94,7 @@
     </parent>
 
     <artifactId>RestAdapters</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <build>
         <plugins>

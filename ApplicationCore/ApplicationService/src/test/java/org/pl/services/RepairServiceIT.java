@@ -42,8 +42,7 @@ class RepairServiceIT {
         return ShrinkWrap.create(JavaArchive.class)
                 .addPackages(true, "org.pl")
                 .addPackages(true, "org.hamcrest")
-                .addAsResource(new File("src/main/resources/"),"")
-                .addAsResource(new File("target/classes/META-INF/"), "META-INF/")
+                .addAsResource(new File("src/test/resources/META-INF"),"")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 

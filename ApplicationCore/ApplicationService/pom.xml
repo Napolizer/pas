@@ -56,10 +56,6 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit5</groupId>
-            <artifactId>arquillian-junit5-container</artifactId>
-        </dependency>
     </dependencies>
 
     <parent>
