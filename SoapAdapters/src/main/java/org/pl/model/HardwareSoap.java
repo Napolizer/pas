@@ -2,7 +2,9 @@ package org.pl.model;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.pl.adapters.HardwareTypeSoapAdapter;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -23,6 +25,7 @@ public class HardwareSoap implements EntitySoap, Serializable {
     private Integer price;
     @NotNull
     @XmlElement(required = true)
+    @XmlJavaTypeAdapter(HardwareTypeSoapAdapter.class)
     private HardwareTypeSoap hardwareType;
 
     public HardwareSoap() {

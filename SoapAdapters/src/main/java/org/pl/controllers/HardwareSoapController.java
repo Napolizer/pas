@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@WebService(serviceName = "HardwareSoapController", targetNamespace = "hw")
+@WebService(serviceName = "HardwareSoapController")
 public class HardwareSoapController {
     @Inject
     WriteHardwareUseCases writeHardwareUseCases;
