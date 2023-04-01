@@ -1,13 +1,15 @@
 package org.pl.controllers;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
 import org.pl.converters.ClientConverter;
-import org.pl.model.BasicSoap;
+import org.pl.model.ClientSoap;
 import org.pl.userinterface.client.ReadClientUseCases;
 import org.pl.userinterface.client.WriteClientUseCases;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @WebService(serviceName = "ClientSoapController")
 public class ClientSoapController {
@@ -19,8 +21,14 @@ public class ClientSoapController {
     private ClientConverter clientConverter;
 
     @WebMethod
-    public BasicSoap hello() {
+    public List<ClientSoap> allClients() {
+        System.out.println("readClientUseCases");
+        System.out.println(readClientUseCases);
+        System.out.println("clientConverter");
         System.out.println(clientConverter);
-        return new BasicSoap();
+        return readClientUseCases.getAllClients()
+                .stream()
+                .map(clientConverter::convert)
+                .collect(Collectors.toList());
     }
 }
