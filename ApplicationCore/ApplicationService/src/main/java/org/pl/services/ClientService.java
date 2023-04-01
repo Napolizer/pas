@@ -10,7 +10,7 @@ import org.pl.infrastructure.client.*;
 import org.pl.model.Client;
 import org.pl.model.ClientType;
 import org.pl.userinterface.client.ReadClientUseCases;
-import org.pl.userinterface.client.WriteClientUseCases;
+import org.pl.userinterface.client.WriteHardwareUseCase;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApplicationScoped
-public class ClientService implements WriteClientUseCases, ReadClientUseCases {
+public class ClientService implements WriteHardwareUseCase, ReadClientUseCases {
     @Inject
     private ReadClientPort readClientPort;
 

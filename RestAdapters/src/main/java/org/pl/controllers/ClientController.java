@@ -28,7 +28,7 @@ import org.pl.model.exceptions.authentication.UserNotFoundException;
 import org.pl.providers.ETagProvider;
 import org.pl.providers.TokenProvider;
 import org.pl.userinterface.client.ReadClientUseCases;
-import org.pl.userinterface.client.WriteClientUseCases;
+import org.pl.userinterface.client.WriteHardwareUseCase;
 import org.pl.userinterface.repair.ReadRepairUseCases;
 
 import java.util.*;
@@ -39,7 +39,7 @@ public class ClientController {
     @Inject
     private ReadClientUseCases readClientUseCases;
     @Inject
-    private WriteClientUseCases writeClientUseCases;
+    private WriteHardwareUseCase writeClientUseCases;
     @Inject
     private ReadRepairUseCases readRepairUseCases;
     @Inject

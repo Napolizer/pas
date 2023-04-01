@@ -7,7 +7,7 @@ import jakarta.servlet.annotation.WebListener;
 
 import org.pl.converters.ClientConverter;
 import org.pl.model.*;
-import org.pl.userinterface.client.WriteClientUseCases;
+import org.pl.userinterface.client.WriteHardwareUseCase;
 
 import java.util.logging.Logger;
 
@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class StartupListener implements ServletContextListener {
     private static final Logger LOGGER = Logger.getLogger(StartupListener.class.getName());
     @Inject
-    private WriteClientUseCases writeClientUseCases;
+    private WriteHardwareUseCase writeClientUseCases;
     @Inject
     private ClientConverter clientConverter;
     @Override

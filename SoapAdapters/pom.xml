@@ -68,6 +68,7 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -140,7 +141,7 @@
                             <goal>wsgen-test</goal>
                         </goals>
                         <configuration>
-                            <sei>org.pl.controllers.ClientSoapController</sei>
+                            <sei>org.pl.controllers.HardwareSoapController</sei>
                             <genWsdl>true</genWsdl>
                             <resourceDestDir>target/generated-sources/wsdl</resourceDestDir>
                         </configuration>
