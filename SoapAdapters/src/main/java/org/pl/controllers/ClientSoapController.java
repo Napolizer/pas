@@ -7,14 +7,13 @@ import org.pl.model.BasicSoap;
 import org.pl.userinterface.client.ReadClientUseCases;
 import org.pl.userinterface.client.WriteClientUseCases;
 
-@WebService(serviceName = "ClientAPI")
-public class ClientSoapController {
+@WebService(serviceName = "ClientSoapController")
+public class ClientSoapController implements ClientSoap {
     @Inject
     private WriteClientUseCases writeClientUseCases;
     @Inject
     private ReadClientUseCases readClientUseCases;
 
-    @WebMethod
     public BasicSoap hello() {
         return new BasicSoap();
     }
