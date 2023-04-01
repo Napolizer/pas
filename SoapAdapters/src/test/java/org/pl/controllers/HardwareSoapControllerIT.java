@@ -1,9 +1,7 @@
 package org.pl.controllers;
 
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.*;
+import org.hamcrest.Factory;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -13,8 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.microshed.testing.SharedContainerConfig;
-import org.microshed.testing.jupiter.MicroShedTest;
 import org.pl.converters.HardwareConverter;
 import org.pl.model.*;
 import org.pl.model.exceptions.HardwareException;
@@ -23,14 +19,12 @@ import org.pl.userinterface.hardware.ReadHardwareUseCases;
 import org.pl.userinterface.hardware.WriteHardwareUseCases;
 
 import java.io.File;
-import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@MicroShedTest
-@SharedContainerConfig(AppContainerConfig.class)
 @ExtendWith(ArquillianExtension.class)
 public class HardwareSoapControllerIT {
     @Inject
@@ -39,13 +33,18 @@ public class HardwareSoapControllerIT {
     ReadHardwareUseCases readHardwareUseCases;
     @Inject
     HardwareConverter hardwareConverter;
-
     private HardwareSoapController hardwareSoapController;
-
-    private Hardware existingHardware;
+    private HardwareSoap hardware;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
+        hardware = new HardwareSoap(
+                UUID.randomUUID(),
+                false,
+                100,
+                new ComputerSoap(ConditionSoap.FINE)
+        );
+
         hardwareSoapController = new HardwareSoapController();
         hardwareSoapController.writeHardwareUseCases = writeHardwareUseCases;
         hardwareSoapController.readHardwareUseCases = readHardwareUseCases;
@@ -65,32 +64,78 @@ public class HardwareSoapControllerIT {
 
     @Test
     @Order(1)
-    public void properlyGetsAllHardwareTest() {
-        // Call the method being tested
-        List<HardwareSoap> result = hardwareSoapController.getAllHardware();
-
-        // Assert that the correct list of hardware is returned
-        assertThat(result.size(), is(equalTo(0)));
-//        assertEquals(existingHardwareId, result.get(0).getId());
-//        assertEquals("Existing hardware", result.get(0).getName());
-//        assertEquals("A description", result.get(0).getDescription());
+    public void createHardwarePositiveTest() throws HardwareException, RepositoryException {
+        HardwareSoap createdHardware = hardwareSoapController.createHardware(hardware);
+        assertThat(hardwareSoapController.getHardwareById(createdHardware.getId()), is(notNullValue()));
     }
 
     @Test
     @Order(2)
-    public void properlyCreatesHardwareTest() throws HardwareException, RepositoryException {
-        HardwareSoap hardware = new HardwareSoap(
+    public void createHardwareNegativeTestPriceIsNegative() {
+        hardware.setPrice(-100);
+        assertThrows(HardwareException.class, () -> hardwareSoapController.createHardware(hardware));
+    }
+
+    @Test
+    @Order(3)
+    void getHardwareByIdPositiveTest() throws RepositoryException, HardwareException {
+        HardwareSoap createdHardware = hardwareSoapController.createHardware(hardware);
+        assertThat(hardwareSoapController.getHardwareById(createdHardware.getId()), is(equalTo(createdHardware)));
+    }
+
+    @Test
+    @Order(4)
+    void deleteHardwarePositiveTest() throws HardwareException, RepositoryException {
+        HardwareSoap createdHardware = hardwareSoapController.createHardware(hardware);
+        assertThat(hardwareSoapController.getHardwareById(createdHardware.getId()), is(notNullValue()));
+        hardwareSoapController.deleteHardware(createdHardware.getId());
+        assertThat(hardwareSoapController.getHardwareById(createdHardware.getId()), is(nullValue()));
+    }
+
+    @Test
+    @Order(5)
+    void deleteHardwareNegativeTest() {
+        assertThrows(RepositoryException.class, () -> hardwareSoapController.deleteHardware(hardware.getId()));
+    }
+
+    @Test
+    @Order(6)
+    void updateHardwarePricePositiveTest() throws HardwareException, RepositoryException {
+        HardwareSoap createdHardware = hardwareSoapController.createHardware(hardware);
+        assertThat(hardwareSoapController.getHardwareById(createdHardware.getId()).getPrice(), is(equalTo(100)));
+        createdHardware.setPrice(200);
+        hardwareSoapController.updateHardware(createdHardware);
+        assertThat(hardwareSoapController.getHardwareById(createdHardware.getId()).getPrice(), is(equalTo(200)));
+    }
+
+    @Test
+    @Order(7)
+    void updateHardwareTypePositiveTest() throws HardwareException, RepositoryException {
+        ComputerSoap computerSoap = new ComputerSoap(ConditionSoap.FINE);
+        HardwareSoap createdHardware = hardwareSoapController.createHardware(hardware);
+        assertThat(hardwareSoapController.getHardwareById(createdHardware.getId()).getHardwareType().getType(), is(equalTo(computerSoap.getType())));
+        MonitorSoap monitorSoap = new MonitorSoap(ConditionSoap.FINE);
+        createdHardware.setHardwareType(monitorSoap);
+        hardwareSoapController.updateHardware(createdHardware);
+        assertThat(hardwareSoapController.getHardwareById(createdHardware.getId()).getHardwareType().getType(), is(equalTo(monitorSoap.getType())));
+    }
+
+    @Test
+    @Order(8)
+    void getAllHardwareTest() throws HardwareException, RepositoryException {
+        HardwareSoap createdHardware1 = hardwareSoapController.createHardware(hardware);
+        assertThat(hardwareSoapController.getAllHardware(), is(notNullValue()));
+        assertThat(hardwareSoapController.getAllHardware().contains(createdHardware1), is(true));
+
+        HardwareSoap newHardware = new HardwareSoap(
                 UUID.randomUUID(),
                 false,
                 100,
                 new ComputerSoap(ConditionSoap.FINE)
         );
 
-        List<HardwareSoap> result = hardwareSoapController.getAllHardware();
-        assertThat(result.size(), is(equalTo(0)));
-
-        hardwareSoapController.createHardware(hardware);
-        result = hardwareSoapController.getAllHardware();
-        assertThat(result.size(), is(equalTo(1)));
+        HardwareSoap createdHardware2 = hardwareSoapController.createHardware(newHardware);
+        assertThat(hardwareSoapController.getAllHardware().contains(createdHardware1) &&
+                hardwareSoapController.getAllHardware().contains(createdHardware2), is(true));
     }
 }
