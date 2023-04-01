@@ -1,5 +1,6 @@
 package org.pl.controllers;
 
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
@@ -17,11 +18,11 @@ import java.util.stream.Collectors;
 @WebService(serviceName = "HardwareSoapController")
 public class HardwareSoapController {
     @Inject
-    private WriteHardwareUseCases writeHardwareUseCases;
+    WriteHardwareUseCases writeHardwareUseCases;
     @Inject
-    private ReadHardwareUseCases readHardwareUseCases;
+    ReadHardwareUseCases readHardwareUseCases;
     @Inject
-    private HardwareConverter hardwareConverter;
+    HardwareConverter hardwareConverter;
 
     @WebMethod
     public List<HardwareSoap> getAllHardware() {
