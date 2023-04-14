@@ -11,11 +11,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>ApplicationCore</module>
-        <module>RepositoriesAdapters</module>
-        <module>ApplicationPorts</module>
-        <module>RestAdapters</module>
-        <module>SoapAdapters</module>
+        <module>RepairModule</module>
     </modules>
 
     <properties>

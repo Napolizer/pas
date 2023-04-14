@@ -3,6 +3,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>SoapAdapters</artifactId>
+    <packaging>war</packaging>
+
     <dependencies>
         <dependency>
             <groupId>org.example</groupId>
@@ -11,11 +15,19 @@
         </dependency>
         <dependency>
             <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-api</artifactId>
+            <artifactId>jakarta.jakartaee-web-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>jakarta.jws</groupId>
+            <artifactId>jakarta.jws-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.soap</groupId>
+            <artifactId>jakarta.xml.soap-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -56,6 +68,7 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -71,7 +84,7 @@
         </dependency>
         <dependency>
             <groupId>org.microshed</groupId>
-            <artifactId>microshed-testing-payara-micro</artifactId>
+            <artifactId>microshed-testing-payara-server</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
@@ -85,16 +98,18 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
     </dependencies>
 
     <parent>
         <groupId>org.example</groupId>
-        <artifactId>MultiModuleProject</artifactId>
+        <artifactId>RepairModule</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
-    <artifactId>RestAdapters</artifactId>
-    <packaging>war</packaging>
 
     <build>
         <plugins>
@@ -113,6 +128,32 @@
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>4.0.1</version>
+                <executions>
+                    <execution>
+                        <id>schemagen</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>wsgen-test</goal>
+                        </goals>
+                        <configuration>
+                            <sei>org.pl.controllers.HardwareSoapController</sei>
+                            <genWsdl>true</genWsdl>
+                            <resourceDestDir>target/generated-sources/wsdl</resourceDestDir>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>jakarta.xml.ws</groupId>
+                        <artifactId>jakarta.xml.ws-api</artifactId>
+                        <version>4.0.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
