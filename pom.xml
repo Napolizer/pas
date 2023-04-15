@@ -12,6 +12,7 @@
 
     <modules>
         <module>RepairModule</module>
+        <module>UserModule</module>
     </modules>
 
     <properties>
