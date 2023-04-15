@@ -6,18 +6,7 @@
              version="3.1">
   <persistence-unit name="H2_REPOSITORIES_ADAPTERS_TEST" transaction-type="JTA">
     <class>org.pl.adapter.data.model.AddressEnt</class>
-    <class>org.pl.adapter.data.model.ClientTypeEnt</class>
-    <class>org.pl.adapter.data.model.BasicEnt</class>
-    <class>org.pl.adapter.data.model.PremiumEnt</class>
-    <class>org.pl.adapter.data.model.VipEnt</class>
-    <class>org.pl.adapter.data.model.ClientEnt</class>
-    <class>org.pl.adapter.data.model.RepairEnt</class>
-    <class>org.pl.adapter.data.model.HardwareEnt</class>
-    <class>org.pl.adapter.data.model.HardwareTypeEnt</class>
-    <class>org.pl.adapter.data.model.ComputerEnt</class>
-    <class>org.pl.adapter.data.model.ConsoleEnt</class>
-    <class>org.pl.adapter.data.model.MonitorEnt</class>
-    <class>org.pl.adapter.data.model.PhoneEnt</class>
+    <class>org.pl.adapter.data.model.UserEnt</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <shared-cache-mode>NONE</shared-cache-mode>
     <validation-mode>AUTO</validation-mode>
