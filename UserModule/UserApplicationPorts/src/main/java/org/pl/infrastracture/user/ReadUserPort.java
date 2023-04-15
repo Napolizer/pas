@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ReadUserPort {
-    User getUser(UUID uuid);
-    User getUserByUsername(String username);
+    List<User> getAllUsersFilter(String substr);
     List<User> getAllUsers();
+    User getUserByUsername(String username);
+    List<User> getUserList(boolean condition);
+    User getUser(UUID uuid);
+    List<User> getUsersByUsername(String username);
 }
