@@ -1,5 +1,6 @@
 package org.pl.adapter.data.aggregates;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.pl.adapter.data.converters.UserConverter;
 import org.pl.adapter.data.model.UserEnt;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@ApplicationScoped
 public class UserRepositoryAdapter implements ReadUserPort, WriteUserPort {
     @Inject
     UserEntRepository userEntRepository;
