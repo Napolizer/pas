@@ -1,11 +1,10 @@
-package org.pl.model;
+package org.pl.adapter.data.model;
 
 import jakarta.json.bind.annotation.JsonbTransient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.pl.adapter.data.model.UserAccessTypeEnt;
 
 import java.util.UUID;
 
