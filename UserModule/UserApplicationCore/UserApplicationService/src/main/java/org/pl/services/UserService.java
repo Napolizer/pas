@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.pl.infrastracture.user.ReadUserPort;
 import org.pl.infrastracture.user.WriteUserPort;
 import org.pl.model.User;
+import org.pl.model.exceptions.RepositoryException;
 import org.pl.model.exceptions.UserException;
 import org.pl.userinterface.user.ReadUserUseCases;
 import org.pl.userinterface.user.WriteUserUseCases;
@@ -25,12 +26,7 @@ public class UserService implements WriteUserUseCases, ReadUserUseCases {
     private WriteUserPort writeUserPort;
 
     @Override
-    public User getUser(UUID uuid) {
-        return readUserPort.getUser(uuid);
-    }
-
-    @Override
-    public User getUserByUsername(String username) {
+    public User getUserByUsername(String username) throws RepositoryException {
         return readUserPort.getUserByUsername(username);
     }
 
@@ -40,7 +36,42 @@ public class UserService implements WriteUserUseCases, ReadUserUseCases {
     }
 
     @Override
-    public User add(User user) throws UserException {
+    public int getPresentSize() {
+        return readUserPort.getUserList(false).size();
+    }
+
+    @Override
+    public int getArchiveSize() {
+        return readUserPort.getUserList(true).size();
+    }
+
+    @Override
+    public List<User> getAllUsersFilter(String substr) {
+        return readUserPort.getAllUsersFilter(substr);
+    }
+
+    @Override
+    public List<User> getUsersByUsername(String username) {
+        return readUserPort.getUsersByUsername(username);
+    }
+
+    @Override
+    public User get(UUID id) throws RepositoryException {
+        return readUserPort.getUser(id);
+    }
+
+    @Override
+    public String getInfo(UUID id) throws RepositoryException {
+        return readUserPort.getUser(id).toString();
+    }
+
+    @Override
+    public boolean isUserArchive(UUID uuid) throws RepositoryException {
+        return readUserPort.getUser(uuid).getArchive();
+    }
+
+    @Override
+    public User add(User user) throws UserException, RepositoryException {
         if (Objects.equals(user.getFirstName(), ""))
             throw new UserException(UserException.USER_FIRST_NAME_EXCEPTION);
         if (Objects.equals(user.getLastName(), ""))
@@ -53,22 +84,22 @@ public class UserService implements WriteUserUseCases, ReadUserUseCases {
     }
 
     @Override
-    public User archive(UUID uuid) {
+    public User archive(UUID uuid) throws RepositoryException {
         return writeUserPort.deleteUser(uuid);
     }
 
     @Override
-    public User updateUser(UUID uuid, User user) {
+    public User updateUser(UUID uuid, User user) throws RepositoryException {
         return writeUserPort.updateUser(uuid, user);
     }
 
     @Override
-    public User updatePassword(UUID uuid, String newPassword) {
+    public User updatePassword(UUID uuid, String newPassword) throws RepositoryException {
         return writeUserPort.changePassword(uuid, newPassword);
     }
 
     @Override
-    public User dearchive(UUID uuid) {
+    public User dearchive(UUID uuid) throws RepositoryException {
         return writeUserPort.restoreUser(uuid);
     }
 }
