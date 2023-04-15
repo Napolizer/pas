@@ -54,7 +54,6 @@ public class ClientConverterIT {
                 .firstName("a")
                 .lastName("b")
                 .username("s")
-                .password("s")
                 .archive(false)
                 .balance(200.5)
                 .phoneNumber("33")
@@ -72,7 +71,6 @@ public class ClientConverterIT {
         assertEquals(client.getFirstName(), clientRest.getFirstName());
         assertEquals(client.getLastName(), clientRest.getLastName());
         assertEquals(client.getUsername(), clientRest.getUsername());
-        assertEquals(client.getPassword(), clientRest.getPassword());
         assertEquals(client.getPhoneNumber(), clientRest.getPhoneNumber());
         assertEquals(client.getArchive(), clientRest.getArchive());
         assertEquals(client.getBalance(), clientRest.getBalance());
@@ -99,7 +97,6 @@ public class ClientConverterIT {
                 .firstName("a")
                 .lastName("b")
                 .username("s")
-                .password("s")
                 .archive(false)
                 .balance(200.5)
                 .phoneNumber("33")
@@ -117,7 +114,6 @@ public class ClientConverterIT {
         assertEquals(clientEnt.getFirstName(), client.getFirstName());
         assertEquals(clientEnt.getLastName(), client.getLastName());
         assertEquals(clientEnt.getUsername(), client.getUsername());
-        assertEquals(clientEnt.getPassword(), client.getPassword());
         assertEquals(clientEnt.getPhoneNumber(), client.getPhoneNumber());
         assertEquals(clientEnt.getArchive(), client.getArchive());
         assertEquals(clientEnt.getBalance(), client.getBalance());

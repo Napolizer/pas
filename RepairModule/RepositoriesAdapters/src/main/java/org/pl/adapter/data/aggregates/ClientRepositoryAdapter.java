@@ -39,15 +39,6 @@ public class ClientRepositoryAdapter implements ReadClientPort, WriteClientPort 
     }
 
     @Override
-    public Client changePassword(UUID uuid, String newPassword) throws RepositoryException {
-        try {
-            return convert(clientEntRepository.changePassword(uuid, newPassword));
-        } catch (RepositoryEntException e) {
-            throw new RepositoryException(e.getMessage());
-        }
-    }
-
-    @Override
     public Client deleteClient(UUID uuid) throws RepositoryException {
         try {
             return convert(clientEntRepository.deleteClient(uuid));

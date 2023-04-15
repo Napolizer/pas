@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class RepairTest {
     ValidatorFactory validatorFactory;
@@ -38,7 +37,6 @@ public class RepairTest {
         validClient = Client.builder()
                 .id(UUID.randomUUID())
                 .username("TestUser")
-                .password("TestPassword")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Władek")

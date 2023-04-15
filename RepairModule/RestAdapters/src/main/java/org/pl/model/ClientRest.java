@@ -1,6 +1,5 @@
 package org.pl.model;
 
-import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -25,8 +24,6 @@ public class ClientRest implements EntityRest, Serializable {
     private UUID id;
     @NotBlank
     private String username;
-    @NotBlank
-    private String password;
     @NotNull
     private Boolean archive;
     @NotNull
@@ -64,11 +61,6 @@ public class ClientRest implements EntityRest, Serializable {
     @Override
     public UUID getId() {
         return id;
-    }
-
-    @JsonbTransient
-    public String getPassword() {
-        return password;
     }
 
     @Override

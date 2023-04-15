@@ -104,7 +104,6 @@ public class RepairControllerIT {
                 .lastName("Kowalski")
                 .phoneNumber("123456789")
                 .username("januszkowalski")
-                .password("januszek")
                 .build();
 
         testRepair = RepairRest.builder()

@@ -18,19 +18,19 @@ public class UserAuthenticator {
     @Inject
     private ClientConverter clientConverter;
 
-    public ClientRest authenticate(UserRestCredentials userCredentials) throws InvalidCredentialsException, UserIsArchiveException, UserNotFoundException {
-        try {
-            ClientRest client = clientConverter.convert(readClientUseCases.getClientByUsername(userCredentials.getUsername()));
-            if (client.getArchive()) {
-                throw new UserIsArchiveException();
-            }
-            if (!client.getPassword().equals(userCredentials.getPassword())) {
-                throw new InvalidCredentialsException();
-            }
-            return client;
-        } catch (RepositoryException e) {
-            // No user was found
-            throw new UserNotFoundException();
-        }
-    }
+//    public ClientRest authenticate(UserRestCredentials userCredentials) throws InvalidCredentialsException, UserIsArchiveException, UserNotFoundException {
+//        try {
+//            ClientRest client = clientConverter.convert(readClientUseCases.getClientByUsername(userCredentials.getUsername()));
+//            if (client.getArchive()) {
+//                throw new UserIsArchiveException();
+//            }
+//            if (!client.getPassword().equals(userCredentials.getPassword())) {
+//                throw new InvalidCredentialsException();
+//            }
+//            return client;
+//        } catch (RepositoryException e) {
+//            // No user was found
+//            throw new UserNotFoundException();
+//        }
+//    }
 }

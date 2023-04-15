@@ -59,7 +59,6 @@ public class RepairEntRepositoryIT {
                 .build();
             userEnt = ClientEnt.builder()
                 .username("janko333")
-                .password("password")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Janek")
@@ -75,7 +74,6 @@ public class RepairEntRepositoryIT {
                 .build();
             employeeEnt = ClientEnt.builder()
                 .username("Username")
-                .password("Password")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Jan")
@@ -91,7 +89,6 @@ public class RepairEntRepositoryIT {
                 .build();
             adminEnt = ClientEnt.builder()
                 .username("admino23")
-                .password("password")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Jakub")

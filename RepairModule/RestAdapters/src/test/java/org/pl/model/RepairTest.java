@@ -37,7 +37,6 @@ public class RepairTest {
         validClient = ClientRest.builder()
                 .id(UUID.randomUUID())
                 .username("TestUser")
-                .password("TestPassword")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Władek")

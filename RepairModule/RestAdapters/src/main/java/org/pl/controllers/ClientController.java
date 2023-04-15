@@ -3,8 +3,6 @@ package org.pl.controllers;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
@@ -180,32 +178,6 @@ public class ClientController {
     }
 
     @PUT
-    @Path("/id/{id}/change_password")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
-    public Response changePassword(@PathParam("id")String id,@NotNull JsonValue jsonValue) {
-        var json = Json.createObjectBuilder();
-        try {
-            JsonObject body = jsonValue.asJsonObject();
-            UUID uuid = UUID.fromString(id);
-            if (body.containsKey("newPassword")) {
-                String newPassword = body.getString("newPassword");
-                Client client = writeClientUseCases.updatePassword(uuid, newPassword);
-                return Response.ok(clientConverter.convert(client)).build();
-            } else {
-                json.add("error", "Invalid data in request");
-                return Response.status(400).entity(json.build()).build();
-            }
-        } catch (IllegalArgumentException e) {
-            json.add("error", "Invalid data in request");
-            return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException e) {
-            json.add("error", "Client does not exist");
-            return Response.status(404).entity(json.build()).build();
-        }
-    }
-
-    @PUT
     @Path("/id/{id}/activate")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
@@ -283,27 +255,27 @@ public class ClientController {
         return Response.ok(clients).build();
     }
 
-    @POST
-    @Path("/login")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(@NotNull @Valid UserRestCredentials userCredentials) {
-        var json = Json.createObjectBuilder();
-        try {
-            ClientRest client = userAuthenticator.authenticate(userCredentials);
-
-            String token = tokenProvider.generateToken(client);
-            json.add("token", token);
-            return Response.ok(json.build()).build();
-        } catch (UserNotFoundException e) {
-            json.add("error", e.getMessage());
-            return Response.status(404).entity(json.build()).build();
-        } catch (InvalidCredentialsException e) {
-            json.add("error", e.getMessage());
-            return Response.status(401).entity(json.build()).build();
-        } catch (UserIsArchiveException e) {
-            json.add("error", e.getMessage());
-            return Response.status(400).entity(json.build()).build();
-        }
-    }
+//    @POST
+//    @Path("/login")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public Response login(@NotNull @Valid UserRestCredentials userCredentials) {
+//        var json = Json.createObjectBuilder();
+//        try {
+//            ClientRest client = userAuthenticator.authenticate(userCredentials);
+//
+//            String token = tokenProvider.generateToken(client);
+//            json.add("token", token);
+//            return Response.ok(json.build()).build();
+//        } catch (UserNotFoundException e) {
+//            json.add("error", e.getMessage());
+//            return Response.status(404).entity(json.build()).build();
+//        } catch (InvalidCredentialsException e) {
+//            json.add("error", e.getMessage());
+//            return Response.status(401).entity(json.build()).build();
+//        } catch (UserIsArchiveException e) {
+//            json.add("error", e.getMessage());
+//            return Response.status(400).entity(json.build()).build();
+//        }
+//    }
 }

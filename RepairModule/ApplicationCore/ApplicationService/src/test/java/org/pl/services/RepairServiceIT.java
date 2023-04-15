@@ -63,7 +63,6 @@ class RepairServiceIT {
         validClient = Client.builder()
                 .id(UUID.randomUUID())
                 .username("Username")
-                .password("Password")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Tester")

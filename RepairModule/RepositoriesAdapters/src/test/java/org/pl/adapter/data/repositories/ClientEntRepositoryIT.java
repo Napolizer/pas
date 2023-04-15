@@ -55,7 +55,6 @@ public class ClientEntRepositoryIT {
         validClient = ClientEnt.builder()
                 .id(UUID.randomUUID())
                 .username("Username")
-                .password("Password")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Tester")
@@ -88,7 +87,6 @@ public class ClientEntRepositoryIT {
         assertThat(savedClient, is(notNullValue()));
         assertThat(savedClient.getId(), is(equalTo(validClient.getId())));
         assertThat(savedClient.getUsername(), is(equalTo(validClient.getUsername())));
-        assertThat(savedClient.getPassword(), is(equalTo(validClient.getPassword())));
         assertThat(savedClient.getArchive(), is(equalTo(validClient.getArchive())));
         assertThat(savedClient.getBalance(), is(equalTo(validClient.getBalance())));
         assertThat(savedClient.getFirstName(), is(equalTo(validClient.getFirstName())));
@@ -124,7 +122,6 @@ public class ClientEntRepositoryIT {
         ClientEnt clientEnt = ClientEnt.builder()
                 .id(UUID.randomUUID())
                 .username("TEST")
-                .password("test")
                 .archive(true)
                 .balance(101.0)
                 .firstName("Test")
@@ -143,7 +140,7 @@ public class ClientEntRepositoryIT {
         ClientEnt updatedClient = clientEntRepository.updateClient(savedClient.getId(), clientEnt);
 
         assertThat(updatedClient.getId(), is(equalTo(savedClient.getId())));
-        assertThat(updatedClient.getPassword(), is(equalTo(savedClient.getPassword())));
+
 
         assertThat(updatedClient.getUsername(), is(equalTo(clientEnt.getUsername())));
         assertThat(updatedClient.getArchive(), is(equalTo(clientEnt.getArchive())));
@@ -164,36 +161,6 @@ public class ClientEntRepositoryIT {
         assertThat(savedClient, is(notNullValue()));
         Assertions.assertThrows(RepositoryEntException.class, () -> clientEntRepository.updateClient(UUID.randomUUID(), validClient));
         Assertions.assertThrows(RepositoryEntException.class, () -> clientEntRepository.updateClient(validClient.getId(), null));
-    }
-
-    @Test
-    public void changePasswordPositiveTest() throws RepositoryEntException {
-        ClientEnt savedClient = clientEntRepository.saveClient(validClient);
-        assertThat(savedClient, is(notNullValue()));
-        ClientEnt updatedClient = clientEntRepository.changePassword(validClient.getId(), "haslo123");
-
-        assertThat(updatedClient.getId(), is(equalTo(savedClient.getId())));
-        assertThat(updatedClient.getPassword(), not(is(equalTo(savedClient.getPassword()))));
-
-        assertThat(updatedClient.getUsername(), is(equalTo(validClient.getUsername())));
-        assertThat(updatedClient.getArchive(), is(equalTo(validClient.getArchive())));
-        assertThat(updatedClient.getBalance(), is(equalTo(validClient.getBalance())));
-        assertThat(updatedClient.getFirstName(), is(equalTo(validClient.getFirstName())));
-        assertThat(updatedClient.getLastName(), is(equalTo(validClient.getLastName())));
-        assertThat(updatedClient.getPhoneNumber(), is(equalTo(validClient.getPhoneNumber())));
-        assertThat(updatedClient.getClientTypeEnt().getType(), is(equalTo(validClient.getClientTypeEnt().getType())));
-        assertThat(updatedClient.getClientTypeEnt().getFactor(), is(equalTo(validClient.getClientTypeEnt().getFactor())));
-        assertThat(updatedClient.getClientTypeEnt().getMaxRepairs(), is(equalTo(validClient.getClientTypeEnt().getMaxRepairs())));
-        assertThat(updatedClient.getAddressEnt(), is(equalTo(validClient.getAddressEnt())));
-        assertThat(updatedClient.getClientAccessTypeEnt(), is(equalTo(validClient.getClientAccessTypeEnt())));
-    }
-
-    @Test
-    public void changePasswordNegativeTest() throws RepositoryEntException {
-        ClientEnt savedClient = clientEntRepository.saveClient(validClient);
-        assertThat(savedClient, is(notNullValue()));
-        Assertions.assertThrows(RepositoryEntException.class, () -> clientEntRepository.changePassword(UUID.randomUUID(), "haslo"));
-        Assertions.assertThrows(RepositoryEntException.class, () -> clientEntRepository.changePassword(validClient.getId(), null));
     }
 
     @Test

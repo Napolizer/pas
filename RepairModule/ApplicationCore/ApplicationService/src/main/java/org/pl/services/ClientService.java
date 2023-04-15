@@ -86,10 +86,6 @@ public class ClientService implements WriteHardwareUseCase, ReadClientUseCases {
         return writeClientPort.updateClient(uuid, client);
     }
 
-    public Client updatePassword(UUID uuid, String newPassword) throws RepositoryException {
-        return writeClientPort.changePassword(uuid, newPassword);
-    }
-
     public Client dearchive(UUID uuid) throws RepositoryException {
         return writeClientPort.restoreClient(uuid);
     }

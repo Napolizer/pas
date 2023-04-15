@@ -7,11 +7,9 @@ import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.pl.adapter.data.model.ClientEnt;
 import org.pl.model.Address;
 import org.pl.model.Basic;
 import org.pl.model.Client;
@@ -55,7 +53,6 @@ class ClientServiceIT {
         validClient = Client.builder()
                 .id(UUID.randomUUID())
                 .username("Username")
-                .password("Password")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Tester")
@@ -82,7 +79,6 @@ class ClientServiceIT {
         assertEquals(validClient.getUsername(), createdClient.getUsername());
         assertEquals(validClient.getArchive(), createdClient.getArchive());
         assertEquals(validClient.getBalance(), createdClient.getBalance());
-        assertEquals(validClient.getPassword(), createdClient.getPassword());
         assertEquals(validClient.getPhoneNumber(), createdClient.getPhoneNumber());
         assertEquals(validClient.getClientType().getType(), createdClient.getClientType().getType());
         assertEquals(validClient.getClientAccessType(), createdClient.getClientAccessType());
@@ -123,7 +119,6 @@ class ClientServiceIT {
         assertEquals(validClient.getUsername(), clientService.get(createdClient.getId()).getUsername());
         assertEquals(validClient.getArchive(), clientService.get(createdClient.getId()).getArchive());
         assertEquals(validClient.getBalance(), clientService.get(createdClient.getId()).getBalance());
-        assertEquals(validClient.getPassword(), clientService.get(createdClient.getId()).getPassword());
         assertEquals(validClient.getPhoneNumber(), clientService.get(createdClient.getId()).getPhoneNumber());
         assertEquals(validClient.getClientType().getType(), clientService.get(createdClient.getId()).getClientType().getType());
         assertEquals(validClient.getClientAccessType(), clientService.get(createdClient.getId()).getClientAccessType());
@@ -171,7 +166,6 @@ class ClientServiceIT {
         Client validClient2 = Client.builder()
                 .id(UUID.randomUUID())
                 .username("Username7")
-                .password("Password")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Tester")
@@ -212,7 +206,6 @@ class ClientServiceIT {
         Client validClient2 = Client.builder()
                 .id(UUID.randomUUID())
                 .username("Username7")
-                .password("Password")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Tester")
@@ -234,7 +227,6 @@ class ClientServiceIT {
         Client validClient2 = Client.builder()
                 .id(UUID.randomUUID())
                 .username("Username7")
-                .password("Password")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Tester")
@@ -260,25 +252,11 @@ class ClientServiceIT {
         clientService.updateClient(createdClient.getId(), createdClient);
         assertEquals("newUsername", clientService.get(createdClient.getId()).getUsername());
         assertEquals("54321", clientService.get(createdClient.getId()).getPhoneNumber());
-        assertEquals(validClient.getPassword(), clientService.get(createdClient.getId()).getPassword());
     }
 
     @Test
     void updateClientNegativeTest() {
         assertThrows(RepositoryException.class, () -> clientService.updateClient(validClient.getId(), validClient));
-    }
-
-    @Test
-    void updatePasswordPositiveTest() throws RepositoryException, ClientException {
-        Client createdClient = clientService.add(validClient);
-        assertEquals("Password", clientService.get(createdClient.getId()).getPassword());
-        clientService.updatePassword(createdClient.getId(), "newPassword");
-        assertEquals("newPassword", clientService.get(createdClient.getId()).getPassword());
-    }
-
-    @Test
-    void updatePasswordNegativeTest() {
-        assertThrows(RepositoryException.class, () -> clientService.updatePassword(validClient.getId(), "newPassword"));
     }
 
     @Test

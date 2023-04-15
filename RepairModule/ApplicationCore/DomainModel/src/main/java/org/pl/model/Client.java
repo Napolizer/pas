@@ -1,6 +1,5 @@
 package org.pl.model;
 
-import jakarta.json.bind.annotation.JsonbTransient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +17,6 @@ import java.util.UUID;
 public class Client implements Entity, Serializable {
     private UUID id;
     private String username;
-    private String password;
     private Boolean archive;
     private Double balance;
     private String firstName;
@@ -44,11 +42,6 @@ public class Client implements Entity, Serializable {
     @Override
     public UUID getId() {
         return id;
-    }
-
-    @JsonbTransient
-    public String getPassword() {
-        return password;
     }
 
     @Override

@@ -81,19 +81,6 @@ public class ClientEntRepository {
         }
     }
 
-    public ClientEnt changePassword(UUID id, String newPassword) throws RepositoryEntException {
-        try {
-            ClientEnt clientToChange = entityManager.find(ClientEnt.class, id);
-            userTransaction.begin();
-            clientToChange.setPassword(newPassword);
-            entityManager.merge(clientToChange);
-            userTransaction.commit();
-            return clientToChange;
-        } catch (Exception ex) {
-            throw new RepositoryEntException(RepositoryEntException.REPOSITORY_GET_EXCEPTION);
-        }
-    }
-
     public ClientEnt deleteClient(UUID id) throws RepositoryEntException {
         try {
             ClientEnt client = getClientById(id);

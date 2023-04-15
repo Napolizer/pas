@@ -6,12 +6,10 @@ import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.pl.adapter.data.model.exceptions.RepositoryEntException;
 import org.pl.adapter.data.repositories.HardwareEntRepository;
-import org.pl.model.Client;
 
 import java.io.File;
 

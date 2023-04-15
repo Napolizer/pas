@@ -35,7 +35,6 @@ public class ClientEntTest {
         validClient = ClientEnt.builder()
                 .id(UUID.randomUUID())
                 .username("TestUser")
-                .password("TestPassword")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Władek")
@@ -72,26 +71,6 @@ public class ClientEntTest {
         for (var username : validUsernames) {
             validClient.setUsername(username);
             assertEquals(username, validClient.getUsername());
-            assertTrue(validator.validate(validClient).isEmpty());
-        }
-    }
-
-    @Test
-    void fieldPasswordPositiveTest() {
-        List<String> validPasswords = new ArrayList<>(List.of(
-                "BestTesterInLodzCity",
-                "JuniorTester",
-                "TestMaster",
-                " ",
-                "   ",
-                "      ",
-                "  ",
-                ""
-        ));
-        validPasswords.add(null);
-        for (var password : validPasswords) {
-            validClient.setPassword(password);
-            assertEquals(password, validClient.getPassword());
             assertTrue(validator.validate(validClient).isEmpty());
         }
     }
@@ -281,7 +260,6 @@ public class ClientEntTest {
         ClientEnt theSameClient = ClientEnt.builder()
                 .id(validClient.getId())
                 .username("TestUser")
-                .password("TestPassword")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Władek")
@@ -301,7 +279,6 @@ public class ClientEntTest {
         ClientEnt clientWithDifferentId = ClientEnt.builder()
                 .id(UUID.randomUUID())
                 .username("TestUser")
-                .password("TestPassword")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Władek")

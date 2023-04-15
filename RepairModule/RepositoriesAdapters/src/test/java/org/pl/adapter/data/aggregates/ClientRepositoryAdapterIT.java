@@ -56,7 +56,6 @@ public class ClientRepositoryAdapterIT {
         validClient = Client.builder()
                 .id(UUID.randomUUID())
                 .username("Username")
-                .password("Password")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Tester")
@@ -69,7 +68,6 @@ public class ClientRepositoryAdapterIT {
         validClient2 = Client.builder()
                 .id(UUID.randomUUID())
                 .username("Username2")
-                .password("Password")
                 .archive(true)
                 .balance(100.0)
                 .firstName("Tester")
@@ -93,7 +91,6 @@ public class ClientRepositoryAdapterIT {
         Client createdClient = clientRepositoryAdapter.createClient(validClient);
         assertNotNull(createdClient.getId());
         assertEquals(validClient.getUsername(), createdClient.getUsername());
-        assertEquals(validClient.getPassword(), createdClient.getPassword());
         assertEquals(validClient.getArchive(), createdClient.getArchive());
         assertEquals(validClient.getBalance(), createdClient.getBalance());
         assertEquals(validClient.getFirstName(), createdClient.getFirstName());
@@ -119,19 +116,6 @@ public class ClientRepositoryAdapterIT {
     @Test
     void getClientByUuidNegativeTest() {
         assertThrows(RepositoryException.class, () -> clientRepositoryAdapter.getClient(validClient.getId()));
-    }
-
-    @Test
-    void changePasswordPositiveTest() throws RepositoryException {
-        Client createdClient = clientRepositoryAdapter.createClient(validClient);
-        assertEquals("Password", clientRepositoryAdapter.getClient(createdClient.getId()).getPassword());
-        assertDoesNotThrow(() -> clientRepositoryAdapter.changePassword(createdClient.getId(), "newPassword"));
-        assertEquals("newPassword", clientRepositoryAdapter.getClient(createdClient.getId()).getPassword());
-    }
-
-    @Test
-    void changePasswordNegativeTest() {
-        assertThrows(RepositoryException.class, () -> clientRepositoryAdapter.changePassword(validClient.getId(), "newPassword"));
     }
 
     @Test
@@ -216,7 +200,6 @@ public class ClientRepositoryAdapterIT {
         Client createdClient = clientRepositoryAdapter.createClient(validClient);
         Client updatedClient = clientRepositoryAdapter.updateClient(createdClient.getId(), validClient2);
         assertEquals(createdClient.getId(), createdClient.getId());
-        assertEquals(createdClient.getPassword(), updatedClient.getPassword());
         assertEquals(validClient2.getUsername(), updatedClient.getUsername());
         assertEquals(validClient2.getArchive(), updatedClient.getArchive());
         assertEquals(validClient2.getBalance(), updatedClient.getBalance());

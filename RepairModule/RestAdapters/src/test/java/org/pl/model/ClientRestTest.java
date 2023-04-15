@@ -33,7 +33,6 @@ public class ClientRestTest {
         validClient = ClientRest.builder()
                 .id(UUID.randomUUID())
                 .username("TestUser")
-                .password("TestPassword")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Władek")
@@ -81,37 +80,6 @@ public class ClientRestTest {
         for (var username : invalidUsernames) {
             validClient.setUsername(username);
             assertEquals(username, validClient.getUsername());
-            assertFalse(validator.validate(validClient).isEmpty());
-        }
-    }
-
-    @Test
-    void fieldPasswordPositiveTest() {
-        List<String> validPasswords = List.of(
-                "BestTesterInLodzCity",
-                "JuniorTester",
-                "TestMaster"
-        );
-        for (var password : validPasswords) {
-            validClient.setPassword(password);
-            assertEquals(password, validClient.getPassword());
-            assertTrue(validator.validate(validClient).isEmpty());
-        }
-    }
-
-    @Test
-    void fieldPasswordNegativeTest() {
-        List<String> invalidPasswords = new ArrayList<>(List.of(
-                " ",
-                "   ",
-                "      ",
-                "  ",
-                ""
-        ));
-        invalidPasswords.add(null);
-        for (var password : invalidPasswords) {
-            validClient.setPassword(password);
-            assertEquals(password, validClient.getPassword());
             assertFalse(validator.validate(validClient).isEmpty());
         }
     }
@@ -357,7 +325,6 @@ public class ClientRestTest {
         ClientRest theSameClient = ClientRest.builder()
                 .id(validClient.getId())
                 .username("TestUser")
-                .password("TestPassword")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Władek")
@@ -377,7 +344,6 @@ public class ClientRestTest {
         ClientRest clientWithDifferentId = ClientRest.builder()
                 .id(UUID.randomUUID())
                 .username("TestUser")
-                .password("TestPassword")
                 .archive(false)
                 .balance(100.0)
                 .firstName("Władek")

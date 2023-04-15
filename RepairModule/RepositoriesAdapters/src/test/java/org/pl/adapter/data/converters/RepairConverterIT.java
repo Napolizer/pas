@@ -48,7 +48,6 @@ public class RepairConverterIT {
                 .firstName("a")
                 .lastName("b")
                 .username("s")
-                .password("s")
                 .archive(false)
                 .balance(200.5)
                 .phoneNumber("33")
@@ -100,7 +99,6 @@ public class RepairConverterIT {
         assertEquals(repair.getClient().getFirstName(), repairEnt.getClientEnt().getFirstName());
         assertEquals(repair.getClient().getLastName(), repairEnt.getClientEnt().getLastName());
         assertEquals(repair.getClient().getUsername(), repairEnt.getClientEnt().getUsername());
-        assertEquals(repair.getClient().getPassword(), repairEnt.getClientEnt().getPassword());
         assertEquals(repair.getClient().getArchive(), repairEnt.getClientEnt().isArchive());
         assertEquals(repair.getClient().getBalance(), repairEnt.getClientEnt().getBalance());
         assertEquals(repair.getClient().getPhoneNumber(), repairEnt.getClientEnt().getPhoneNumber());
@@ -129,7 +127,6 @@ public class RepairConverterIT {
                 .firstName("a")
                 .lastName("b")
                 .username("s")
-                .password("s")
                 .archive(false)
                 .balance(200.5)
                 .phoneNumber("33")
@@ -181,7 +178,6 @@ public class RepairConverterIT {
         assertEquals(repairEnt.getClientEnt().getFirstName(), repair.getClient().getFirstName());
         assertEquals(repairEnt.getClientEnt().getLastName(), repair.getClient().getLastName());
         assertEquals(repairEnt.getClientEnt().getUsername(), repair.getClient().getUsername());
-        assertEquals(repairEnt.getClientEnt().getPassword(), repair.getClient().getPassword());
         assertEquals(repairEnt.getClientEnt().isArchive(), repair.getClient().getArchive());
         assertEquals(repairEnt.getClientEnt().getBalance(), repair.getClient().getBalance());
         assertEquals(repairEnt.getClientEnt().getPhoneNumber(), repair.getClient().getPhoneNumber());

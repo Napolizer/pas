@@ -98,7 +98,6 @@ public class ClientControllerIT {
                 .lastName("Kowalski")
                 .phoneNumber("123456789")
                 .username("januszkowalski")
-                .password("januszek")
                 .build();
 
         @Test
@@ -136,20 +135,6 @@ public class ClientControllerIT {
         @Test
         public void createClientMissingUsernameTest() {
             testClient.setUsername(null);
-            given()
-                    .contentType(ContentType.JSON)
-                    .body(testClient)
-                    .header("Authorization", "Bearer " + retrieveToken())
-                    .when()
-                    .post("/api/client")
-                    .then()
-                    .assertThat()
-                    .statusCode(400);
-        }
-
-        @Test
-        public void createClientMissingPasswordTest() {
-            testClient.setPassword(null);
             given()
                     .contentType(ContentType.JSON)
                     .body(testClient)

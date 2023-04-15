@@ -1,6 +1,5 @@
 package org.pl.adapter.data.model;
 
-import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +29,6 @@ public class ClientEnt implements EntityEnt, Serializable {
     private UUID id;
     @Column(unique = true)
     private String username;
-    private String password;
     private Boolean archive;
     private Double balance;
     private String firstName;
@@ -63,11 +61,6 @@ public class ClientEnt implements EntityEnt, Serializable {
     @Override
     public UUID getId() {
         return id;
-    }
-
-    @JsonbTransient
-    public String getPassword() {
-        return password;
     }
 
     @Override
