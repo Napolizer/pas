@@ -21,6 +21,7 @@ public class User {
     private String lastName;
     private String phoneNumber;
     private UserAccessType userAccessType;
+    private Address address;
 
     @JsonbTransient
     public String getPassword() {
