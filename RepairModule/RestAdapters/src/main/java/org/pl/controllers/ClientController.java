@@ -255,27 +255,27 @@ public class ClientController {
         return Response.ok(clients).build();
     }
 
-//    @POST
-//    @Path("/login")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response login(@NotNull @Valid UserRestCredentials userCredentials) {
-//        var json = Json.createObjectBuilder();
-//        try {
-//            ClientRest client = userAuthenticator.authenticate(userCredentials);
-//
-//            String token = tokenProvider.generateToken(client);
-//            json.add("token", token);
-//            return Response.ok(json.build()).build();
-//        } catch (UserNotFoundException e) {
-//            json.add("error", e.getMessage());
-//            return Response.status(404).entity(json.build()).build();
-//        } catch (InvalidCredentialsException e) {
-//            json.add("error", e.getMessage());
-//            return Response.status(401).entity(json.build()).build();
-//        } catch (UserIsArchiveException e) {
-//            json.add("error", e.getMessage());
-//            return Response.status(400).entity(json.build()).build();
-//        }
-//    }
+    @POST
+    @Path("/login")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(@NotNull @Valid UserRestCredentials userCredentials) {
+        var json = Json.createObjectBuilder();
+        try {
+            ClientRest client = userAuthenticator.authenticate(userCredentials);
+
+            String token = tokenProvider.generateToken(client);
+            json.add("token", token);
+            return Response.ok(json.build()).build();
+        } catch (UserNotFoundException e) {
+            json.add("error", e.getMessage());
+            return Response.status(404).entity(json.build()).build();
+        } catch (InvalidCredentialsException e) {
+            json.add("error", e.getMessage());
+            return Response.status(401).entity(json.build()).build();
+        } catch (UserIsArchiveException e) {
+            json.add("error", e.getMessage());
+            return Response.status(400).entity(json.build()).build();
+        }
+    }
 }
