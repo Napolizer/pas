@@ -141,7 +141,7 @@
                             <goal>wsgen-test</goal>
                         </goals>
                         <configuration>
-                            <sei>org.pl.controllers.HardwareSoapController</sei>
+                            <sei>org.pl.repair.module.controllers.HardwareSoapController</sei>
                             <genWsdl>true</genWsdl>
                             <resourceDestDir>target/generated-sources/wsdl</resourceDestDir>
                         </configuration>
