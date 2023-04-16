@@ -20,7 +20,7 @@ public class HardwareSoapControllerMicroshedIT {
     @Order(1)
     public void properlyGetsAllHardware() {
         given()
-                .body("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:hw=\"http://controllers.pl.org/\">\n" +
+                .body("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:hw=\"http://controllers.module.repair.pl.org/\">\n" +
                         "   <soapenv:Header/>\n" +
                         "   <soapenv:Body>\n" +
                         "      <hw:getAllHardware/>\n" +
@@ -40,7 +40,7 @@ public class HardwareSoapControllerMicroshedIT {
     @Order(2)
     public void properlyCreatesHardware() {
         given()
-                .body("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:hw=\"http://controllers.pl.org/\">\n" +
+                .body("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:hw=\"http://controllers.module.repair.pl.org/\">\n" +
                         "   <soapenv:Header/>\n" +
                         "   <soapenv:Body>\n" +
                         "      <hw:getAllHardware/>\n" +
@@ -57,7 +57,7 @@ public class HardwareSoapControllerMicroshedIT {
 
         given()
                 .body("""
-                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                             <soapenv:Header/>
                             <soapenv:Body>
                                 <con:createHardware>
@@ -83,7 +83,7 @@ public class HardwareSoapControllerMicroshedIT {
                 .body("Envelope.Body.createHardwareResponse.return.archive", equalTo("false"));
 
         given()
-                .body("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:hw=\"http://controllers.pl.org/\">\n" +
+                .body("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:hw=\"http://controllers.module.repair.pl.org/\">\n" +
                         "   <soapenv:Header/>\n" +
                         "   <soapenv:Body>\n" +
                         "      <hw:getAllHardware/>\n" +
@@ -104,7 +104,7 @@ public class HardwareSoapControllerMicroshedIT {
     public void properlyGetsHardwareById() {
         UUID createdHardwareId = UUID.fromString(given()
                 .body("""
-                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                             <soapenv:Header/>
                             <soapenv:Body>
                                 <con:createHardware>
@@ -133,7 +133,7 @@ public class HardwareSoapControllerMicroshedIT {
 
         given()
             .body("""
-                    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                         <soapenv:Header/>
                         <soapenv:Body>
                             <con:getHardwareById>
@@ -159,7 +159,7 @@ public class HardwareSoapControllerMicroshedIT {
     public void properlyUpdatesHardware() {
             UUID createdHardwareId = UUID.fromString(given()
                 .body("""
-                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                             <soapenv:Header/>
                             <soapenv:Body>
                                 <con:createHardware>
@@ -188,7 +188,7 @@ public class HardwareSoapControllerMicroshedIT {
 
             given()
                 .body("""
-                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                             <soapenv:Header/>
                             <soapenv:Body>
                                 <con:updateHardware>
@@ -222,7 +222,7 @@ public class HardwareSoapControllerMicroshedIT {
     public void properlyDeletesHardware() {
         UUID createdHardwareId = UUID.fromString(given()
                 .body("""
-                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                             <soapenv:Header/>
                             <soapenv:Body>
                                 <con:createHardware>
@@ -251,7 +251,7 @@ public class HardwareSoapControllerMicroshedIT {
 
         given()
                 .body("""
-                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                             <soapenv:Header/>
                             <soapenv:Body>
                                 <con:deleteHardware>
@@ -270,7 +270,7 @@ public class HardwareSoapControllerMicroshedIT {
 
             given()
                 .body("""
-                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                             <soapenv:Header/>
                             <soapenv:Body>
                                 <con:getHardwareById>
@@ -295,7 +295,7 @@ public class HardwareSoapControllerMicroshedIT {
     public void failsToDeleteHardware() {
         given()
                 .body("""
-                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                             <soapenv:Header/>
                             <soapenv:Body>
                                 <con:deleteHardware>
@@ -318,7 +318,7 @@ public class HardwareSoapControllerMicroshedIT {
     public void failsToUpdateHardware() {
         given()
                 .body("""
-                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                             <soapenv:Header/>
                             <soapenv:Body>
                                 <con:updateHardware>
@@ -347,7 +347,7 @@ public class HardwareSoapControllerMicroshedIT {
     public void failsToCreateHardware() {
         given()
                 .body("""
-                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                             <soapenv:Header/>
                             <soapenv:Body>
                                 <con:createHardware>
@@ -376,7 +376,7 @@ public class HardwareSoapControllerMicroshedIT {
     public void failsToGetHardwareById() {
         given()
                 .body("""
-                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.pl.org/">
+                        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:con="http://controllers.module.repair.pl.org/">
                             <soapenv:Header/>
                             <soapenv:Body>
                                 <con:getHardwareById>
