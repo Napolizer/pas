@@ -16,7 +16,6 @@ import org.pl.repair.module.model.Hardware;
 import org.pl.repair.module.model.HardwareType;
 import org.pl.repair.module.model.exceptions.HardwareException;
 import org.pl.repair.module.model.exceptions.RepositoryException;
-import org.pl.repair.module.services.HardwareService;
 
 import javax.transaction.UserTransaction;
 import java.io.File;

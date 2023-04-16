@@ -8,7 +8,6 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.pl.model.*;
 import org.pl.repair.module.adapter.data.model.*;
 import org.pl.repair.module.model.*;
 

@@ -16,7 +16,6 @@ import org.pl.repair.module.model.Client;
 import org.pl.repair.module.model.ClientAccessType;
 import org.pl.repair.module.model.exceptions.ClientException;
 import org.pl.repair.module.model.exceptions.RepositoryException;
-import org.pl.repair.module.services.ClientService;
 
 import javax.transaction.UserTransaction;
 import java.io.File;
