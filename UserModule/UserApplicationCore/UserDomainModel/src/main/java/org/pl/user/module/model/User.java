@@ -3,6 +3,7 @@ package org.pl.user.module.model;
 import jakarta.json.bind.annotation.JsonbTransient;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Data
@@ -10,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class User {
+public class User implements Serializable {
     private UUID id;
     private String username;
     private String password;
