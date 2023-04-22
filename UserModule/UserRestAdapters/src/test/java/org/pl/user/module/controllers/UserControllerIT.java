@@ -28,57 +28,57 @@ public class UserControllerIT {
         adminPassword = "password";
         userPassword = "password";
         adminId = given()
-//                .header("Authorization", "Bearer " + retrieveToken())
+                .header("Authorization", "Bearer " + retrieveToken())
                 .when()
                 .get("/api/user/username/admin")
                 .then()
                 .extract()
                 .path("id");
         userId = given()
-//                .header("Authorization", "Bearer " + retrieveUserToken())
+                .header("Authorization", "Bearer " + retrieveUserToken())
                 .when()
                 .get("/api/user/username/user")
                 .then()
                 .extract()
                 .path("id");
     }
-//
-//    private String retrieveToken() {
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("username", "admin");
-//        credentials.put("password", adminPassword);
-//        return given()
-//                .contentType(ContentType.JSON)
-//                .body(credentials)
-//                .when()
-//                .post("/api/user/login")
-//                .then()
-//                .assertThat()
-//                .statusCode(200)
-//                .contentType(ContentType.JSON)
-//                .body("token", is(instanceOf(String.class)))
-//                .extract()
-//                .path("token");
-//    }
-//
-//    private String retrieveUserToken() {
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("username", "user");
-//        credentials.put("password", userPassword);
-//        return given()
-//                .contentType(ContentType.JSON)
-//                .body(credentials)
-//                .when()
-//                .post("/api/user/login")
-//                .then()
-//                .assertThat()
-//                .statusCode(200)
-//                .contentType(ContentType.JSON)
-//                .body("token", is(instanceOf(String.class)))
-//                .extract()
-//                .path("token");
-//    }
-//
+
+    private String retrieveToken() {
+        Map<String, Object> credentials = new HashMap<>();
+        credentials.put("username", "admin");
+        credentials.put("password", adminPassword);
+        return given()
+                .contentType(ContentType.JSON)
+                .body(credentials)
+                .when()
+                .post("/api/user/login")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("token", is(instanceOf(String.class)))
+                .extract()
+                .path("token");
+    }
+
+    private String retrieveUserToken() {
+        Map<String, Object> credentials = new HashMap<>();
+        credentials.put("username", "user");
+        credentials.put("password", userPassword);
+        return given()
+                .contentType(ContentType.JSON)
+                .body(credentials)
+                .when()
+                .post("/api/user/login")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("token", is(instanceOf(String.class)))
+                .extract()
+                .path("token");
+    }
+
     @Nested
     class CreateUser {
         UserRest testUser = UserRest.builder()
@@ -101,7 +101,7 @@ public class UserControllerIT {
         void createUserPositiveTest() {
             given()
                     .contentType(ContentType.JSON)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .body(testUser)
                     .when()
                     .post("/api/user")
@@ -120,7 +120,7 @@ public class UserControllerIT {
         void createUserMissingBodyTest() {
             given()
                     .contentType(ContentType.JSON)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .post("/api/user")
                     .then()
@@ -134,7 +134,7 @@ public class UserControllerIT {
             given()
                     .contentType(ContentType.JSON)
                     .body(testUser)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .post("/api/user")
                     .then()
@@ -148,7 +148,7 @@ public class UserControllerIT {
             given()
                     .contentType(ContentType.JSON)
                     .body(testUser)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .post("/api/user")
                     .then()
@@ -162,7 +162,7 @@ public class UserControllerIT {
             given()
                     .contentType(ContentType.JSON)
                     .body(testUser)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .post("/api/user")
                     .then()
@@ -176,7 +176,7 @@ public class UserControllerIT {
             given()
                     .contentType(ContentType.JSON)
                     .body(testUser)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .post("/api/user")
                     .then()
@@ -190,7 +190,7 @@ public class UserControllerIT {
             given()
                     .contentType(ContentType.JSON)
                     .body(testUser)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .post("/api/user")
                     .then()
@@ -204,7 +204,7 @@ public class UserControllerIT {
             given()
                     .contentType(ContentType.JSON)
                     .body(testUser)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .post("/api/user")
                     .then()
@@ -218,7 +218,7 @@ public class UserControllerIT {
             given()
                     .contentType(ContentType.JSON)
                     .body(testUser)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .post("/api/user")
                     .then()
@@ -232,7 +232,7 @@ public class UserControllerIT {
             given()
                     .contentType(ContentType.JSON)
                     .body(testUser)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .post("/api/user")
                     .then()
@@ -246,7 +246,7 @@ public class UserControllerIT {
             given()
                     .contentType(ContentType.JSON)
                     .body(testUser)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .post("/api/user")
                     .then()
@@ -260,7 +260,7 @@ public class UserControllerIT {
             given()
                     .contentType(ContentType.JSON)
                     .body(testUser)
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .post("/api/user")
                     .then()
@@ -274,7 +274,7 @@ public class UserControllerIT {
         @Test
         void getUserPositiveTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .get("/api/user/id/" + adminId)
                     .then()
@@ -294,7 +294,7 @@ public class UserControllerIT {
         @Test
         void getUserMissingIdTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .get("/api/user/id/")
                     .then()
@@ -305,7 +305,7 @@ public class UserControllerIT {
         @Test
         void getUserNegativeIdTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .get("/api/user/id/-1")
                     .then()
@@ -316,7 +316,7 @@ public class UserControllerIT {
         @Test
         void getUserWrongIdTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .get("/api/user/id/abc")
                     .then()
@@ -325,50 +325,48 @@ public class UserControllerIT {
         }
     }
 
-//    @Nested
-//    class GetAllUsers {
-//        @Test
-//        void getAllUsersPositiveTest() {
-//            given()
-////                    .header("Authorization", "Bearer " + retrieveToken())
-//                    .when()
-//                    .get("/api/users")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(200)
-//                    .contentType(ContentType.JSON)
-//                    .body("size()", is(greaterThan(2)));
-//        }
-//    }
+    @Nested
+    class GetAllUsers {
+        @Test
+        void getAllUsersPositiveTest() {
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .when()
+                    .get("/api/users")
+                    .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .contentType(ContentType.JSON)
+                    .body("size()", is(greaterThan(2)));
+        }
+    }
 
     @Nested
     class GetUserByUsername {
-//        @Test
-//        void getUserByUsernamePositiveTest() {
-//            given()
-////                    .header("Authorization", "Bearer " + retrieveToken())
-//                    .when()
-//                    .get("/api/user/username/admin")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(200)
-//                    .contentType(ContentType.JSON)
-//                    .body("id", is(adminId))
-//                    .body("archive", is(false))
-//                    .body("balance", is(0.0F))
-//                    .body("clientAccessType", is("ADMINISTRATORS"))
-//                    .body("clientType.type", is("PREMIUM"))
-//                    .body("firstName", is("Admin"))
-//                    .body("lastName", is("Admin"))
-//                    .body("phoneNumber", is("123456789"))
-//                    .body("username", is("admin"))
-//                    .body("password", is(equalTo(null)));
-//        }
+        @Test
+        void getUserByUsernamePositiveTest() {
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .when()
+                    .get("/api/user/username/admin")
+                    .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .contentType(ContentType.JSON)
+                    .body("id", is(adminId))
+                    .body("archive", is(false))
+                    .body("userAccessType", is("ADMINISTRATORS"))
+                    .body("firstName", is("Admin"))
+                    .body("lastName", is("Admin"))
+                    .body("phoneNumber", is("123456789"))
+                    .body("username", is("admin"))
+                    .body("password", is(equalTo(null)));
+        }
 
         @Test
         void getUserByUsernameMissingUsernameTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .get("/api/user/username/")
                     .then()
@@ -379,7 +377,7 @@ public class UserControllerIT {
         @Test
         void getUserByUsernameWrongUsernameTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .get("/api/user/username/abc")
                     .then()
@@ -393,7 +391,7 @@ public class UserControllerIT {
         @Test
         void deactivateUserPositiveTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .body(HttpRequest.BodyPublishers.noBody())
                     .when()
                     .put("/api/user/id/" + userId + "/deactivate")
@@ -402,7 +400,7 @@ public class UserControllerIT {
                     .statusCode(200);
 
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .get("/api/user/id/" + userId)
                     .then()
@@ -412,7 +410,7 @@ public class UserControllerIT {
                     .body("archive", is(true));
 
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .body(HttpRequest.BodyPublishers.noBody())
                     .when()
                     .put("/api/user/id/" + userId + "/activate")
@@ -424,7 +422,7 @@ public class UserControllerIT {
         @Test
         void deactivateUserMissingIdTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id//deactivate")
                     .then()
@@ -435,7 +433,7 @@ public class UserControllerIT {
         @Test
         void deactivateUserNegativeIdTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id/-1/deactivate")
                     .then()
@@ -446,7 +444,7 @@ public class UserControllerIT {
         @Test
         void deactivateUserWrongIdTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id/abc/deactivate")
                     .then()
@@ -457,7 +455,7 @@ public class UserControllerIT {
         @Test
         void deactivateUserWrongUrlTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id/" + adminId + "/deactivate/abc")
                     .then()
@@ -468,7 +466,7 @@ public class UserControllerIT {
         @Test
         void deactivateUserAlreadyDeactivatedTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id/" + userId + "/deactivate")
                     .then()
@@ -476,7 +474,7 @@ public class UserControllerIT {
                     .statusCode(200);
 
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id/" + userId + "/deactivate")
                     .then()
@@ -484,7 +482,7 @@ public class UserControllerIT {
                     .statusCode(400);
 
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .body(HttpRequest.BodyPublishers.noBody())
                     .when()
                     .put("/api/user/id/" + userId + "/activate")
@@ -499,7 +497,7 @@ public class UserControllerIT {
         @Test
         void activateUserPositiveTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id/" + userId + "/deactivate")
                     .then()
@@ -507,7 +505,7 @@ public class UserControllerIT {
                     .statusCode(200);
 
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id/" + userId + "/activate")
                     .then()
@@ -515,7 +513,7 @@ public class UserControllerIT {
                     .statusCode(200);
 
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .get("/api/user/id/" + userId)
                     .then()
@@ -528,7 +526,7 @@ public class UserControllerIT {
         @Test
         void activateUserMissingIdTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id//activate")
                     .then()
@@ -539,7 +537,7 @@ public class UserControllerIT {
         @Test
         void activateUserNegativeIdTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id/-1/activate")
                     .then()
@@ -550,7 +548,7 @@ public class UserControllerIT {
         @Test
         void activateUserWrongIdTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id/abc/activate")
                     .then()
@@ -561,7 +559,7 @@ public class UserControllerIT {
         @Test
         void activateUserWrongUrlTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id/" + adminId + "/activate/abc")
                     .then()
@@ -572,7 +570,7 @@ public class UserControllerIT {
         @Test
         void activateUserAlreadyActivatedTest() {
             given()
-//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/user/id/" + userId + "/activate")
                     .then()
@@ -583,22 +581,22 @@ public class UserControllerIT {
 
     @Nested
     class Login {
-//        @Test
-//        void loginPositiveTest() {
-//            Map<String, Object> credentials = new HashMap<>();
-//            credentials.put("username", "admin");
-//            credentials.put("password", "password");
-//            given()
-//                    .contentType(ContentType.JSON)
-//                    .body(credentials)
-//                    .when()
-//                    .post("/api/user/login")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(200)
-//                    .contentType(ContentType.JSON)
-//                    .body("token", is(instanceOf(String.class)));
-//        }
+        @Test
+        void loginPositiveTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "admin");
+            credentials.put("password", "password");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/user/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .contentType(ContentType.JSON)
+                    .body("token", is(instanceOf(String.class)));
+        }
 
         @Test
         void loginMissingUsernameTest() {
@@ -614,107 +612,107 @@ public class UserControllerIT {
                     .statusCode(400);
         }
 
-//        @Test
-//        public void loginMissingPasswordTest() {
-//            Map<String, Object> credentials = new HashMap<>();
-//            credentials.put("username", "admin");
-//            given()
-//                    .contentType(ContentType.JSON)
-//                    .body(credentials)
-//                    .when()
-//                    .post("/api/user/login")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(400);
-//        }
-//
-//        @Test
-//        public void loginWrongUsernameTest() {
-//            Map<String, Object> credentials = new HashMap<>();
-//            credentials.put("username", "abc");
-//            credentials.put("password", "password");
-//            given()
-//                    .contentType(ContentType.JSON)
-//                    .body(credentials)
-//                    .when()
-//                    .post("/api/user/login")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(404);
-//        }
-//
-//        @Test
-//        public void loginWrongPasswordTest() {
-//            Map<String, Object> credentials = new HashMap<>();
-//            credentials.put("username", "admin");
-//            credentials.put("password", "abc");
-//            given()
-//                    .contentType(ContentType.JSON)
-//                    .body(credentials)
-//                    .when()
-//                    .post("/api/user/login")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(401);
-//        }
-//
-//        @Test
-//        public void loginWrongUsernameAndPasswordTest() {
-//            Map<String, Object> credentials = new HashMap<>();
-//            credentials.put("username", "abc");
-//            credentials.put("password", "abc");
-//            given()
-//                    .contentType(ContentType.JSON)
-//                    .body(credentials)
-//                    .when()
-//                    .post("/api/user/login")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(404);
-//        }
-//
-//        @Test
-//        public void loginWrongUsernameAndPasswordEmptyTest() {
-//            Map<String, Object> credentials = new HashMap<>();
-//            credentials.put("username", "");
-//            credentials.put("password", "");
-//            given()
-//                    .contentType(ContentType.JSON)
-//                    .body(credentials)
-//                    .when()
-//                    .post("/api/user/login")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(400);
-//        }
-//
-//        @Test
-//        public void loginWrongUsernameAndPasswordNullTest() {
-//            Map<String, Object> credentials = new HashMap<>();
-//            credentials.put("username", null);
-//            credentials.put("password", null);
-//            given()
-//                    .contentType(ContentType.JSON)
-//                    .body(credentials)
-//                    .when()
-//                    .post("/api/user/login")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(400);
-//        }
-//
-//        @Test
-//        public void loginWrongUsernameAndPasswordMissingTest() {
-//            Map<String, Object> credentials = new HashMap<>();
-//            given()
-//                    .contentType(ContentType.JSON)
-//                    .body(credentials)
-//                    .when()
-//                    .post("/api/user/login")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(400);
-//        }
+        @Test
+        void loginMissingPasswordTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "admin");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/user/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
+
+        @Test
+        void loginWrongUsernameTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "abc");
+            credentials.put("password", "password");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/user/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(404);
+        }
+
+        @Test
+        void loginWrongPasswordTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "admin");
+            credentials.put("password", "abc");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/user/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(401);
+        }
+
+        @Test
+        void loginWrongUsernameAndPasswordTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "abc");
+            credentials.put("password", "abc");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/user/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(404);
+        }
+
+        @Test
+        void loginWrongUsernameAndPasswordEmptyTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "");
+            credentials.put("password", "");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/user/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
+
+        @Test
+        void loginWrongUsernameAndPasswordNullTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", null);
+            credentials.put("password", null);
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/user/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
+
+        @Test
+        void loginWrongUsernameAndPasswordMissingTest() {
+            Map<String, Object> credentials = new HashMap<>();
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/user/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
     }
 
 //    @Nested

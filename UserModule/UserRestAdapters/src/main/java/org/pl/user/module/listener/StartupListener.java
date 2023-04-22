@@ -24,6 +24,7 @@ public class StartupListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         UserRest admin = UserRest.builder()
                 .username("admin")
+                .password("password")
                 .archive(false)
                 .firstName("Admin")
                 .lastName("Admin")
@@ -37,6 +38,7 @@ public class StartupListener implements ServletContextListener {
                 .build();
             UserRest employee = UserRest.builder()
                 .username("employee")
+                .password("password")
                 .archive(false)
                 .firstName("James")
                 .lastName("Jameson")
@@ -50,6 +52,7 @@ public class StartupListener implements ServletContextListener {
                 .build();
             UserRest user = UserRest.builder()
                 .username("user")
+                .password("password")
                 .archive(false)
                 .firstName("Peter")
                 .lastName("Jackson")

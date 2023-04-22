@@ -1,5 +1,6 @@
 package org.pl.user.module.model;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -33,4 +34,9 @@ public class UserRest implements Serializable {
     @NotNull
     @Valid
     private AddressRest address;
+
+    @JsonbTransient
+    public String getPassword() {
+        return password;
+    }
 }
