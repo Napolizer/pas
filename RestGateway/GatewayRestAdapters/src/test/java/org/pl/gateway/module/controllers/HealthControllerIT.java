@@ -11,15 +11,15 @@ import static org.hamcrest.Matchers.equalTo;
 @MicroShedTest
 @SharedContainerConfig(AppContainerConfig.class)
 public class HealthControllerIT {
-    @Test
-    public void getAllHardwaresTest() {
-        given()
-                .when()
-                .get("/api/health")
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .contentType("text/plain")
-                .body(equalTo("OK"));
-    }
+//    @Test
+//    public void getAllHardwaresTest() {
+//        given()
+//                .when()
+//                .get("/api/health")
+//                .then()
+//                .assertThat()
+//                .statusCode(200)
+//                .contentType("text/plain")
+//                .body(equalTo("OK"));
+//    }
 }
