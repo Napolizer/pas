@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.HttpHeaders;
 import org.pl.gateway.module.filters.CorsResponseFilter;
+import org.pl.gateway.module.model.TokenClaims;
 import org.pl.gateway.module.providers.TokenProvider;
 
 import java.util.HashSet;
