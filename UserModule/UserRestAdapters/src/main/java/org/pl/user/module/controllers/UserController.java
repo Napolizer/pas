@@ -3,6 +3,8 @@ package org.pl.user.module.controllers;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
@@ -50,7 +52,7 @@ public class UserController {
     @GET
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-//    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getUserById(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -75,7 +77,7 @@ public class UserController {
     @GET
     @Path("/username/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-//    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getUserByUsername(@PathParam("username")String username, @QueryParam("strict")String strict) {
         var json = Json.createObjectBuilder();
         try {
@@ -101,7 +103,7 @@ public class UserController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-//    @RolesAllowed("ADMIN")
+    @RolesAllowed("ADMIN")
     public Response addUser(@Valid @NotNull UserRest user) {
         var json = Json.createObjectBuilder();
         try {
@@ -149,7 +151,7 @@ public class UserController {
     @PUT
     @Path("/id/{id}/deactivate")
     @Produces(MediaType.APPLICATION_JSON)
-//    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
+    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
     public Response deactivateUser(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -174,7 +176,7 @@ public class UserController {
     @PUT
     @Path("/id/{id}/activate")
     @Produces(MediaType.APPLICATION_JSON)
-//    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
+    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
     public Response activateUser(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -198,7 +200,7 @@ public class UserController {
     @GET
     @Path("/filter/{substr}")
     @Produces(MediaType.APPLICATION_JSON)
-//    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
+    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
     public Response getAllUsersFilter(@PathParam("substr")String substr) {
         List<UserRest> users = readUserUseCases.getAllUsersFilter(substr)
                 .stream()
@@ -228,6 +230,32 @@ public class UserController {
         } catch (UserIsArchiveException e) {
             json.add("error", e.getMessage());
             return Response.status(400).entity(json.build()).build();
+        }
+    }
+
+    @PUT
+    @Path("/id/{id}/change_password")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
+    public Response changePassword(@PathParam("id")String id,@NotNull JsonValue jsonValue) {
+        var json = Json.createObjectBuilder();
+        try {
+            JsonObject body = jsonValue.asJsonObject();
+            UUID uuid = UUID.fromString(id);
+            if (body.containsKey("newPassword")) {
+                String newPassword = body.getString("newPassword");
+                User user = writeUserUseCases.updatePassword(uuid, newPassword);
+                return Response.ok(userConverter.convert(user)).build();
+            } else {
+                json.add("error", "Invalid data in request");
+                return Response.status(400).entity(json.build()).build();
+            }
+        } catch (IllegalArgumentException e) {
+            json.add("error", "Invalid data in request");
+            return Response.status(400).entity(json.build()).build();
+        } catch (RepositoryException e) {
+            json.add("error", "User does not exist");
+            return Response.status(404).entity(json.build()).build();
         }
     }
 }
