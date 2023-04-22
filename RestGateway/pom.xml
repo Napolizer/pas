@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>UserTopic</artifactId>
+    <artifactId>RestGateway</artifactId>
     <packaging>pom</packaging>
 
     <parent>
@@ -12,6 +12,6 @@
     </parent>
 
     <modules>
-        <module>TopicApplicationCore</module>
+        <module>GatewayApplicationCore</module>
     </modules>
 </project>

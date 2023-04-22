@@ -4,15 +4,15 @@
 
     <parent>
         <groupId>org.example</groupId>
-        <artifactId>UserTopic</artifactId>
+        <artifactId>RestGateway</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modules>
-        <module>TopicApplicationService</module>
-        <module>TopicDomainModel</module>
+        <module>GatewayApplicationService</module>
+        <module>GatewayDomainModel</module>
     </modules>
 
-    <artifactId>TopicApplicationCore</artifactId>
+    <artifactId>GatewayApplicationCore</artifactId>
     <packaging>pom</packaging>
 </project>
