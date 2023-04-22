@@ -2,34 +2,17 @@ package org.pl.repair.module.providers;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.ValidationException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.pl.repair.module.model.ClientRest;
 import org.pl.repair.module.model.TokenClaims;
-
-import java.util.Date;
 
 @ApplicationScoped
 public class TokenProvider {
     @Inject
     @ConfigProperty(name="secret_key", defaultValue = "Default secret key")
     private String secretKey;
-    @Inject
-    @ConfigProperty(name="token_expiration_time", defaultValue = "900000")
-    private Long expirationTime;
-
-    public String generateToken(ClientRest client) {
-        long now = System.currentTimeMillis();
-        return Jwts.builder()
-                .setSubject(client.getUsername())
-                .claim("group", client.getClientAccessType())
-                .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + expirationTime)) // 15 minutes expiration time
-                .signWith(SignatureAlgorithm.HS512, secretKey).compact();
-    }
 
     public TokenClaims getTokenClaims(String token) throws ValidationException {
         try {

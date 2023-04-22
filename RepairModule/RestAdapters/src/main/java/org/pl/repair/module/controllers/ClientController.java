@@ -10,21 +10,15 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.pl.repair.module.authentication.UserAuthenticator;
 import org.pl.repair.module.converters.ClientConverter;
 import org.pl.repair.module.converters.RepairConverter;
 import org.pl.repair.module.model.Client;
 import org.pl.repair.module.model.ClientRest;
 import org.pl.repair.module.model.RepairRest;
-import org.pl.repair.module.model.UserRestCredentials;
 import org.pl.repair.module.model.exceptions.ClientException;
 import org.pl.repair.module.model.exceptions.RepositoryException;
 import org.pl.repair.module.model.exceptions.RepositoryRestException;
-import org.pl.repair.module.model.exceptions.authentication.InvalidCredentialsException;
-import org.pl.repair.module.model.exceptions.authentication.UserIsArchiveException;
-import org.pl.repair.module.model.exceptions.authentication.UserNotFoundException;
 import org.pl.repair.module.providers.ETagProvider;
-import org.pl.repair.module.providers.TokenProvider;
 import org.pl.repair.module.userinterface.client.ReadClientUseCases;
 import org.pl.repair.module.userinterface.client.WriteHardwareUseCase;
 import org.pl.repair.module.userinterface.repair.ReadRepairUseCases;
@@ -44,10 +38,6 @@ public class ClientController {
     private ClientConverter clientConverter;
     @Inject
     private RepairConverter repairConverter;
-    @Inject
-    private TokenProvider tokenProvider;
-    @Inject
-    private UserAuthenticator userAuthenticator;
     @Inject
     private ETagProvider eTagProvider;
     @Context
@@ -253,29 +243,5 @@ public class ClientController {
                 .map(clientConverter::convert)
                 .toList();
         return Response.ok(clients).build();
-    }
-
-    @POST
-    @Path("/login")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(@NotNull @Valid UserRestCredentials userCredentials) {
-        var json = Json.createObjectBuilder();
-        try {
-            ClientRest client = userAuthenticator.authenticate(userCredentials);
-
-            String token = tokenProvider.generateToken(client);
-            json.add("token", token);
-            return Response.ok(json.build()).build();
-        } catch (UserNotFoundException e) {
-            json.add("error", e.getMessage());
-            return Response.status(404).entity(json.build()).build();
-        } catch (InvalidCredentialsException e) {
-            json.add("error", e.getMessage());
-            return Response.status(401).entity(json.build()).build();
-        } catch (UserIsArchiveException e) {
-            json.add("error", e.getMessage());
-            return Response.status(400).entity(json.build()).build();
-        }
     }
 }
