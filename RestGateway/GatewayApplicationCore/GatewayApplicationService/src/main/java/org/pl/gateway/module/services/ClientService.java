@@ -4,103 +4,85 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.pl.gateway.module.model.exceptions.ClientException;
-import org.pl.gateway.module.model.exceptions.RepositoryException;
-import org.pl.infrastructure.client.*;
-import org.pl.model.Client;
-import org.pl.model.ClientType;
-import org.pl.userinterface.client.ReadClientUseCases;
-import org.pl.userinterface.client.WriteHardwareUseCase;
+import org.pl.gateway.module.model.Client;
+import org.pl.gateway.module.model.ClientType;
+import org.pl.repair.module.controllers.ClientController;
+import org.pl.user.module.controllers.UserController;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @ApplicationScoped
-public class ClientService implements WriteHardwareUseCase, ReadClientUseCases {
+public class ClientService {
     @Inject
-    private ReadClientPort readClientPort;
+    private ClientController clientController;
 
     @Inject
-    private WriteClientPort writeClientPort;
+    private UserController userController;
 
-    public Client add(Client client) throws RepositoryException, ClientException {
-        if (Objects.equals(client.getFirstName(), ""))
-            throw new ClientException(ClientException.CLIENT_FIRST_NAME_EXCEPTION);
-        if (Objects.equals(client.getLastName(), ""))
-            throw new ClientException(ClientException.CLIENT_LAST_NAME_EXCEPTION);
-        if (Objects.equals(client.getPhoneNumber(), ""))
-            throw new ClientException(ClientException.CLIENT_PHONE_NUMBER_EXCEPTION);
-        if (Objects.equals(client.getAddress(), null))
-            throw new ClientException(ClientException.CLIENT_ADDRESS_EXCEPTION);
-        return writeClientPort.createClient(client);
+    public Client add(Client client) {
+        return null;
     }
 
-    public Client get(UUID id) throws RepositoryException {
-        return readClientPort.getClient(id);
+    public Client get(UUID id) {
+        return null;
     }
 
-    public String getInfo(UUID id) throws RepositoryException {
-        return readClientPort.getClient(id).toString();
+    public String getInfo(UUID id) {
+        return null;
     }
 
-    public double getClientBalance(UUID id) throws RepositoryException {
-        return readClientPort.getClient(id).getBalance();
+    public double getClientBalance(UUID id) {
+        return 0;
     }
 
-    public boolean isClientArchive(UUID id) throws RepositoryException {
-        return readClientPort.getClient(id).getArchive();
+    public boolean isClientArchive(UUID id) {
+        return true;
     }
 
-    public Client archive(UUID id) throws RepositoryException {
-        return writeClientPort.deleteClient(id);
+    public Client archive(UUID id) {
+        return null;
     }
 
     public List<Client> getAllClients() {
-        return readClientPort.getAllClients();
+        return null;
     }
 
-    public Client getClientByUsername(String username) throws RepositoryException {
-        return readClientPort.getClientByUsername(username);
+    public Client getClientByUsername(String username) {
+        return null;
     }
 
     public int getPresentSize() {
-        return readClientPort.getClientList(false).size();
+        return 0;
     }
 
     public int getArchiveSize() {
-        return readClientPort.getClientList(true).size();
+        return 0;
     }
 
     public List<Client> getAllClientsFilter(String substr) {
-        return readClientPort.getAllClientsFilter(substr);
+        return null;
     }
 
     public List<Client> getClientsByUsername(String username) {
-        return readClientPort.getClientsByUsername(username);
+        return null;
     }
 
-    public Client updateClient(UUID uuid, Client client) throws RepositoryException {
-        return writeClientPort.updateClient(uuid, client);
+    public Client updateClient(UUID uuid, Client client) {
+        return null;
     }
 
-    public Client updatePassword(UUID uuid, String newPassword) throws RepositoryException {
-        return writeClientPort.changePassword(uuid, newPassword);
+    public Client updatePassword(UUID uuid, String newPassword) {
+        return null;
     }
 
-    public Client dearchive(UUID uuid) throws RepositoryException {
-        return writeClientPort.restoreClient(uuid);
+    public Client dearchive(UUID uuid) {
+        return null;
     }
 
-    public ClientType getClientTypeById(UUID uuid) throws RepositoryException {
-        List<Client> clients = getAllClients();
-        for (Client client : clients) {
-            if (client.getClientType().getId().equals(uuid)) {
-                return client.getClientType();
-            }
-        }
-        throw new RepositoryException(RepositoryException.REPOSITORY_GET_EXCEPTION);
+    public ClientType getClientTypeById(UUID uuid) {
+        return null;
     }
 }
