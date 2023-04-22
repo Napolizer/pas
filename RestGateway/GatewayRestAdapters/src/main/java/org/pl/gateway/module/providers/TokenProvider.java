@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.ValidationException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.pl.gateway.module.model.ClientRest;
+import org.pl.gateway.module.model.TokenClaims;
 
 import java.util.Date;
 
