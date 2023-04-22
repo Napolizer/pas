@@ -271,25 +271,25 @@ public class UserControllerIT {
 
     @Nested
     class GetUser {
-//        @Test
-//        void getUserPositiveTest() {
-//            given()
-////                    .header("Authorization", "Bearer " + retrieveToken())
-//                    .when()
-//                    .get("/api/user/id/" + adminId)
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(200)
-//                    .contentType(ContentType.JSON)
-//                    .body("id", is(adminId))
-//                    .body("archive", is(false))
-//                    .body("userAccessType", is("ADMINISTRATORS"))
-//                    .body("firstName", is("Admin"))
-//                    .body("lastName", is("Admin"))
-//                    .body("phoneNumber", is("123456789"))
-//                    .body("username", is("admin"))
-//                    .body("password", is(equalTo(null)));
-//        }
+        @Test
+        void getUserPositiveTest() {
+            given()
+//                    .header("Authorization", "Bearer " + retrieveToken())
+                    .when()
+                    .get("/api/user/id/" + adminId)
+                    .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .contentType(ContentType.JSON)
+                    .body("id", is(adminId))
+                    .body("archive", is(false))
+                    .body("userAccessType", is("ADMINISTRATORS"))
+                    .body("firstName", is("Admin"))
+                    .body("lastName", is("Admin"))
+                    .body("phoneNumber", is("123456789"))
+                    .body("username", is("admin"))
+                    .body("password", is(equalTo(null)));
+        }
 
         @Test
         void getUserMissingIdTest() {
