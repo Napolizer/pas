@@ -3,13 +3,19 @@ package org.pl.user.module.controllers;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.user.module.converters.UserConverter;
+import org.pl.user.module.model.User;
 import org.pl.user.module.model.UserRest;
 import org.pl.user.module.model.exceptions.RepositoryException;
 import org.pl.user.module.model.exceptions.RepositoryRestException;
+import org.pl.user.module.model.exceptions.UserException;
 import org.pl.user.module.providers.ETagProvider;
 import org.pl.user.module.userinterface.user.ReadUserUseCases;
 import org.pl.user.module.userinterface.user.WriteUserUseCases;
@@ -28,10 +34,13 @@ public class UserController {
     private UserConverter userConverter;
     @Inject
     private ETagProvider eTagProvider;
+    @Context
+    private HttpHeaders httpHeaders;
 
     @GET
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+//    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getUserById(@PathParam("id")String id) {
         var json = Json.createObjectBuilder();
         try {
@@ -56,6 +65,7 @@ public class UserController {
     @GET
     @Path("/username/{username}")
     @Produces(MediaType.APPLICATION_JSON)
+//    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
     public Response getUserByUsername(@PathParam("username")String username, @QueryParam("strict")String strict) {
         var json = Json.createObjectBuilder();
         try {
@@ -77,4 +87,137 @@ public class UserController {
             return Response.status(404).entity(json.build()).build();
         }
     }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+//    @RolesAllowed("ADMIN")
+    public Response addUser(@Valid @NotNull UserRest user) {
+        var json = Json.createObjectBuilder();
+        try {
+            User createdUser = writeUserUseCases.add(userConverter.convert(user));
+            return Response.status(201).entity(userConverter.convert(createdUser)).build();
+        } catch (RepositoryException e) {
+            json.add("error", "User already exists");
+            return Response.status(400).entity(json.build()).build();
+        } catch (UserException e) {
+            json.add("error", "Invalid fields");
+            return Response.status(400).entity(json.build()).build();
+        }
+    }
+
+    @PUT
+    @Path("/id/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUser(UserRest user, @PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
+        try {
+            String etag = httpHeaders.getHeaderString("If-Match");
+            if (etag == null) {
+                json.add("error", "Request is missing If-Match header");
+                return Response.status(400).entity(json.build()).build();
+            }
+            UUID uuid = UUID.fromString(id);
+
+            User existingUser = readUserUseCases.get(uuid);
+            if (!eTagProvider.generateETag(existingUser).equals(etag)) {
+                json.add("error", "Invalid If-Match signature");
+                return Response.status(412).entity(json.build()).build();
+            }
+
+            User updatedUser = writeUserUseCases.updateUser(uuid, userConverter.convert(user));
+            return Response.ok(userConverter.convert(updatedUser)).build();
+        } catch (IllegalArgumentException e) {
+            json.add("error", "Invalid data in request");
+            return Response.status(400).entity(json.build()).build();
+        } catch (RepositoryException e) {
+            json.add("error", "User does not exist");
+            return Response.status(404).entity(json.build()).build();
+        }
+    }
+
+    @PUT
+    @Path("/id/{id}/deactivate")
+    @Produces(MediaType.APPLICATION_JSON)
+//    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
+    public Response deactivateUser(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
+        try {
+            UUID uuid = UUID.fromString(id);
+            User user = writeUserUseCases.archive(uuid);
+            return Response.ok(userConverter.convert(user)).build();
+        } catch (IllegalArgumentException e) {
+            json.add("error", "Invalid data in request");
+            return Response.status(400).entity(json.build()).build();
+        } catch (RepositoryException e) {
+            if (e.getMessage().equals(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION)) {
+                json.add("error", "User is already deactivated");
+                return Response.status(400).entity(json.build()).build();
+            } else {
+                json.add("error", "User does not exist");
+                json.add("exception", e.getMessage());
+                return Response.status(404).entity(json.build()).build();
+            }
+        }
+    }
+
+    @PUT
+    @Path("/id/{id}/activate")
+    @Produces(MediaType.APPLICATION_JSON)
+//    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
+    public Response activateUser(@PathParam("id")String id) {
+        var json = Json.createObjectBuilder();
+        try {
+            UUID uuid = UUID.fromString(id);
+            User user = writeUserUseCases.dearchive(uuid);
+            return Response.ok(userConverter.convert(user)).build();
+        } catch (IllegalArgumentException e) {
+            json.add("error", "Invalid data in request");
+            return Response.status(400).entity(json.build()).build();
+        } catch (RepositoryException e) {
+            if (e.getMessage().equals(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION)) {
+                json.add("error", "User is already active");
+                return Response.status(400).entity(json.build()).build();
+            } else {
+                json.add("error", "User does not exist");
+                return Response.status(404).entity(json.build()).build();
+            }
+        }
+    }
+
+    @GET
+    @Path("/filter/{substr}")
+    @Produces(MediaType.APPLICATION_JSON)
+//    @RolesAllowed(value={"EMPLOYEE", "ADMIN"})
+    public Response getAllUsersFilter(@PathParam("substr")String substr) {
+        List<UserRest> users = readUserUseCases.getAllUsersFilter(substr)
+                .stream()
+                .map(userConverter::convert)
+                .toList();
+        return Response.ok(users).build();
+    }
+
+//    @POST
+//    @Path("/login")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public Response login(@NotNull @Valid UserRestCredentials userCredentials) {
+//        var json = Json.createObjectBuilder();
+//        try {
+//            ClientRest client = userAuthenticator.authenticate(userCredentials);
+//
+//            String token = tokenProvider.generateToken(client);
+//            json.add("token", token);
+//            return Response.ok(json.build()).build();
+//        } catch (UserNotFoundException e) {
+//            json.add("error", e.getMessage());
+//            return Response.status(404).entity(json.build()).build();
+//        } catch (InvalidCredentialsException e) {
+//            json.add("error", e.getMessage());
+//            return Response.status(401).entity(json.build()).build();
+//        } catch (UserIsArchiveException e) {
+//            json.add("error", e.getMessage());
+//            return Response.status(400).entity(json.build()).build();
+//        }
+//    }
 }
