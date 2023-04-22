@@ -25,9 +25,9 @@ import org.pl.repair.module.model.exceptions.authentication.UserIsArchiveExcepti
 import org.pl.repair.module.model.exceptions.authentication.UserNotFoundException;
 import org.pl.repair.module.providers.ETagProvider;
 import org.pl.repair.module.providers.TokenProvider;
-import org.pl.repair.module.userinterface.client.ReadClientUseCases;
-import org.pl.repair.module.userinterface.client.WriteHardwareUseCase;
-import org.pl.repair.module.userinterface.repair.ReadRepairUseCases;
+import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
+import org.pl.gateway.module.userinterface.client.WriteHardwareUseCase;
+import org.pl.gateway.module.userinterface.repair.ReadRepairUseCases;
 
 import java.util.*;
 import java.util.stream.Collectors;

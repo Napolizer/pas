@@ -17,8 +17,8 @@ import org.pl.repair.module.model.Client;
 import org.pl.repair.module.model.DateRange;
 import org.pl.repair.module.model.Hardware;
 import org.pl.repair.module.model.RepairRest;
-import org.pl.repair.module.userinterface.client.ReadClientUseCases;
-import org.pl.repair.module.userinterface.hardware.ReadHardwareUseCases;
+import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
+import org.pl.gateway.module.userinterface.hardware.ReadHardwareUseCases;
 
 import java.io.StringReader;
 import java.text.SimpleDateFormat;

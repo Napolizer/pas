@@ -16,8 +16,8 @@ import org.pl.repair.module.model.HardwareRest;
 import org.pl.repair.module.model.exceptions.HardwareException;
 import org.pl.repair.module.model.exceptions.RepositoryException;
 import org.pl.repair.module.providers.ETagProvider;
-import org.pl.repair.module.userinterface.hardware.ReadHardwareUseCases;
-import org.pl.repair.module.userinterface.hardware.WriteHardwareUseCases;
+import org.pl.gateway.module.userinterface.hardware.ReadHardwareUseCases;
+import org.pl.gateway.module.userinterface.hardware.WriteHardwareUseCases;
 
 import java.util.List;
 import java.util.UUID;

@@ -13,5 +13,6 @@
 
     <modules>
         <module>GatewayRestAdapters</module>
+        <module>GatewayPorts</module>
     </modules>
 </project>

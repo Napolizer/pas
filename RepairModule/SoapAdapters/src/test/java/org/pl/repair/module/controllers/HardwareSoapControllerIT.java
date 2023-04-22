@@ -17,8 +17,8 @@ import org.pl.repair.module.model.ComputerSoap;
 import org.pl.repair.module.model.ConditionSoap;
 import org.pl.repair.module.model.HardwareSoap;
 import org.pl.repair.module.model.MonitorSoap;
-import org.pl.repair.module.userinterface.hardware.ReadHardwareUseCases;
-import org.pl.repair.module.userinterface.hardware.WriteHardwareUseCases;
+import org.pl.gateway.module.userinterface.hardware.ReadHardwareUseCases;
+import org.pl.gateway.module.userinterface.hardware.WriteHardwareUseCases;
 
 import java.io.File;
 import java.util.UUID;

@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 import org.pl.repair.module.converters.ClientTypeConverter;
 import org.pl.repair.module.model.ClientTypeRest;
 import org.pl.repair.module.model.exceptions.RepositoryException;
-import org.pl.repair.module.userinterface.client.ReadClientUseCases;
+import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
 
 import java.util.UUID;
 
