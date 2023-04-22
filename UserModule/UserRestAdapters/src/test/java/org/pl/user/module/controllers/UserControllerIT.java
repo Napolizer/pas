@@ -715,59 +715,59 @@ public class UserControllerIT {
         }
     }
 
-//    @Nested
-//    class ChangePassword {
-//        @Test
-//        void changePasswordPositiveTest() {
-//            Map<String, Object> password = new HashMap<>();
-//            password.put("newPassword", "newPassword");
-//            given()
-////                    .header("Authorization", "Bearer " + retrieveToken())
-//                    .contentType(ContentType.JSON)
-//                    .body(password)
-//                    .when()
-//                    .put("/api/user/id/" + adminId + "/change_password")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(200);
-//            // Should not be able to log in using old password
-//            Map<String, Object> credentials = new HashMap<>();
-//            credentials.put("username", "admin");
-//            credentials.put("password", "password");
-//            given()
-//                    .contentType(ContentType.JSON)
-//                    .body(credentials)
-//                    .when()
-//                    .post("/api/user/login")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(401);
-//
-//            adminPassword = "newPassword";
-//            password.put("newPassword", "password");
-//            given()
-////                    .header("Authorization", "Bearer " + retrieveToken())
-//                    .contentType(ContentType.JSON)
-//                    .body(password)
-//                    .when()
-//                    .put("/api/user/id/" + adminId + "/change_password")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(200);
-//        }
-//
-//        @Test
-//        void changePasswordEmptyBody() {
-//            Map<String, Object> body = new HashMap<>();
-//            given()
-////                    .header("Authorization", "Bearer " + retrieveToken())
-//                    .contentType(ContentType.JSON)
-//                    .body(body)
-//                    .when()
-//                    .put("/api/user/id/" + adminId + "/change_password")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(400);
-//        }
-//    }
+    @Nested
+    class ChangePassword {
+        @Test
+        void changePasswordPositiveTest() {
+            Map<String, Object> password = new HashMap<>();
+            password.put("newPassword", "newPassword");
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .contentType(ContentType.JSON)
+                    .body(password)
+                    .when()
+                    .put("/api/user/id/" + adminId + "/change_password")
+                    .then()
+                    .assertThat()
+                    .statusCode(200);
+            // Should not be able to log in using old password
+            Map<String, Object> credentials = new HashMap<>();
+            credentials.put("username", "admin");
+            credentials.put("password", "password");
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(credentials)
+                    .when()
+                    .post("/api/user/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(401);
+
+            adminPassword = "newPassword";
+            password.put("newPassword", "password");
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .contentType(ContentType.JSON)
+                    .body(password)
+                    .when()
+                    .put("/api/user/id/" + adminId + "/change_password")
+                    .then()
+                    .assertThat()
+                    .statusCode(200);
+        }
+
+        @Test
+        void changePasswordEmptyBody() {
+            Map<String, Object> body = new HashMap<>();
+            given()
+                    .header("Authorization", "Bearer " + retrieveToken())
+                    .contentType(ContentType.JSON)
+                    .body(body)
+                    .when()
+                    .put("/api/user/id/" + adminId + "/change_password")
+                    .then()
+                    .assertThat()
+                    .statusCode(400);
+        }
+    }
 }
