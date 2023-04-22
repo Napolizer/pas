@@ -13,7 +13,11 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.gateway.module.converters.HardwareConverter;
 import org.pl.gateway.module.model.HardwareRest;
+import org.pl.gateway.module.model.exceptions.HardwareException;
+import org.pl.gateway.module.model.exceptions.RepositoryException;
 import org.pl.gateway.module.providers.ETagProvider;
+import org.pl.gateway.module.userinterface.hardware.ReadHardwareUseCases;
+import org.pl.gateway.module.userinterface.hardware.WriteHardwareUseCases;
 
 import java.util.List;
 import java.util.UUID;

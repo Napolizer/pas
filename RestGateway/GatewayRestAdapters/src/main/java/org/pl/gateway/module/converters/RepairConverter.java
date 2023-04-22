@@ -2,9 +2,7 @@ package org.pl.gateway.module.converters;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.pl.gateway.module.model.ClientRest;
-import org.pl.gateway.module.model.HardwareRest;
-import org.pl.gateway.module.model.RepairRest;
+import org.pl.gateway.module.model.*;
 
 @ApplicationScoped
 public class RepairConverter {

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import org.pl.gateway.module.model.exceptions.ClientException;
 import org.pl.gateway.module.model.exceptions.ClientRestException;
 
 import java.io.Serializable;

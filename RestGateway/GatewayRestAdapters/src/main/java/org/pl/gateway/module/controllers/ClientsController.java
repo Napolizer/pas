@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.gateway.module.converters.ClientConverter;
 import org.pl.gateway.module.model.ClientRest;
+import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
 
 import java.util.List;
 

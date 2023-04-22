@@ -1,26 +1,17 @@
 package org.pl.gateway.module.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.pl.gateway.module.model.Client;
 import org.pl.gateway.module.model.ClientType;
-import org.pl.repair.module.controllers.ClientController;
-import org.pl.user.module.controllers.UserController;
 
 import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @ApplicationScoped
 public class ClientService {
-    @Inject
-    private ClientController clientController;
-
-    @Inject
-    private UserController userController;
 
     public Client add(Client client) {
         return null;

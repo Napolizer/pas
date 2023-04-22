@@ -11,6 +11,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.gateway.module.converters.ClientTypeConverter;
 import org.pl.gateway.module.model.ClientTypeRest;
+import org.pl.gateway.module.model.exceptions.RepositoryException;
+import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
 
 import java.util.UUID;
 

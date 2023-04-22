@@ -1,6 +1,7 @@
 package org.pl.gateway.module.converters;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import org.pl.gateway.module.model.DateRange;
 import org.pl.gateway.module.model.DateRangeRest;
 
 @ApplicationScoped

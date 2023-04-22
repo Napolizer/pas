@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.gateway.module.converters.HardwareConverter;
 import org.pl.gateway.module.model.HardwareRest;
+import org.pl.gateway.module.userinterface.hardware.ReadHardwareUseCases;
 
 import java.util.List;
 

@@ -11,7 +11,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.gateway.module.converters.RepairConverter;
 import org.pl.gateway.module.model.RepairRest;
+import org.pl.gateway.module.model.exceptions.RepositoryException;
 import org.pl.gateway.module.providers.ETagProvider;
+import org.pl.gateway.module.userinterface.repair.ReadRepairUseCases;
+import org.pl.gateway.module.userinterface.repair.WriteRepairUseCases;
 
 import java.security.Principal;
 import java.util.UUID;

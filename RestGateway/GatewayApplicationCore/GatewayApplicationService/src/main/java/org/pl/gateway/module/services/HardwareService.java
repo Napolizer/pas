@@ -1,23 +1,16 @@
 package org.pl.gateway.module.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.pl.gateway.module.model.Hardware;
 import org.pl.gateway.module.model.HardwareType;
-import org.pl.repair.module.controllers.HardwareController;
 
 import java.util.List;
 import java.util.UUID;
 
-//@NoArgsConstructor
 @RequiredArgsConstructor
-@AllArgsConstructor
 @ApplicationScoped
 public class HardwareService {
-    @Inject
-    private HardwareController hardwareController;
 
     public Hardware add(Hardware hardware){
         return null;

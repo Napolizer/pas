@@ -2,6 +2,7 @@ package org.pl.gateway.module.converters;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.pl.gateway.module.model.Hardware;
 import org.pl.gateway.module.model.HardwareRest;
 
 @ApplicationScoped

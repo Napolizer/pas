@@ -13,7 +13,12 @@ import jakarta.json.bind.adapter.JsonbAdapter;
 import org.pl.gateway.module.converters.ClientConverter;
 import org.pl.gateway.module.converters.DateRangeConverter;
 import org.pl.gateway.module.converters.HardwareConverter;
+import org.pl.gateway.module.model.Client;
+import org.pl.gateway.module.model.DateRange;
+import org.pl.gateway.module.model.Hardware;
 import org.pl.gateway.module.model.RepairRest;
+import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
+import org.pl.gateway.module.userinterface.hardware.ReadHardwareUseCases;
 
 import java.io.StringReader;
 import java.text.SimpleDateFormat;

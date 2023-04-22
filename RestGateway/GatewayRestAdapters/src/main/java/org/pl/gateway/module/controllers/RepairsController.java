@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.gateway.module.converters.RepairConverter;
 import org.pl.gateway.module.model.RepairRest;
+import org.pl.gateway.module.userinterface.repair.ReadRepairUseCases;
 
 import java.util.List;
 

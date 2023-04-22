@@ -15,15 +15,21 @@ import jakarta.ws.rs.core.Response;
 import org.pl.gateway.module.authentication.UserAuthenticator;
 import org.pl.gateway.module.converters.ClientConverter;
 import org.pl.gateway.module.converters.RepairConverter;
+import org.pl.gateway.module.model.Client;
 import org.pl.gateway.module.model.ClientRest;
 import org.pl.gateway.module.model.RepairRest;
 import org.pl.gateway.module.model.UserRestCredentials;
+import org.pl.gateway.module.model.exceptions.ClientException;
+import org.pl.gateway.module.model.exceptions.RepositoryException;
 import org.pl.gateway.module.model.exceptions.RepositoryRestException;
 import org.pl.gateway.module.model.exceptions.authentication.InvalidCredentialsException;
 import org.pl.gateway.module.model.exceptions.authentication.UserIsArchiveException;
 import org.pl.gateway.module.model.exceptions.authentication.UserNotFoundException;
 import org.pl.gateway.module.providers.ETagProvider;
 import org.pl.gateway.module.providers.TokenProvider;
+import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
+import org.pl.gateway.module.userinterface.client.WriteClientUseCases;
+import org.pl.gateway.module.userinterface.repair.ReadRepairUseCases;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,7 +39,7 @@ public class ClientController {
     @Inject
     private ReadClientUseCases readClientUseCases;
     @Inject
-    private WriteHardwareUseCase writeClientUseCases;
+    private WriteClientUseCases writeClientUseCases;
     @Inject
     private ReadRepairUseCases readRepairUseCases;
     @Inject

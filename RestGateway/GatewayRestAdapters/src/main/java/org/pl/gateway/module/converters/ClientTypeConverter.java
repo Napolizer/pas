@@ -1,10 +1,7 @@
 package org.pl.gateway.module.converters;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.pl.gateway.module.model.BasicRest;
-import org.pl.gateway.module.model.ClientTypeRest;
-import org.pl.gateway.module.model.PremiumRest;
-import org.pl.gateway.module.model.VipRest;
+import org.pl.gateway.module.model.*;
 
 
 @ApplicationScoped

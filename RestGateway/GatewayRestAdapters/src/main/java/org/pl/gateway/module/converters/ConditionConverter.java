@@ -1,6 +1,7 @@
 package org.pl.gateway.module.converters;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import org.pl.gateway.module.model.Condition;
 import org.pl.gateway.module.model.ConditionRest;
 
 @ApplicationScoped

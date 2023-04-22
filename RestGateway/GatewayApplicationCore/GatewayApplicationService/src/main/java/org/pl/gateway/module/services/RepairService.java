@@ -1,22 +1,15 @@
 package org.pl.gateway.module.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.pl.gateway.module.model.Repair;
 import org.pl.gateway.module.userinterface.repair.ReadRepairUseCases;
-import org.pl.repair.module.controllers.RepairController;
 
 import java.util.*;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @ApplicationScoped
 public class RepairService implements ReadRepairUseCases {
-    @Inject
-    private RepairController repairController;
-
     public Repair add(Repair repair) {
         return null;
     }
