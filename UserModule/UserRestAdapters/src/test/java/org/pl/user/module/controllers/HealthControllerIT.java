@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.equalTo;
 @SharedContainerConfig(AppContainerConfig.class)
 class HealthControllerIT {
     @Test
-    void getAllHardwaresTest() {
+    void healthControllerPositiveTest() {
         given()
                 .when()
                 .get("/api/health")

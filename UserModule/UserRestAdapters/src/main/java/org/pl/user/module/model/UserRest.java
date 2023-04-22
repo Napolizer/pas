@@ -1,5 +1,8 @@
 package org.pl.user.module.model;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serializable;
@@ -12,12 +15,22 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class UserRest implements Serializable {
     private UUID id;
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
+    @NotNull
     private Boolean archive;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
+    @NotBlank
     private String phoneNumber;
-    private UserAccessType userAccessType;
-    private Address address;
+    @NotNull
+    @Valid
+    private UserAccessTypeRest userAccessType;
+    @NotNull
+    @Valid
+    private AddressRest address;
 }
