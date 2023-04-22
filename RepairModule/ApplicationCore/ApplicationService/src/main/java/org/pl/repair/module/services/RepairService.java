@@ -8,10 +8,10 @@ import org.pl.repair.module.model.exceptions.ClientException;
 import org.pl.repair.module.model.exceptions.HardwareException;
 import org.pl.repair.module.model.exceptions.RepositoryException;
 import org.pl.repair.module.model.Repair;
-import org.pl.gateway.module.infrastructure.repair.ReadRepairPort;
-import org.pl.gateway.module.infrastructure.repair.WriteRepairPort;
-import org.pl.gateway.module.userinterface.repair.ReadRepairUseCases;
-import org.pl.gateway.module.userinterface.repair.WriteRepairUseCases;
+import org.pl.repair.module.infrastructure.repair.ReadRepairPort;
+import org.pl.repair.module.infrastructure.repair.WriteRepairPort;
+import org.pl.repair.module.userinterface.repair.ReadRepairUseCases;
+import org.pl.repair.module.userinterface.repair.WriteRepairUseCases;
 
 import java.util.*;
 

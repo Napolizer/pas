@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 import org.pl.repair.module.converters.HardwareTypeConverter;
 import org.pl.repair.module.model.HardwareTypeRest;
 import org.pl.repair.module.model.exceptions.RepositoryException;
-import org.pl.gateway.module.userinterface.hardware.ReadHardwareUseCases;
+import org.pl.repair.module.userinterface.hardware.ReadHardwareUseCases;
 
 
 import java.util.UUID;

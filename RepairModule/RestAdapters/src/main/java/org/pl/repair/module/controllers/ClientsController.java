@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.repair.module.converters.ClientConverter;
 import org.pl.repair.module.model.ClientRest;
-import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
+import org.pl.repair.module.userinterface.client.ReadClientUseCases;
 
 import java.util.List;
 

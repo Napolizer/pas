@@ -7,7 +7,7 @@ import jakarta.servlet.annotation.WebListener;
 
 import org.pl.repair.module.converters.ClientConverter;
 import org.pl.repair.module.model.*;
-import org.pl.gateway.module.userinterface.client.WriteHardwareUseCase;
+import org.pl.repair.module.userinterface.client.WriteHardwareUseCase;
 
 import java.util.logging.Logger;
 

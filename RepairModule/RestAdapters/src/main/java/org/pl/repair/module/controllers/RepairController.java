@@ -13,8 +13,8 @@ import org.pl.repair.module.converters.RepairConverter;
 import org.pl.repair.module.model.RepairRest;
 import org.pl.repair.module.model.exceptions.RepositoryException;
 import org.pl.repair.module.providers.ETagProvider;
-import org.pl.gateway.module.userinterface.repair.ReadRepairUseCases;
-import org.pl.gateway.module.userinterface.repair.WriteRepairUseCases;
+import org.pl.repair.module.userinterface.repair.ReadRepairUseCases;
+import org.pl.repair.module.userinterface.repair.WriteRepairUseCases;
 
 import java.security.Principal;
 import java.util.UUID;

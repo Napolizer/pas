@@ -8,10 +8,10 @@ import org.pl.repair.module.model.exceptions.ClientException;
 import org.pl.repair.module.model.exceptions.RepositoryException;
 import org.pl.repair.module.model.Client;
 import org.pl.repair.module.model.ClientType;
-import org.pl.gateway.module.infrastructure.client.ReadClientPort;
-import org.pl.gateway.module.infrastructure.client.WriteClientPort;
-import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
-import org.pl.gateway.module.userinterface.client.WriteHardwareUseCase;
+import org.pl.repair.module.infrastructure.client.ReadClientPort;
+import org.pl.repair.module.infrastructure.client.WriteClientPort;
+import org.pl.repair.module.userinterface.client.ReadClientUseCases;
+import org.pl.repair.module.userinterface.client.WriteHardwareUseCase;
 
 import java.util.List;
 import java.util.Objects;

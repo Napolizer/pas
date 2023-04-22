@@ -9,7 +9,7 @@ import org.pl.repair.module.model.exceptions.RepositoryException;
 import org.pl.repair.module.model.exceptions.authentication.InvalidCredentialsException;
 import org.pl.repair.module.model.exceptions.authentication.UserIsArchiveException;
 import org.pl.repair.module.model.exceptions.authentication.UserNotFoundException;
-import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
+import org.pl.repair.module.userinterface.client.ReadClientUseCases;
 
 @ApplicationScoped
 public class UserAuthenticator {

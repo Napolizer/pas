@@ -8,8 +8,8 @@ import org.pl.repair.module.adapter.data.model.HardwareEnt;
 import org.pl.repair.module.adapter.data.repositories.HardwareEntRepository;
 import org.pl.repair.module.model.exceptions.RepositoryException;
 import org.pl.repair.module.model.Hardware;
-import org.pl.gateway.module.infrastructure.hardware.ReadHardwarePort;
-import org.pl.gateway.module.infrastructure.hardware.WriteHardwarePort;
+import org.pl.repair.module.infrastructure.hardware.ReadHardwarePort;
+import org.pl.repair.module.infrastructure.hardware.WriteHardwarePort;
 
 import java.util.ArrayList;
 import java.util.List;
