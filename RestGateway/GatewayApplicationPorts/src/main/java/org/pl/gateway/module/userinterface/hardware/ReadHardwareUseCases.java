@@ -1,8 +1,9 @@
 package org.pl.gateway.module.userinterface.hardware;
 
-import org.pl.repair.module.model.Hardware;
-import org.pl.repair.module.model.HardwareType;
-import org.pl.repair.module.model.exceptions.RepositoryException;
+
+import org.pl.gateway.module.model.Hardware;
+import org.pl.gateway.module.model.HardwareType;
+import org.pl.gateway.module.model.exceptions.RepositoryException;
 
 import java.util.List;
 import java.util.UUID;

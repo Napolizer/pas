@@ -1,8 +1,8 @@
 package org.pl.gateway.module.userinterface.repair;
 
 
-import org.pl.repair.module.model.Repair;
-import org.pl.repair.module.model.exceptions.RepositoryException;
+import org.pl.gateway.module.model.Repair;
+import org.pl.gateway.module.model.exceptions.RepositoryException;
 
 import java.util.List;
 import java.util.UUID;

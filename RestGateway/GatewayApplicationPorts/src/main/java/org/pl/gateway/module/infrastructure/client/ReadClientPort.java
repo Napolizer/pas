@@ -1,5 +1,8 @@
 package org.pl.gateway.module.infrastructure.client;
 
+import org.pl.gateway.module.model.Client;
+import org.pl.gateway.module.model.exceptions.RepositoryException;
+
 import java.util.List;
 import java.util.UUID;
 
