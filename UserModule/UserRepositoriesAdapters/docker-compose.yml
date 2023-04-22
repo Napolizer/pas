@@ -1,0 +1,11 @@
+version: '3'
+services:
+  db:
+    image: postgres:15.2
+    container_name: tksUserModule
+    environment:
+      POSTGRES_DB: tksUserModule
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+    ports:
+      - "5432:5432"

@@ -68,6 +68,48 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.dkanejs.maven.plugins</groupId>
+                <artifactId>docker-compose-maven-plugin</artifactId>
+                <version>4.0.0</version>
+                <executions>
+                    <execution>
+                        <id>pull</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>pull</goal>
+                        </goals>
+                        <configuration>
+                            <composeFile>${project.basedir}/docker-compose.yml</composeFile>
+                            <ignorePullFailures>true</ignorePullFailures>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>up</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>up</goal>
+                        </goals>
+                        <configuration>
+                            <composeFile>${project.basedir}/docker-compose.yml</composeFile>
+                            <detachedMode>true</detachedMode>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

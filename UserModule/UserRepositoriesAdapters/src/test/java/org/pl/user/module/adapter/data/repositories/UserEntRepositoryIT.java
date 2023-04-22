@@ -42,6 +42,7 @@ public class UserEntRepositoryIT {
         return ShrinkWrap.create(JavaArchive.class)
                 .addPackages(true, "org.pl")
                 .addPackages(true, "org.hamcrest")
+                .addPackages(true, "org.postgresql")
                 .addAsResource(new File("src/main/resources/"),"")
                 .addAsResource(new File("target/classes/META-INF/"), "META-INF/")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");

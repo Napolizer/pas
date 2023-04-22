@@ -3,23 +3,16 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
              https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
-             version="3.1">
-  <persistence-unit name="H2_REPOSITORIES_ADAPTERS_TEST" transaction-type="JTA">
-    <class>org.pl.user.module.adapter.data.model.AddressEnt</class>
-    <class>org.pl.user.module.adapter.data.model.UserEnt</class>
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+             version="3.0">
+  <persistence-unit name="tksUserModulePU" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>java:app/jdbc/tksUserModulePU</jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <shared-cache-mode>NONE</shared-cache-mode>
     <validation-mode>AUTO</validation-mode>
     <properties>
-      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
-      <property name="javax.persistence.jdbc.url"    value="jdbc:h2:mem:test" />
-      <property name="javax.persistence.jdbc.user" value="sa" />
-      <property name="javax.persistence.jdbc.password" value="" />
-      <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
-      <property name="hibernate.hbm2ddl.auto" value="create-drop" />
-      <property name="show_sql" value="true"/>
-      <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
+      <property name="eclipselink.logging.level" value="FINE"/>
+      <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
     </properties>
-
   </persistence-unit>
 </persistence>
