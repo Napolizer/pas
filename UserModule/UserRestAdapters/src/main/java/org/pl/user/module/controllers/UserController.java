@@ -10,13 +10,19 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.pl.user.module.authentication.UserAuthenticator;
 import org.pl.user.module.converters.UserConverter;
 import org.pl.user.module.model.User;
 import org.pl.user.module.model.UserRest;
+import org.pl.user.module.model.UserRestCredentials;
 import org.pl.user.module.model.exceptions.RepositoryException;
 import org.pl.user.module.model.exceptions.RepositoryRestException;
 import org.pl.user.module.model.exceptions.UserException;
+import org.pl.user.module.model.exceptions.authentication.InvalidCredentialsException;
+import org.pl.user.module.model.exceptions.authentication.UserIsArchiveException;
+import org.pl.user.module.model.exceptions.authentication.UserNotFoundException;
 import org.pl.user.module.providers.ETagProvider;
+import org.pl.user.module.providers.TokenProvider;
 import org.pl.user.module.userinterface.user.ReadUserUseCases;
 import org.pl.user.module.userinterface.user.WriteUserUseCases;
 
@@ -36,6 +42,10 @@ public class UserController {
     private ETagProvider eTagProvider;
     @Context
     private HttpHeaders httpHeaders;
+    @Inject
+    private TokenProvider tokenProvider;
+    @Inject
+    private UserAuthenticator userAuthenticator;
 
     @GET
     @Path("/id/{id}")
@@ -197,27 +207,27 @@ public class UserController {
         return Response.ok(users).build();
     }
 
-//    @POST
-//    @Path("/login")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response login(@NotNull @Valid UserRestCredentials userCredentials) {
-//        var json = Json.createObjectBuilder();
-//        try {
-//            ClientRest client = userAuthenticator.authenticate(userCredentials);
-//
-//            String token = tokenProvider.generateToken(client);
-//            json.add("token", token);
-//            return Response.ok(json.build()).build();
-//        } catch (UserNotFoundException e) {
-//            json.add("error", e.getMessage());
-//            return Response.status(404).entity(json.build()).build();
-//        } catch (InvalidCredentialsException e) {
-//            json.add("error", e.getMessage());
-//            return Response.status(401).entity(json.build()).build();
-//        } catch (UserIsArchiveException e) {
-//            json.add("error", e.getMessage());
-//            return Response.status(400).entity(json.build()).build();
-//        }
-//    }
+    @POST
+    @Path("/login")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(@NotNull @Valid UserRestCredentials userCredentials) {
+        var json = Json.createObjectBuilder();
+        try {
+            UserRest client = userAuthenticator.authenticate(userCredentials);
+
+            String token = tokenProvider.generateToken(client);
+            json.add("token", token);
+            return Response.ok(json.build()).build();
+        } catch (UserNotFoundException e) {
+            json.add("error", e.getMessage());
+            return Response.status(404).entity(json.build()).build();
+        } catch (InvalidCredentialsException e) {
+            json.add("error", e.getMessage());
+            return Response.status(401).entity(json.build()).build();
+        } catch (UserIsArchiveException e) {
+            json.add("error", e.getMessage());
+            return Response.status(400).entity(json.build()).build();
+        }
+    }
 }

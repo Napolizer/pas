@@ -38,6 +38,10 @@
             <groupId>org.microshed</groupId>
             <artifactId>microshed-testing-payara-micro</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
