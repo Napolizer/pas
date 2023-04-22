@@ -13,6 +13,7 @@
     <modules>
         <module>RepairModule</module>
         <module>UserModule</module>
+        <module>RestGateway</module>
     </modules>
 
     <properties>
