@@ -1,8 +1,5 @@
 package org.pl.gateway.module.infrastructure.client;
 
-import org.pl.repair.module.model.Client;
-import org.pl.repair.module.model.exceptions.RepositoryException;
-
 import java.util.List;
 import java.util.UUID;
 
