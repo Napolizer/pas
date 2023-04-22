@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.*;
 @MicroShedTest
 @SharedContainerConfig(AppContainerConfig.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class HardwareSoapControllerMicroshedIT {
+public class AAHardwareSoapControllerMicroshedIT {
     @Test
     @Order(1)
     public void properlyGetsAllHardware() {

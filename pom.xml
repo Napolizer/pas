@@ -126,6 +126,7 @@
                         <include>**/*IT.java</include>
                         <include>**/*IntegrationTest.java</include>
                     </includes>
+                    <runOrder>alphabetical</runOrder>
                 </configuration>
                 <executions>
                     <execution>
