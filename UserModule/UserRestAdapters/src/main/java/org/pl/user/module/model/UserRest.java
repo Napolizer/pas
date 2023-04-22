@@ -18,6 +18,6 @@ public class UserRest implements Serializable {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private UserAccessType userAccessType;
-    private Address address;
+    private UserAccessTypeRest userAccessType;
+    private AddressRest address;
 }
