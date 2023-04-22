@@ -11,7 +11,7 @@ public class AppContainerConfig implements SharedContainerConfiguration {
     @Container
     public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15.2")
             .withNetworkAliases("testpostgres")
-            .withDatabaseName("tks")
+            .withDatabaseName("tksUserModule")
             .withUsername("docker")
             .withPassword("docker");
 
