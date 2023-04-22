@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>GatewayPorts</artifactId>
+    <artifactId>GatewayApplicationPorts</artifactId>
 
     <dependencies>
         <dependency>
