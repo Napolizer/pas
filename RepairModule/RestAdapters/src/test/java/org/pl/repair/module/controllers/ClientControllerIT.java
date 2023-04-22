@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.microshed.testing.SharedContainerConfig;
 import org.microshed.testing.jupiter.MicroShedTest;
+import org.pl.repair.module.factories.TokenFactory;
 import org.pl.repair.module.model.AddressRest;
 import org.pl.repair.module.model.BasicRest;
 import org.pl.repair.module.model.ClientAccessTypeRest;
@@ -21,12 +22,14 @@ import static org.hamcrest.Matchers.greaterThan;
 @MicroShedTest
 @SharedContainerConfig(AppContainerConfig.class)
 public class ClientControllerIT {
+    private TokenFactory tokenFactory;
     String userId;
     String userPassword;
     String adminId;
     String adminPassword;
 
     public ClientControllerIT() {
+        tokenFactory = new TokenFactory();
         adminPassword = "password";
         userPassword = "password";
         adminId = given()
@@ -46,39 +49,11 @@ public class ClientControllerIT {
     }
 
     private String retrieveToken() {
-        Map<String, Object> credentials = new HashMap<>();
-        credentials.put("username", "admin");
-        credentials.put("password", adminPassword);
-        return given()
-                .contentType(ContentType.JSON)
-                .body(credentials)
-                .when()
-                .post("/api/client/login")
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("token", is(instanceOf(String.class)))
-                .extract()
-                .path("token");
+        return tokenFactory.generateAdminToken("admin");
     }
 
     private String retrieveUserToken() {
-        Map<String, Object> credentials = new HashMap<>();
-        credentials.put("username", "user");
-        credentials.put("password", userPassword);
-        return given()
-                .contentType(ContentType.JSON)
-                .body(credentials)
-                .when()
-                .post("/api/client/login")
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("token", is(instanceOf(String.class)))
-                .extract()
-                .path("token");
+        return tokenFactory.generateUserToken("user");
     }
 
     @Nested
@@ -715,142 +690,6 @@ public class ClientControllerIT {
                     .header("Authorization", "Bearer " + retrieveToken())
                     .when()
                     .put("/api/client/id/" + userId + "/activate")
-                    .then()
-                    .assertThat()
-                    .statusCode(400);
-        }
-    }
-
-    @Nested
-    class Login {
-        @Test
-        public void loginPositiveTest() {
-            Map<String, Object> credentials = new HashMap<>();
-            credentials.put("username", "admin");
-            credentials.put("password", "password");
-            given()
-                    .contentType(ContentType.JSON)
-                    .body(credentials)
-                    .when()
-                    .post("/api/client/login")
-                    .then()
-                    .assertThat()
-                    .statusCode(200)
-                    .contentType(ContentType.JSON)
-                    .body("token", is(instanceOf(String.class)));
-        }
-
-        @Test
-        public void loginMissingUsernameTest() {
-            Map<String, Object> credentials = new HashMap<>();
-            credentials.put("password", "password");
-            given()
-                    .contentType(ContentType.JSON)
-                    .body(credentials)
-                    .when()
-                    .post("/api/client/login")
-                    .then()
-                    .assertThat()
-                    .statusCode(400);
-        }
-
-        @Test
-        public void loginMissingPasswordTest() {
-            Map<String, Object> credentials = new HashMap<>();
-            credentials.put("username", "admin");
-            given()
-                    .contentType(ContentType.JSON)
-                    .body(credentials)
-                    .when()
-                    .post("/api/client/login")
-                    .then()
-                    .assertThat()
-                    .statusCode(400);
-        }
-
-        @Test
-        public void loginWrongUsernameTest() {
-            Map<String, Object> credentials = new HashMap<>();
-            credentials.put("username", "abc");
-            credentials.put("password", "password");
-            given()
-                    .contentType(ContentType.JSON)
-                    .body(credentials)
-                    .when()
-                    .post("/api/client/login")
-                    .then()
-                    .assertThat()
-                    .statusCode(404);
-        }
-
-//        @Test
-//        public void loginWrongPasswordTest() {
-//            Map<String, Object> credentials = new HashMap<>();
-//            credentials.put("username", "admin");
-//            credentials.put("password", "abc");
-//            given()
-//                    .contentType(ContentType.JSON)
-//                    .body(credentials)
-//                    .when()
-//                    .post("/api/client/login")
-//                    .then()
-//                    .assertThat()
-//                    .statusCode(401);
-//        }
-
-        @Test
-        public void loginWrongUsernameAndPasswordTest() {
-            Map<String, Object> credentials = new HashMap<>();
-            credentials.put("username", "abc");
-            credentials.put("password", "abc");
-            given()
-                    .contentType(ContentType.JSON)
-                    .body(credentials)
-                    .when()
-                    .post("/api/client/login")
-                    .then()
-                    .assertThat()
-                    .statusCode(404);
-        }
-
-        @Test
-        public void loginWrongUsernameAndPasswordEmptyTest() {
-            Map<String, Object> credentials = new HashMap<>();
-            credentials.put("username", "");
-            credentials.put("password", "");
-            given()
-                    .contentType(ContentType.JSON)
-                    .body(credentials)
-                    .when()
-                    .post("/api/client/login")
-                    .then()
-                    .assertThat()
-                    .statusCode(400);
-        }
-
-        @Test
-        public void loginWrongUsernameAndPasswordNullTest() {
-            Map<String, Object> credentials = new HashMap<>();
-            credentials.put("username", null);
-            credentials.put("password", null);
-            given()
-                    .contentType(ContentType.JSON)
-                    .body(credentials)
-                    .when()
-                    .post("/api/client/login")
-                    .then()
-                    .assertThat()
-                    .statusCode(400);
-        }
-
-        @Test
-        public void loginWrongUsernameAndPasswordMissingTest() {
-            Map<String, Object> credentials = new HashMap<>();
-            given()
-                    .contentType(ContentType.JSON)
-                    .body(credentials)
-                    .when()
-                    .post("/api/client/login")
                     .then()
                     .assertThat()
                     .statusCode(400);

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.microshed.testing.SharedContainerConfig;
 import org.microshed.testing.jupiter.MicroShedTest;
+import org.pl.repair.module.factories.TokenFactory;
 import org.pl.repair.module.model.*;
 
 import java.util.HashMap;
@@ -15,28 +16,19 @@ import static org.hamcrest.CoreMatchers.*;
 
 @MicroShedTest
 @SharedContainerConfig(AppContainerConfig.class)
-public class HardwareControllerIT {
+class HardwareControllerIT {
+    private TokenFactory tokenFactory;
     private HardwareTypeRest hardwareType;
     private HardwareRest testHardware;
     private String hardwareId;
     private String hardwareETag;
 
+    public HardwareControllerIT() {
+        tokenFactory = new TokenFactory();
+    }
+
     private String retrieveToken() {
-        Map<String, Object> credentials = new HashMap<>();
-        credentials.put("username", "admin");
-        credentials.put("password", "password");
-        return given()
-                .contentType(ContentType.JSON)
-                .body(credentials)
-                .when()
-                .post("/api/client/login")
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("token", is(instanceOf(String.class)))
-                .extract()
-                .path("token");
+        return tokenFactory.generateAdminToken("admin");
     }
 
     private String retrieveHardwareId() {

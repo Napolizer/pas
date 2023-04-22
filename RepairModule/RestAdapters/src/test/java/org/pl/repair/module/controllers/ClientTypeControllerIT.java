@@ -4,6 +4,7 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.microshed.testing.SharedContainerConfig;
 import org.microshed.testing.jupiter.MicroShedTest;
+import org.pl.repair.module.factories.TokenFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,23 +15,11 @@ import static org.hamcrest.CoreMatchers.is;
 
 @MicroShedTest
 @SharedContainerConfig(AppContainerConfig.class)
-public class ClientTypeControllerIT {
+class ClientTypeControllerIT {
+    private static final TokenFactory tokenFactory = new TokenFactory();
+
     private static String retrieveToken() {
-        Map<String, Object> credentials = new HashMap<>();
-        credentials.put("username", "admin");
-        credentials.put("password", "password");
-        return given()
-                .contentType(ContentType.JSON)
-                .body(credentials)
-                .when()
-                .post("/api/client/login")
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("token", is(instanceOf(String.class)))
-                .extract()
-                .path("token");
+        return tokenFactory.generateAdminToken("admin");
     }
 
     @Test
