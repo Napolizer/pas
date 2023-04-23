@@ -297,7 +297,25 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     }
 
     public ClientRest updatePassword(UUID uuid, String newPassword) {
-        return null;
+        try {
+            HttpRequest updatedUserRequest = httpAuthorizedBuilderProvider.builder()
+                    .uri(new URI(userApi + "/user/id/" + uuid + "/change_password"))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(newPassword))
+                    .build();
+            HttpResponse<String> updatedUserResponse = httpClient.send(updatedUserRequest, HttpResponse.BodyHandlers.ofString());
+
+            if ( updatedUserResponse.statusCode() != 200) {
+                throw new WebApplicationException(updatedUserResponse.statusCode());
+            }
+
+            var reader = updatedUserResponse.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new ClientTypeRestJsonbAdapter())).
+                    fromJson(reader, ClientRest.class);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new WebApplicationException(400);
+        }
     }
 
     public ClientRest dearchive(UUID uuid) {
