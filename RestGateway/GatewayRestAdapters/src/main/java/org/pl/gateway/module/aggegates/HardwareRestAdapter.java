@@ -45,7 +45,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
                     toJson(HardwareRest);
 
 
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi + "/hardware"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
@@ -67,7 +67,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
 
     public boolean isHardwareArchive(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi +"/hardware/id/" + id))
                     .GET()
                     .build();
@@ -101,7 +101,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
 
     public String getInfo(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi +"/hardware/id/" + id))
                     .GET()
                     .build();
@@ -118,7 +118,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
 
     public void archive(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi + "/hardware/id/" + id))
                     .DELETE()
                     .build();
@@ -132,7 +132,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
     }
     public int getPresentSize() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi + "/hardware/present"))
                     .GET()
                     .build();
@@ -150,7 +150,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
 
     public int getArchiveSize() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi + "/hardwares"))
                     .GET()
                     .build();
@@ -175,7 +175,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
     public List<HardwareRest> getAllHardwares() {
         try {
             System.out.println("headers: " + httpHeaders.getHeaderString("Authorization"));
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi + "/hardwares"))
                     .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
@@ -198,7 +198,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
                     .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
                     toJson(HardwareRest);
 
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi + "/hardware/id/" + uuid))
                     .header("Content-Type", "application/json")
                     .PUT(HttpRequest.BodyPublishers.ofString(json))
@@ -220,7 +220,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
 
     public HardwareTypeRest getHardwareTypeById(UUID uuid) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi + "/hardwares"))
                     .GET()
                     .build();
@@ -243,7 +243,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
 
     public List<HardwareRest> getAllPresentHardware() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi + "/hardware/present"))
                     .GET()
                     .build();
@@ -260,7 +260,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
 
     public List<HardwareRest> getAllPresentHardwareFilter(String substr) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi + "/hardware/present/filter/" + substr))
                     .GET()
                     .build();

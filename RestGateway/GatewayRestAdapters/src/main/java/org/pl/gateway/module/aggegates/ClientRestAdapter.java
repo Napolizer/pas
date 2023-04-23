@@ -83,7 +83,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     public ClientRest get(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(clientApi +"/client/id/" + id))
                     .GET()
                     .build();
@@ -100,7 +100,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     public String getInfo(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(clientApi +"/client/id/" + id))
                     .GET()
                     .build();
@@ -117,7 +117,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     public double getClientBalance(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(clientApi +"/client/id/" + id))
                     .GET()
                     .build();
@@ -134,7 +134,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     public boolean isClientArchive(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(clientApi +"/client/id/" + id))
                     .GET()
                     .build();
@@ -155,7 +155,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     public List<ClientRest> getAllClients() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI( clientApi + "/clients"))
                     .GET()
                     .build();
@@ -172,7 +172,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     public ClientRest getClientByUsername(String username) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(clientApi +"/client/username/" + username))
                     .GET()
                     .build();
@@ -189,7 +189,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     public int getPresentSize() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(clientApi + "/clients"))
                     .GET()
                     .build();
@@ -218,7 +218,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     public int getArchiveSize() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(clientApi + "/clients"))
                     .GET()
                     .build();
@@ -247,7 +247,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     public List<ClientRest> getAllClientsFilter(String substr) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI( clientApi + "/client/filter/" + substr))
                     .GET()
                     .build();
@@ -276,7 +276,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     public ClientTypeRest getClientTypeById(UUID uuid) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(clientApi + "/clients"))
                     .GET()
                     .build();
