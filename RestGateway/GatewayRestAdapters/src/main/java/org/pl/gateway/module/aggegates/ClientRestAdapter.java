@@ -298,10 +298,13 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     public ClientRest updatePassword(UUID uuid, String newPassword) {
         try {
+            var json = Json.createObjectBuilder();
+            json.add("newPassword", newPassword);
+
             HttpRequest updatedUserRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(userApi + "/user/id/" + uuid + "/change_password"))
                     .header("Content-Type", "application/json")
-                    .PUT(HttpRequest.BodyPublishers.ofString(newPassword))
+                    .PUT(HttpRequest.BodyPublishers.ofString(json.build().toString()))
                     .build();
             HttpResponse<String> updatedUserResponse = httpClient.send(updatedUserRequest, HttpResponse.BodyHandlers.ofString());
 
