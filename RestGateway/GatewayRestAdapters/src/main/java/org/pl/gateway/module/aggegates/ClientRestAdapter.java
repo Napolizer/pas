@@ -262,8 +262,38 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
-    public ClientRest updateClient(UUID uuid, ClientRest ClientRest) {
-        return null;
+    public ClientRest updateClient(UUID uuid, ClientRest clientRest) {
+        try {
+            var json = JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new ClientTypeRestJsonbAdapter())).
+                    toJson(new ClientRestWithPassword(clientRest));
+
+            HttpRequest updatedClientRequest = httpAuthorizedBuilderProvider.builder()
+                    .uri(new URI(clientApi + "/client/id/" + uuid))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+            HttpResponse<String> updatedClientResponse = httpClient.send(updatedClientRequest, HttpResponse.BodyHandlers.ofString());
+
+            HttpRequest updatedUserRequest = httpAuthorizedBuilderProvider.builder()
+                    .uri(new URI(userApi + "/user/id/" + uuid))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+            HttpResponse<String> updatedUserResponse = httpClient.send(updatedUserRequest, HttpResponse.BodyHandlers.ofString());
+
+
+            if (updatedClientResponse.statusCode() != 200 || updatedUserResponse.statusCode() != 200) {
+                throw new WebApplicationException(updatedClientResponse.statusCode());
+            }
+
+            var reader = updatedClientResponse.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new ClientTypeRestJsonbAdapter())).
+                    fromJson(reader, ClientRest.class);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new WebApplicationException(400);
+        }
     }
 
     public ClientRest updatePassword(UUID uuid, String newPassword) {
