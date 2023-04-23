@@ -1,7 +1,5 @@
 package org.pl.gateway.module.aggegates;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
@@ -18,7 +16,6 @@ import org.pl.gateway.module.model.ClientRest;
 import org.pl.gateway.module.model.ClientRestWithPassword;
 import org.pl.gateway.module.model.ClientTypeRest;
 import org.pl.gateway.module.model.UserRestCredentials;
-import org.pl.gateway.module.model.exceptions.RepositoryRestException;
 import org.pl.gateway.module.jsonb.adapters.RepairJsonbAdapter;
 import org.pl.gateway.module.model.*;
 import org.pl.gateway.module.model.exceptions.authentication.InvalidCredentialsException;
@@ -87,7 +84,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public ClientRest get(UUID id) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(repairApi +"/client/id/" + id))
+                    .uri(new URI(clientApi +"/client/id/" + id))
                     .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
@@ -105,7 +102,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public String getInfo(UUID id) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(repairApi +"/client/id/" + id))
+                    .uri(new URI(clientApi +"/client/id/" + id))
                     .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
@@ -123,7 +120,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public double getClientBalance(UUID id) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(repairApi +"/client/id/" + id))
+                    .uri(new URI(clientApi +"/client/id/" + id))
                     .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
@@ -141,7 +138,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public boolean isClientArchive(UUID id) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(repairApi +"/client/id/" + id))
+                    .uri(new URI(clientApi +"/client/id/" + id))
                     .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
@@ -163,7 +160,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public List<ClientRest> getAllClients() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI( repairApi + "/clients"))
+                    .uri(new URI( clientApi + "/clients"))
                     .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
@@ -181,7 +178,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public ClientRest getClientByUsername(String username) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(repairApi +"/client/username/" + username))
+                    .uri(new URI(clientApi +"/client/username/" + username))
                     .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
@@ -199,7 +196,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public int getPresentSize() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(repairApi + "/clients"))
+                    .uri(new URI(clientApi + "/clients"))
                     .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
@@ -229,7 +226,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public int getArchiveSize() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(repairApi + "/clients"))
+                    .uri(new URI(clientApi + "/clients"))
                     .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
@@ -259,7 +256,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public List<ClientRest> getAllClientsFilter(String substr) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI( repairApi + "/client/filter/" + substr))
+                    .uri(new URI( clientApi + "/client/filter/" + substr))
                     .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
@@ -289,7 +286,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public ClientTypeRest getClientTypeById(UUID uuid) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(repairApi + "/clients"))
+                    .uri(new URI(clientApi + "/clients"))
                     .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
