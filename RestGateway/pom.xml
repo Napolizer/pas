@@ -13,7 +13,5 @@
 
     <modules>
         <module>GatewayRestAdapters</module>
-        <module>GatewayApplicationPorts</module>
-        <module>GatewayApplicationCore</module>
     </modules>
 </project>
