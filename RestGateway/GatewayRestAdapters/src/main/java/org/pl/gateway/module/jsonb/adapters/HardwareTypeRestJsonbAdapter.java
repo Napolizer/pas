@@ -1,4 +1,4 @@
-package org.pl.gateway.module.adapters;
+package org.pl.gateway.module.jsonb.adapters;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;

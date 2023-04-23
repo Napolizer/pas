@@ -7,7 +7,7 @@ import jakarta.json.bind.JsonbConfig;
 import jakarta.ws.rs.WebApplicationException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.pl.gateway.module.adapters.RepairJsonbAdapter;
+import org.pl.gateway.module.jsonb.adapters.RepairJsonbAdapter;
 import org.pl.gateway.module.model.RepairRest;
 
 import java.io.IOException;

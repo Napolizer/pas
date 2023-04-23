@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.pl.gateway.module.adapters.RepairJsonbAdapter;
+import org.pl.gateway.module.jsonb.adapters.RepairJsonbAdapter;
 import org.pl.gateway.module.annotations.ValidDateRange;
 import org.pl.gateway.module.model.exceptions.HardwareRestException;
 

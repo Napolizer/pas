@@ -6,7 +6,7 @@ import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.ws.rs.WebApplicationException;
 import lombok.RequiredArgsConstructor;
-import org.pl.gateway.module.adapters.HardwareTypeRestJsonbAdapter;
+import org.pl.gateway.module.jsonb.adapters.HardwareTypeRestJsonbAdapter;
 import org.pl.gateway.module.model.HardwareRest;
 import org.pl.gateway.module.model.HardwareTypeRest;
 
