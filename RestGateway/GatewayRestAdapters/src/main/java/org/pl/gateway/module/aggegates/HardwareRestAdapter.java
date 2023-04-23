@@ -6,6 +6,8 @@ import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.ws.rs.WebApplicationException;
 import lombok.RequiredArgsConstructor;
+import org.eclipse.microprofile.faulttolerance.*;
+import org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException;
 import org.pl.gateway.module.config.ApiConfig;
 import org.pl.gateway.module.jsonb.adapters.HardwareTypeRestJsonbAdapter;
 import org.pl.gateway.module.model.HardwareRest;
@@ -35,6 +37,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
     @Inject
     private ApiConfig apiConfig;
 
+    @Timeout(value = 5000)
     public HardwareRest add(HardwareRest HardwareRest) {
         try {
             var json = JsonbBuilder
@@ -62,6 +65,9 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public boolean isHardwareArchive(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -79,6 +85,9 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public HardwareRest get(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -96,6 +105,9 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public String getInfo(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -113,6 +125,9 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
         }
     }
 
+    @Timeout(value = 5000)
+    @Retry(maxRetries = 4, delay = 500)
+    @Bulkhead(1)
     public void archive(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -127,6 +142,10 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public int getPresentSize() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -145,6 +164,9 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public int getArchiveSize() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -169,6 +191,9 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public List<HardwareRest> getAllHardwares() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -187,6 +212,9 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
         }
     }
 
+    @Timeout(value = 5000)
+    @Retry(maxRetries = 4, delay = 500)
+    @Bulkhead(1)
     public HardwareRest updateHardware(UUID uuid, HardwareRest HardwareRest) {
         try {
             var json = JsonbBuilder
@@ -213,6 +241,9 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public HardwareTypeRest getHardwareTypeById(UUID uuid) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -236,6 +267,9 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public List<HardwareRest> getAllPresentHardware() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -253,6 +287,9 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public List<HardwareRest> getAllPresentHardwareFilter(String substr) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -268,5 +305,9 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    private Object getNull() {
+        return null;
     }
 }

@@ -10,6 +10,8 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import lombok.NoArgsConstructor;
+import org.eclipse.microprofile.faulttolerance.*;
+import org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException;
 import org.pl.gateway.module.config.ApiConfig;
 import org.pl.gateway.module.jsonb.adapters.ClientTypeRestJsonbAdapter;
 import org.pl.gateway.module.jsonb.adapters.HardwareTypeRestJsonbAdapter;
@@ -49,6 +51,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     @Inject
     private ApiConfig apiConfig;
 
+    @Timeout(value = 5000)
     public ClientRest add(ClientRest ClientRest) throws WebApplicationException {
         try {
             var json = JsonbBuilder
@@ -91,6 +94,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public ClientRest get(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -108,6 +114,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public String getInfo(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -125,6 +134,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public double getClientBalance(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -142,6 +154,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public boolean isClientArchive(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -159,6 +174,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @Retry(maxRetries = 4, delay = 500)
+    @Bulkhead(1)
     public ClientRest archive(UUID id) {
         try {
             HttpRequest archiveClientRequest = httpAuthorizedBuilderProvider.builder()
@@ -186,6 +204,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public List<ClientRest> getAllClients() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -203,6 +224,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public ClientRest getClientByUsername(String username) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -220,6 +244,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public int getPresentSize() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -249,6 +276,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public int getArchiveSize() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -278,6 +308,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public List<ClientRest> getAllClientsFilter(String substr) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -295,6 +328,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @Retry(maxRetries = 4, delay = 500)
+    @Bulkhead(1)
     public ClientRest updateClient(UUID uuid, ClientRest clientRest) {
         try {
             var json = JsonbBuilder
@@ -329,6 +365,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @Retry(maxRetries = 4, delay = 500)
+    @Bulkhead(1)
     public ClientRest updatePassword(UUID uuid, String newPassword) {
         try {
             var json = Json.createObjectBuilder();
@@ -354,6 +393,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @Retry(maxRetries = 4, delay = 500)
+    @Bulkhead(1)
     public ClientRest dearchive(UUID uuid) {
         try {
             HttpRequest dearchiveClientRequest = httpAuthorizedBuilderProvider.builder()
@@ -381,6 +423,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public ClientTypeRest getClientTypeById(UUID uuid) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -404,6 +449,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         }
     }
 
+    @Timeout(value = 5000)
+    @Retry(maxRetries = 4, delay = 500)
+    @Bulkhead(1)
     public String login(UserRestCredentials userRestCredentials) throws InvalidCredentialsException {
         try {
             var json = JsonbBuilder
@@ -427,5 +475,9 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new InvalidCredentialsException();
         }
+    }
+
+    private Object getNull() {
+        return null;
     }
 }
