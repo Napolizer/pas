@@ -62,6 +62,15 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
                     .build();
             HttpResponse<String> createClientResponse = httpClient.send(createClientRequest, HttpResponse.BodyHandlers.ofString());
 
+            // Make sure that UserModule and RepairModule entities has same id
+            var reader = createClientResponse.body();
+            JsonObject jsonObject = Json.createReader(new StringReader(reader)).readObject();
+            String createdClientId = jsonObject.getString("id");
+            ClientRest.setId(UUID.fromString((createdClientId)));
+            json = JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new ClientTypeRestJsonbAdapter()))
+                    .toJson(new ClientRestWithPassword(ClientRest));
+
             HttpRequest createUserRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(apiConfig.getUserApi() + "/user"))
                     .header("Content-Type", "application/json")
@@ -73,7 +82,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
                 throw new WebApplicationException(createClientResponse.statusCode());
             }
 
-            var reader = createClientResponse.body();
+            reader = createClientResponse.body();
             return JsonbBuilder
                     .create(new JsonbConfig().withAdapters(new ClientTypeRestJsonbAdapter()))
                     .fromJson(reader, ClientRest.class);
@@ -151,7 +160,30 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     }
 
     public ClientRest archive(UUID id) {
-        return null;
+        try {
+            HttpRequest archiveClientRequest = httpAuthorizedBuilderProvider.builder()
+                    .uri(new URI(apiConfig.getClientApi() + "/client/id/" + id + "/deactivate"))
+                    .PUT(HttpRequest.BodyPublishers.noBody())
+                    .build();
+            HttpResponse<String> archiveClientResponse = httpClient.send(archiveClientRequest, HttpResponse.BodyHandlers.ofString());
+
+            HttpRequest archiveUserRequest = httpAuthorizedBuilderProvider.builder()
+                    .uri(new URI(apiConfig.getUserApi() + "/user/id/" + id + "/deactivate"))
+                    .PUT(HttpRequest.BodyPublishers.noBody())
+                    .build();
+            HttpResponse<String> archiveUserResponse = httpClient.send(archiveUserRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (archiveClientResponse.statusCode() != 200 || archiveUserResponse.statusCode() != 200) {
+                throw new WebApplicationException(archiveClientResponse.statusCode());
+            }
+
+            var reader = archiveClientResponse.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new ClientTypeRestJsonbAdapter()))
+                    .fromJson(reader, ClientRest.class);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new WebApplicationException(400);
+        }
     }
 
     public List<ClientRest> getAllClients() {
@@ -323,7 +355,30 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     }
 
     public ClientRest dearchive(UUID uuid) {
-        return null;
+        try {
+            HttpRequest dearchiveClientRequest = httpAuthorizedBuilderProvider.builder()
+                    .uri(new URI(apiConfig.getClientApi() + "/client/id/" + uuid + "/activate"))
+                    .PUT(HttpRequest.BodyPublishers.noBody())
+                    .build();
+            HttpResponse<String> dearchiveClientResponse = httpClient.send(dearchiveClientRequest, HttpResponse.BodyHandlers.ofString());
+
+            HttpRequest dearchiveUserRequest = httpAuthorizedBuilderProvider.builder()
+                    .uri(new URI(apiConfig.getUserApi() + "/user/id/" + uuid + "/activate"))
+                    .PUT(HttpRequest.BodyPublishers.noBody())
+                    .build();
+            HttpResponse<String> dearchiveUserResponse = httpClient.send(dearchiveUserRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (dearchiveClientResponse.statusCode() != 200 || dearchiveUserResponse.statusCode() != 200) {
+                throw new WebApplicationException(dearchiveClientResponse.statusCode());
+            }
+
+            var reader = dearchiveClientResponse.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new ClientTypeRestJsonbAdapter()))
+                    .fromJson(reader, ClientRest.class);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new WebApplicationException(400);
+        }
     }
 
     public ClientTypeRest getClientTypeById(UUID uuid) {

@@ -30,7 +30,9 @@ public class UserEntRepository {
     UserTransaction userTransaction;
 
     public UserEnt saveUser(UserEnt userEnt) throws RepositoryEntException {
-        userEnt.setId(UUID.randomUUID());
+        if (userEnt.getId() == null) {
+            userEnt.setId(UUID.randomUUID());
+        }
         try {
             if (!entityManager.contains(userEnt)) {
                 userTransaction.begin();
