@@ -53,7 +53,7 @@ public class RepairService implements ReadRepairUseCases {
 
     public Repair get(UUID id) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/id/" + id))
+                .uri(new URI(repairApi + "/repair/id/" + id))
                 .GET()
                 .build();
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -66,7 +66,7 @@ public class RepairService implements ReadRepairUseCases {
 
     public String getInfo(UUID id) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/id/" + id))
+                .uri(new URI(repairApi + "/repair/id/" + id))
                 .GET()
                 .build();
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -104,7 +104,7 @@ public class RepairService implements ReadRepairUseCases {
 
     public boolean isRepairArchive(UUID id) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/id/" + id))
+                .uri(new URI(repairApi + "/repair/id/" + id))
                 .GET()
                 .build();
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -116,7 +116,7 @@ public class RepairService implements ReadRepairUseCases {
     }
     public Repair archivize(UUID id) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/id/" + id))
+                .uri(new URI(repairApi + "/repair/id/" + id))
                 .DELETE()
                 .build();
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -132,7 +132,7 @@ public class RepairService implements ReadRepairUseCases {
 
     public Repair repair(UUID id) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/id/" + id))
+                .uri(new URI(repairApi + "/repair/id/" + id))
                 .GET()
                 .build();
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -150,7 +150,7 @@ public class RepairService implements ReadRepairUseCases {
                 .toJson(repair);
 
         HttpRequest putHttpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/id/" + id))
+                .uri(new URI(repairApi + "/repair/id/" + id))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(json))
                 .build();
@@ -285,7 +285,7 @@ public class RepairService implements ReadRepairUseCases {
                 .toJson(repair);
 
         HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/id/" + uuid))
+                .uri(new URI(repairApi + "/repair/id/" + uuid))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(json))
                 .build();

@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.pl.gateway.module.adapters.HardwareTypeRestAdapter;
+import org.pl.gateway.module.adapters.HardwareTypeAdapter;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -23,7 +23,7 @@ public class HardwareRest implements EntityRest, Serializable {
     @NotNull
     private Integer price;
     @NotNull
-    @JsonbTypeAdapter(HardwareTypeRestAdapter.class)
+    @JsonbTypeAdapter(HardwareTypeAdapter.class)
     private HardwareTypeRest hardwareType;
 
     public void repair() {

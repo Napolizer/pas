@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.pl.gateway.module.adapters.ClientTypeRestAdapter;
+import org.pl.gateway.module.adapters.ClientTypeAdapter;
 import org.pl.gateway.module.model.exceptions.ClientRestException;
 
 import java.io.Serializable;
@@ -39,7 +39,7 @@ public class ClientRest implements EntityRest, Serializable {
     @NotBlank
     private String phoneNumber;
     @NotNull
-    @JsonbTypeAdapter(ClientTypeRestAdapter.class)
+    @JsonbTypeAdapter(ClientTypeAdapter.class)
     private ClientTypeRest clientType;
     @NotNull
     @Valid
