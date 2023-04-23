@@ -292,6 +292,11 @@
                 <version>1.18.0</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.microprofile.health</groupId>
+                <artifactId>microprofile-health-api</artifactId>
+                <version>4.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
