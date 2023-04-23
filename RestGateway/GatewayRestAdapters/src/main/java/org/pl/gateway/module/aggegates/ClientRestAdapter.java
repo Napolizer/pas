@@ -10,6 +10,7 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import lombok.NoArgsConstructor;
+import org.pl.gateway.module.config.ApiConfig;
 import org.pl.gateway.module.jsonb.adapters.ClientTypeRestJsonbAdapter;
 import org.pl.gateway.module.jsonb.adapters.HardwareTypeRestJsonbAdapter;
 import org.pl.gateway.module.model.ClientRest;
@@ -45,8 +46,8 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     @Context
     private HttpHeaders httpHeaders;
-    private static final String userApi = "https://localhost:8181/UserRestAdapters-1.0-SNAPSHOT/api";
-    private static final String clientApi = "https://localhost:8181/RestAdapters-1.0-SNAPSHOT/api";
+    @Inject
+    private ApiConfig apiConfig;
 
     public ClientRest add(ClientRest ClientRest) throws WebApplicationException {
         try {
@@ -55,14 +56,14 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
                     .toJson(new ClientRestWithPassword(ClientRest));
 
             HttpRequest createClientRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(clientApi + "/client"))
+                    .uri(new URI(apiConfig.getClientApi() + "/client"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
             HttpResponse<String> createClientResponse = httpClient.send(createClientRequest, HttpResponse.BodyHandlers.ofString());
 
             HttpRequest createUserRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(userApi + "/user"))
+                    .uri(new URI(apiConfig.getUserApi() + "/user"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
@@ -84,7 +85,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public ClientRest get(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(clientApi +"/client/id/" + id))
+                    .uri(new URI(apiConfig.getClientApi() +"/client/id/" + id))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -101,7 +102,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public String getInfo(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(clientApi +"/client/id/" + id))
+                    .uri(new URI(apiConfig.getClientApi() +"/client/id/" + id))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -118,7 +119,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public double getClientBalance(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(clientApi +"/client/id/" + id))
+                    .uri(new URI(apiConfig.getClientApi() +"/client/id/" + id))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -135,7 +136,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public boolean isClientArchive(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(clientApi +"/client/id/" + id))
+                    .uri(new URI(apiConfig.getClientApi() +"/client/id/" + id))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -156,7 +157,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public List<ClientRest> getAllClients() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI( clientApi + "/clients"))
+                    .uri(new URI( apiConfig.getClientApi() + "/clients"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -173,7 +174,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public ClientRest getClientByUsername(String username) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(clientApi +"/client/username/" + username))
+                    .uri(new URI(apiConfig.getClientApi() +"/client/username/" + username))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -190,7 +191,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public int getPresentSize() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(clientApi + "/clients"))
+                    .uri(new URI(apiConfig.getClientApi() + "/clients"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -219,7 +220,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public int getArchiveSize() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(clientApi + "/clients"))
+                    .uri(new URI(apiConfig.getClientApi() + "/clients"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -248,7 +249,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public List<ClientRest> getAllClientsFilter(String substr) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI( clientApi + "/client/filter/" + substr))
+                    .uri(new URI( apiConfig.getClientApi() + "/client/filter/" + substr))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -269,14 +270,14 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
                     toJson(new ClientRestWithPassword(clientRest));
 
             HttpRequest updatedClientRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(clientApi + "/client/id/" + uuid))
+                    .uri(new URI(apiConfig.getClientApi() + "/client/id/" + uuid))
                     .header("Content-Type", "application/json")
                     .PUT(HttpRequest.BodyPublishers.ofString(json))
                     .build();
             HttpResponse<String> updatedClientResponse = httpClient.send(updatedClientRequest, HttpResponse.BodyHandlers.ofString());
 
             HttpRequest updatedUserRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(userApi + "/user/id/" + uuid))
+                    .uri(new URI(apiConfig.getUserApi() + "/user/id/" + uuid))
                     .header("Content-Type", "application/json")
                     .PUT(HttpRequest.BodyPublishers.ofString(json))
                     .build();
@@ -302,7 +303,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
             json.add("newPassword", newPassword);
 
             HttpRequest updatedUserRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(userApi + "/user/id/" + uuid + "/change_password"))
+                    .uri(new URI(apiConfig.getUserApi() + "/user/id/" + uuid + "/change_password"))
                     .header("Content-Type", "application/json")
                     .PUT(HttpRequest.BodyPublishers.ofString(json.build().toString()))
                     .build();
@@ -328,7 +329,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     public ClientTypeRest getClientTypeById(UUID uuid) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
-                    .uri(new URI(clientApi + "/clients"))
+                    .uri(new URI(apiConfig.getClientApi() + "/clients"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -355,7 +356,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
                     .toJson(userRestCredentials);
 
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(userApi + "/user/login"))
+                    .uri(new URI(apiConfig.getUserApi() + "/user/login"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
