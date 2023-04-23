@@ -19,7 +19,6 @@ public interface ReadClientUseCases {
     int getPresentSize();
     int getArchiveSize();
     List<ClientRest> getAllClientsFilter(String substr);
-    List<ClientRest> getClientsByUsername(String username);
     ClientTypeRest getClientTypeById(UUID id) throws RepositoryRestException;
     ClientRest getClientByUsername(String username) throws RepositoryRestException;
     String login(UserRestCredentials userRestCredentials) throws InvalidCredentialsException;

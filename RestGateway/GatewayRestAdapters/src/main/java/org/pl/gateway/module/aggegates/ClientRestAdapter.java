@@ -1,56 +1,119 @@
 package org.pl.gateway.module.aggegates;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import lombok.NoArgsConstructor;
 import org.pl.gateway.module.jsonb.adapters.HardwareTypeRestJsonbAdapter;
-import org.pl.gateway.module.model.ClientRest;
-import org.pl.gateway.module.model.ClientTypeRest;
-import org.pl.gateway.module.model.UserRestCredentials;
+import org.pl.gateway.module.jsonb.adapters.RepairJsonbAdapter;
+import org.pl.gateway.module.model.*;
 import org.pl.gateway.module.model.exceptions.authentication.InvalidCredentialsException;
 import org.pl.gateway.module.ports.userinterface.client.ReadClientUseCases;
 import org.pl.gateway.module.ports.userinterface.client.WriteClientUseCases;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
-@ApplicationScoped
-public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCases {
+@SessionScoped
+public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCases, Serializable {
     @Inject
     private HttpClient httpClient;
+
+    @Context
+    private HttpHeaders httpHeaders;
     private static final String userApi = "https://localhost:8181/UserRestAdapters-1.0-SNAPSHOT/api";
+    private static final String repairApi = "https://localhost:8181/RestAdapters-1.0-SNAPSHOT/api";
 
     public ClientRest add(ClientRest ClientRest) {
         return null;
     }
 
     public ClientRest get(UUID id) {
-        return null;
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi +"/client/id/" + id))
+                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    fromJson(reader, ClientRest.class);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public String getInfo(UUID id) {
-        return null;
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi +"/client/id/" + id))
+                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    fromJson(reader, ClientRest.class).toString();
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public double getClientBalance(UUID id) {
-        return 0;
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi +"/client/id/" + id))
+                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    fromJson(reader, ClientRest.class).getBalance();
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public boolean isClientArchive(UUID id) {
-        return true;
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi +"/client/id/" + id))
+                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    fromJson(reader, ClientRest.class).getArchive();
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public ClientRest archive(UUID id) {
@@ -58,27 +121,117 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     }
 
     public List<ClientRest> getAllClients() {
-        return null;
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI( repairApi + "/clients"))
+                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
+                    .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public ClientRest getClientByUsername(String username) {
-        return null;
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi +"/client/username/" + username))
+                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    fromJson(reader, ClientRest.class);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public int getPresentSize() {
-        return 0;
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/clients"))
+                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                throw new WebApplicationException(response.statusCode());
+            }
+
+            var reader = response.body();
+            List<ClientRest> allClients = JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new RepairJsonbAdapter()))
+                    .fromJson(reader, new ArrayList<RepairRest>(){}.getClass().getGenericSuperclass());
+
+            List<ClientRest> presentClients = new ArrayList<>();
+            for (ClientRest clientRest : allClients) {
+                if (!clientRest.getArchive()) {
+                    presentClients.add(clientRest);
+                }
+            }
+            return presentClients.size();
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public int getArchiveSize() {
-        return 0;
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/clients"))
+                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                throw new WebApplicationException(response.statusCode());
+            }
+
+            var reader = response.body();
+            List<ClientRest> allClients = JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new RepairJsonbAdapter()))
+                    .fromJson(reader, new ArrayList<RepairRest>(){}.getClass().getGenericSuperclass());
+
+            List<ClientRest> presentClients = new ArrayList<>();
+            for (ClientRest clientRest : allClients) {
+                if (clientRest.getArchive()) {
+                    presentClients.add(clientRest);
+                }
+            }
+            return presentClients.size();
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public List<ClientRest> getAllClientsFilter(String substr) {
-        return null;
-    }
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI( repairApi + "/client/filter/" + substr))
+                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-    public List<ClientRest> getClientsByUsername(String username) {
-        return null;
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
+                    .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public ClientRest updateClient(UUID uuid, ClientRest ClientRest) {
@@ -94,7 +247,27 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
     }
 
     public ClientTypeRest getClientTypeById(UUID uuid) {
-        return null;
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/clients"))
+                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            List<ClientRest> allClients = JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
+                    .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
+            for (ClientRest clientRest : allClients) {
+                if (clientRest.getClientType().getId() == uuid) {
+                    return clientRest.getClientType();
+                }
+            }
+            return null;
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public String login(UserRestCredentials userRestCredentials) throws InvalidCredentialsException {
