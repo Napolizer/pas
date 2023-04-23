@@ -7,7 +7,7 @@ import jakarta.json.bind.adapter.JsonbAdapter;
 import org.pl.gateway.module.model.*;
 
 
-public class HardwareTypeRestAdapter implements JsonbAdapter<HardwareTypeRest, JsonValue> {
+public class HardwareTypeRestJsonbAdapter implements JsonbAdapter<HardwareTypeRest, JsonValue> {
     @Override
     public JsonValue adaptToJson(HardwareTypeRest hardwareType) {
         var json = Json.createObjectBuilder();

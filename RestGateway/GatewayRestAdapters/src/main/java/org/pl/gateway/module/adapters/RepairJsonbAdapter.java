@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @ApplicationScoped
-public class RepairAdapter implements JsonbAdapter<RepairRest, JsonValue> {
+public class RepairJsonbAdapter implements JsonbAdapter<RepairRest, JsonValue> {
     @Inject
     private DateRangeConverter dateRangeConverter;
     @Inject

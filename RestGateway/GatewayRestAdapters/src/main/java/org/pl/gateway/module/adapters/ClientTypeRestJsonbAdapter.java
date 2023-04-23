@@ -10,7 +10,7 @@ import org.pl.gateway.module.model.PremiumRest;
 import org.pl.gateway.module.model.VipRest;
 
 
-public class ClientTypeRestAdapter implements JsonbAdapter<ClientTypeRest, JsonValue> {
+public class ClientTypeRestJsonbAdapter implements JsonbAdapter<ClientTypeRest, JsonValue> {
     @Override
     public JsonValue adaptToJson(ClientTypeRest clientType) {
         var json = Json.createObjectBuilder();
