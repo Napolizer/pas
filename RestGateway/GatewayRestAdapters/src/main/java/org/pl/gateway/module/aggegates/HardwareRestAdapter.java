@@ -13,6 +13,7 @@ import org.pl.gateway.module.model.HardwareRest;
 import org.pl.gateway.module.model.HardwareTypeRest;
 import org.pl.gateway.module.ports.userinterface.hardware.ReadHardwareUseCases;
 import org.pl.gateway.module.ports.userinterface.hardware.WriteHardwareUseCases;
+import org.pl.gateway.module.providers.HttpAuthorizedBuilderProvider;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -30,6 +31,8 @@ import java.util.UUID;
 public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareUseCases, Serializable {
     @Inject
     private HttpClient httpClient;
+    @Inject
+    private HttpAuthorizedBuilderProvider httpAuthorizedBuilderProvider;
     @Context
     private HttpHeaders httpHeaders;
 
@@ -81,7 +84,7 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
 
     public HardwareRest get(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi +"/hardware/id/" + id))
                     .GET()
                     .build();
