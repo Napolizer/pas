@@ -72,31 +72,6 @@ public class ClientController {
         }
     }
 
-    @GET
-    @Path("/username/{username}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed(value={"USER", "EMPLOYEE", "ADMIN"})
-    public Response getClientByUsername(@PathParam("username")String username, @QueryParam("strict")String strict) {
-        var json = Json.createObjectBuilder();
-        try {
-            if (Objects.equals(strict, "false")) {
-                List<ClientRest> clients = readClientUseCases.getClientsByUsername(username)
-                        .stream()
-                        .toList();
-                return Response.ok(clients).build();
-            } else {
-                ClientRest client = readClientUseCases.getClientByUsername(username);
-                if (client == null) {
-                    throw new RepositoryRestException("");
-                }
-                return Response.ok(client).build();
-            }
-        } catch (RepositoryRestException e) {
-            json.add("error", "Client not found");
-            return Response.status(404).entity(json.build()).build();
-        }
-    }
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
