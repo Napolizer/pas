@@ -1,10 +1,12 @@
 package org.pl.gateway.module.aggegates;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import lombok.RequiredArgsConstructor;
 import org.pl.gateway.module.jsonb.adapters.HardwareTypeRestJsonbAdapter;
 import org.pl.gateway.module.model.HardwareRest;
@@ -13,6 +15,7 @@ import org.pl.gateway.module.ports.userinterface.hardware.ReadHardwareUseCases;
 import org.pl.gateway.module.ports.userinterface.hardware.WriteHardwareUseCases;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -23,10 +26,12 @@ import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@ApplicationScoped
-public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareUseCases {
+@SessionScoped
+public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareUseCases, Serializable {
     @Inject
     private HttpClient httpClient;
+    @Context
+    private HttpHeaders httpHeaders;
 
     private static final String repairApi = "https://localhost:8181/RestAdapters-1.0-SNAPSHOT/api";
 
@@ -166,13 +171,16 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
 
     public List<HardwareRest> getAllHardwares() {
         try {
+            System.out.println("headers: " + httpHeaders.getHeaderString("Authorization"));
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(repairApi + "/HardwareRests"))
+                    .uri(new URI(repairApi + "/hardwares"))
+                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
             var reader = response.body();
+            System.out.println("Reader: " + reader);
             return JsonbBuilder
                     .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
                     .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
