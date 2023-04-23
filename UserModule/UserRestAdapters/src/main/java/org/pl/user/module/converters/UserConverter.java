@@ -22,7 +22,7 @@ public class UserConverter {
                 .lastName(user.getLastName())
                 .phoneNumber(user.getPhoneNumber())
                 .address(addressConverter.convert(user.getAddress()))
-                .userAccessType(userAccessTypeConverter.convert(user.getUserAccessType()))
+                .clientAccessType(userAccessTypeConverter.convert(user.getUserAccessType()))
                 .password(user.getPassword())
                 .build();
     }
@@ -37,7 +37,7 @@ public class UserConverter {
                 .lastName(userRest.getLastName())
                 .phoneNumber(userRest.getPhoneNumber())
                 .address(addressConverter.convert(userRest.getAddress()))
-                .userAccessType(userAccessTypeConverter.convert(userRest.getUserAccessType()))
+                .userAccessType(userAccessTypeConverter.convert(userRest.getClientAccessType()))
                 .password(userRest.getPassword())
                 .build();
     }

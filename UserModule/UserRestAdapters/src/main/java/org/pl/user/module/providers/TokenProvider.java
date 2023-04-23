@@ -25,7 +25,7 @@ public class TokenProvider {
         long now = System.currentTimeMillis();
         return Jwts.builder()
                 .setSubject(user.getUsername())
-                .claim("group", user.getUserAccessType())
+                .claim("group", user.getClientAccessType())
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + expirationTime)) // 15 minutes expiration time
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();

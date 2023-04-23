@@ -30,7 +30,7 @@ public class UserRest implements Serializable {
     private String phoneNumber;
     @NotNull
     @Valid
-    private UserAccessTypeRest userAccessType;
+    private UserAccessTypeRest clientAccessType;
     @NotNull
     @Valid
     private AddressRest address;

@@ -1,5 +1,7 @@
 package org.pl.gateway.module.aggegates;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
@@ -10,12 +12,19 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import lombok.NoArgsConstructor;
+import org.pl.gateway.module.jsonb.adapters.ClientTypeRestJsonbAdapter;
 import org.pl.gateway.module.jsonb.adapters.HardwareTypeRestJsonbAdapter;
+import org.pl.gateway.module.model.ClientRest;
+import org.pl.gateway.module.model.ClientRestWithPassword;
+import org.pl.gateway.module.model.ClientTypeRest;
+import org.pl.gateway.module.model.UserRestCredentials;
+import org.pl.gateway.module.model.exceptions.RepositoryRestException;
 import org.pl.gateway.module.jsonb.adapters.RepairJsonbAdapter;
 import org.pl.gateway.module.model.*;
 import org.pl.gateway.module.model.exceptions.authentication.InvalidCredentialsException;
 import org.pl.gateway.module.ports.userinterface.client.ReadClientUseCases;
 import org.pl.gateway.module.ports.userinterface.client.WriteClientUseCases;
+import org.pl.gateway.module.providers.HttpAuthorizedBuilderProvider;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -33,15 +42,46 @@ import java.util.UUID;
 @SessionScoped
 public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCases, Serializable {
     @Inject
+    private HttpAuthorizedBuilderProvider httpAuthorizedBuilderProvider;
+    @Inject
     private HttpClient httpClient;
 
     @Context
     private HttpHeaders httpHeaders;
     private static final String userApi = "https://localhost:8181/UserRestAdapters-1.0-SNAPSHOT/api";
-    private static final String repairApi = "https://localhost:8181/RestAdapters-1.0-SNAPSHOT/api";
+    private static final String clientApi = "https://localhost:8181/RestAdapters-1.0-SNAPSHOT/api";
 
-    public ClientRest add(ClientRest ClientRest) {
-        return null;
+    public ClientRest add(ClientRest ClientRest) throws WebApplicationException {
+        try {
+            var json = JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new ClientTypeRestJsonbAdapter()))
+                    .toJson(new ClientRestWithPassword(ClientRest));
+
+            HttpRequest createClientRequest = httpAuthorizedBuilderProvider.builder()
+                    .uri(new URI(clientApi + "/client"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+            HttpResponse<String> createClientResponse = httpClient.send(createClientRequest, HttpResponse.BodyHandlers.ofString());
+
+            HttpRequest createUserRequest = httpAuthorizedBuilderProvider.builder()
+                    .uri(new URI(userApi + "/user"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+            HttpResponse<String> createUserResponse = httpClient.send(createUserRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (createClientResponse.statusCode() != 201 || createUserResponse.statusCode() != 201) {
+                throw new WebApplicationException(createClientResponse.statusCode());
+            }
+
+            var reader = createClientResponse.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new ClientTypeRestJsonbAdapter()))
+                    .fromJson(reader, ClientRest.class);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new WebApplicationException(400);
+        }
     }
 
     public ClientRest get(UUID id) {
