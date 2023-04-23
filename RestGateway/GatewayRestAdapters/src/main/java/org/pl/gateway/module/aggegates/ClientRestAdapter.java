@@ -85,7 +85,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(clientApi +"/client/id/" + id))
-                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -103,7 +102,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(clientApi +"/client/id/" + id))
-                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -121,7 +119,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(clientApi +"/client/id/" + id))
-                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -139,7 +136,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(clientApi +"/client/id/" + id))
-                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -161,7 +157,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI( clientApi + "/clients"))
-                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -179,7 +174,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(clientApi +"/client/username/" + username))
-                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -197,7 +191,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(clientApi + "/clients"))
-                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -227,7 +220,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(clientApi + "/clients"))
-                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -257,7 +249,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI( clientApi + "/client/filter/" + substr))
-                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -287,7 +278,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(clientApi + "/clients"))
-                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
