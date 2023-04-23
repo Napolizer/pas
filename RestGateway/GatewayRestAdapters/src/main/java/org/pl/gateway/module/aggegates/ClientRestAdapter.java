@@ -1,6 +1,6 @@
 package org.pl.gateway.module.aggegates;
 
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -27,7 +27,6 @@ import org.pl.gateway.module.ports.userinterface.client.WriteClientUseCases;
 import org.pl.gateway.module.providers.HttpAuthorizedBuilderProvider;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -39,8 +38,8 @@ import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
-@SessionScoped
-public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCases, Serializable {
+@Stateless
+public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCases {
     @Inject
     private HttpAuthorizedBuilderProvider httpAuthorizedBuilderProvider;
     @Inject
@@ -96,7 +95,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public ClientRest get(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -116,7 +114,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public String getInfo(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -136,8 +133,8 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
-    public double getClientBalance(UUID id) {
+    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "returnZero")
+    public Double getClientBalance(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(apiConfig.getClientApi() +"/client/id/" + id))
@@ -156,8 +153,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
-    public boolean isClientArchive(UUID id) {
+    public Boolean isClientArchive(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(apiConfig.getClientApi() +"/client/id/" + id))
@@ -206,7 +202,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public List<ClientRest> getAllClients() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -226,7 +221,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public ClientRest getClientByUsername(String username) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -246,8 +240,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
-    public int getPresentSize() {
+    public Integer getPresentSize() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(apiConfig.getClientApi() + "/clients"))
@@ -278,8 +271,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
-    public int getArchiveSize() {
+    public Integer getArchiveSize() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(apiConfig.getClientApi() + "/clients"))
@@ -310,7 +302,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public List<ClientRest> getAllClientsFilter(String substr) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -425,7 +416,6 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public ClientTypeRest getClientTypeById(UUID uuid) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -476,8 +466,7 @@ public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCase
             throw new InvalidCredentialsException();
         }
     }
-
-    private Object getNull() {
-        return null;
+    private Double returnZero(UUID id) {
+        return 0.0;
     }
 }

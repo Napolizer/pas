@@ -11,9 +11,9 @@ public interface ReadRepairUseCases {
     RepairRest get(UUID id) throws RepositoryRestException;
     String getInfo(UUID id) throws RepositoryRestException;
     List<RepairRest> getAllClientRepairs(UUID clientId) throws RepositoryRestException;
-    boolean isRepairArchive(UUID id) throws RepositoryRestException;
-    int getPresentSize();
-    int getArchiveSize();
+    Boolean isRepairArchive(UUID id) throws RepositoryRestException;
+    Integer getPresentSize();
+    Integer getArchiveSize();
     List<RepairRest> getClientsPastRepairs(UUID id) throws RepositoryRestException;
     List<RepairRest> getClientsPresentRepairs(UUID id) throws RepositoryRestException;
     List<RepairRest> getAllRepairs();

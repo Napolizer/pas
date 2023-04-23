@@ -13,11 +13,11 @@ import java.util.UUID;
 public interface ReadClientUseCases {
     ClientRest get(UUID id) throws RepositoryRestException;
     String getInfo(UUID id) throws RepositoryRestException;
-    double getClientBalance(UUID id) throws RepositoryRestException;
-    boolean isClientArchive(UUID id) throws RepositoryRestException;
+    Double getClientBalance(UUID id) throws RepositoryRestException;
+    Boolean isClientArchive(UUID id) throws RepositoryRestException;
     List<ClientRest> getAllClients();
-    int getPresentSize();
-    int getArchiveSize();
+    Integer getPresentSize();
+    Integer getArchiveSize();
     List<ClientRest> getAllClientsFilter(String substr);
     ClientTypeRest getClientTypeById(UUID id) throws RepositoryRestException;
     ClientRest getClientByUsername(String username) throws RepositoryRestException;

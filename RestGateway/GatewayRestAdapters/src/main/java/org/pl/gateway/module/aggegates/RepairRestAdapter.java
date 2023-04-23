@@ -1,6 +1,6 @@
 package org.pl.gateway.module.aggegates;
 
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
@@ -8,7 +8,6 @@ import jakarta.ws.rs.WebApplicationException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.eclipse.microprofile.faulttolerance.*;
-import org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException;
 import org.pl.gateway.module.config.ApiConfig;
 import org.pl.gateway.module.jsonb.adapters.RepairJsonbAdapter;
 import org.pl.gateway.module.model.RepairRest;
@@ -17,7 +16,6 @@ import org.pl.gateway.module.ports.userinterface.repair.WriteRepairUseCases;
 import org.pl.gateway.module.providers.HttpAuthorizedBuilderProvider;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -30,8 +28,8 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@SessionScoped
-public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCases, Serializable {
+@Stateless
+public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCases {
 
     @Inject
     private HttpClient httpClient;
@@ -71,7 +69,6 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public RepairRest get(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -91,7 +88,6 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public String getInfo(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -111,7 +107,6 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public List<RepairRest> getAllClientRepairs(UUID clientId) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -143,8 +138,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
-    public boolean isRepairArchive(UUID id) {
+    public Boolean isRepairArchive(UUID id) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(apiConfig.getRepairApi() + "/repair/id/" + id))
@@ -225,8 +219,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
-    public int getPresentSize() {
+    public Integer getPresentSize() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(apiConfig.getRepairApi() + "/repairs"))
@@ -257,8 +250,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
-    public int getArchiveSize() {
+    public Integer getArchiveSize() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(apiConfig.getRepairApi() + "/repairs"))
@@ -289,7 +281,6 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public List<RepairRest> getClientsPastRepairs(UUID uuid) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -321,7 +312,6 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public List<RepairRest> getClientsPresentRepairs(UUID uuid) {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -353,7 +343,6 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     @Timeout(value = 5000)
     @CircuitBreaker(successThreshold = 5, requestVolumeThreshold = 4, failureRatio = 0.75, delay = 1000)
-    @Fallback(applyOn = CircuitBreakerOpenException.class, fallbackMethod = "getNull")
     public List<RepairRest> getAllRepairs() {
         try {
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
@@ -398,9 +387,5 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e.getMessage());
         }
-    }
-
-    private Object getNull() {
-        return null;
     }
 }

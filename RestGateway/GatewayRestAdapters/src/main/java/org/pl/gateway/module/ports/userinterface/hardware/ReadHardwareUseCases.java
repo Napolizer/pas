@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ReadHardwareUseCases {
-    boolean isHardwareArchive(UUID id) throws RepositoryRestException;
+    Boolean isHardwareArchive(UUID id) throws RepositoryRestException;
     HardwareRest get(UUID id) throws RepositoryRestException;
     String getInfo(UUID id) throws RepositoryRestException;
-    int getPresentSize();
-    int getArchiveSize();
+    Integer getPresentSize();
+    Integer getArchiveSize();
     List<HardwareRest> getAllHardwares();
     HardwareTypeRest getHardwareTypeById(UUID id) throws RepositoryRestException;
     List<HardwareRest> getAllPresentHardware();
