@@ -5,14 +5,13 @@ import jakarta.inject.Inject;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.pl.gateway.module.jsonb.adapters.RepairJsonbAdapter;
 import org.pl.gateway.module.model.RepairRest;
 import org.pl.gateway.module.ports.userinterface.repair.ReadRepairUseCases;
 import org.pl.gateway.module.ports.userinterface.repair.WriteRepairUseCases;
+import org.pl.gateway.module.providers.HttpAuthorizedBuilderProvider;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -34,8 +33,8 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
     @Inject
     private HttpClient httpClient;
 
-    @Context
-    private HttpHeaders httpHeaders;
+    @Inject
+    private HttpAuthorizedBuilderProvider httpAuthorizedBuilderProvider;
 
     private static final String RepairRestApi = "https://localhost:8181/RestAdapters-1.0-SNAPSHOT/api";
     public RepairRest add(RepairRest RepairRest) {
@@ -44,7 +43,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
                     .create(new JsonbConfig().withAdapters(new RepairJsonbAdapter()))
                     .toJson(RepairRest);
 
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .header("Content-Type", "application/json")
                     .uri(new URI(RepairRestApi + "/repair"))
                     .POST(HttpRequest.BodyPublishers.ofString(json))
@@ -67,7 +66,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     public RepairRest get(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repair/id/" + id))
                     .GET()
                     .build();
@@ -84,7 +83,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     public String getInfo(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repair/id/" + id))
                     .GET()
                     .build();
@@ -101,7 +100,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     public List<RepairRest> getAllClientRepairs(UUID clientId) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repair"))
                     .GET()
                     .build();
@@ -130,7 +129,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     public boolean isRepairArchive(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repair/id/" + id))
                     .GET()
                     .build();
@@ -146,7 +145,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
     }
     public RepairRest archivize(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repair/id/" + id))
                     .DELETE()
                     .build();
@@ -166,7 +165,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     public RepairRest repair(UUID id) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repair/id/" + id))
                     .GET()
                     .build();
@@ -184,7 +183,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
                     .create(new JsonbConfig().withAdapters(new RepairJsonbAdapter()))
                     .toJson(RepairRest);
 
-            HttpRequest putHttpRequest = HttpRequest.newBuilder()
+            HttpRequest putHttpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repair/id/" + id))
                     .header("Content-Type", "application/json")
                     .PUT(HttpRequest.BodyPublishers.ofString(json))
@@ -202,7 +201,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     public int getPresentSize() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repairs"))
                     .GET()
                     .build();
@@ -231,7 +230,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     public int getArchiveSize() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repairs"))
                     .GET()
                     .build();
@@ -260,7 +259,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     public List<RepairRest> getClientsPastRepairs(UUID uuid) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repairs"))
                     .GET()
                     .build();
@@ -289,7 +288,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     public List<RepairRest> getClientsPresentRepairs(UUID uuid) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repairs"))
                     .GET()
                     .build();
@@ -318,7 +317,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
 
     public List<RepairRest> getAllRepairs() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repairs"))
                     .GET()
                     .build();
@@ -343,7 +342,7 @@ public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCase
                     .create(new JsonbConfig().withAdapters(new RepairJsonbAdapter()))
                     .toJson(RepairRest);
 
-            HttpRequest httpRequest = HttpRequest.newBuilder()
+            HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(RepairRestApi + "/repair/id/" + uuid))
                     .header("Content-Type", "application/json")
                     .PUT(HttpRequest.BodyPublishers.ofString(json))

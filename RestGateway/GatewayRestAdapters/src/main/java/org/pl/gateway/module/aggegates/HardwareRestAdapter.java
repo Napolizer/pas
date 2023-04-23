@@ -5,8 +5,6 @@ import jakarta.inject.Inject;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
 import lombok.RequiredArgsConstructor;
 import org.pl.gateway.module.jsonb.adapters.HardwareTypeRestJsonbAdapter;
 import org.pl.gateway.module.model.HardwareRest;
@@ -33,8 +31,6 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
     private HttpClient httpClient;
     @Inject
     private HttpAuthorizedBuilderProvider httpAuthorizedBuilderProvider;
-    @Context
-    private HttpHeaders httpHeaders;
 
     private static final String repairApi = "https://localhost:8181/RestAdapters-1.0-SNAPSHOT/api";
 
@@ -174,10 +170,8 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
 
     public List<HardwareRest> getAllHardwares() {
         try {
-            System.out.println("headers: " + httpHeaders.getHeaderString("Authorization"));
             HttpRequest httpRequest = httpAuthorizedBuilderProvider.builder()
                     .uri(new URI(repairApi + "/hardwares"))
-                    .header("Authorization", httpHeaders.getHeaderString("Authorization"))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
