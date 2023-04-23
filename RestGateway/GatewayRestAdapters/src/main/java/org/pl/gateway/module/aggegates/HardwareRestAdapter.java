@@ -30,189 +30,237 @@ public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareU
 
     private static final String repairApi = "https://localhost:8181/RestAdapters-1.0-SNAPSHOT/api";
 
-    public HardwareRest add(HardwareRest HardwareRest) throws URISyntaxException, IOException, InterruptedException {
-        var json = JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
-                toJson(HardwareRest);
+    public HardwareRest add(HardwareRest HardwareRest) {
+        try {
+            var json = JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    toJson(HardwareRest);
 
 
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/HardwareRest"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/HardwareRest"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() != 201) {
-            throw new WebApplicationException(response.statusCode());
-        }
-
-        var reader = response.body();
-        return JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
-                fromJson(reader, HardwareRest.class);
-    }
-
-    public boolean isHardwareArchive(UUID id) throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi +"/HardwareRest/id/" + id))
-                .GET()
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-        var reader = response.body();
-        return JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
-                fromJson(reader, HardwareRest.class).getArchive();
-    }
-
-    public HardwareRest get(UUID id) throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi +"/HardwareRest/id/" + id))
-                .GET()
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-        var reader = response.body();
-        return JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
-                fromJson(reader, HardwareRest.class);
-    }
-
-    public String getInfo(UUID id) throws IOException, InterruptedException, URISyntaxException {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi +"/HardwareRest/id/" + id))
-                .GET()
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-        var reader = response.body();
-        return JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
-                fromJson(reader, HardwareRest.class).toString();
-    }
-
-    public void archive(UUID id) throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/HardwareRest/id/" + id))
-                .DELETE()
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() != 200) {
-            throw new WebApplicationException(response.statusCode());
-        }
-    }
-    public int getPresentSize() throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/HardwareRest/present"))
-                .GET()
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-        var reader = response.body();
-        List<HardwareRest> presentHardwareRest = JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
-                .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
-        return presentHardwareRest.size();
-    }
-
-    public int getArchiveSize() throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/HardwareRests"))
-                .GET()
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-        var reader = response.body();
-        List<HardwareRest> allHardwareRests = JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
-                .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
-        List<HardwareRest> archiveHardwareRests = new ArrayList<>();
-        for (HardwareRest HardwareRest : allHardwareRests) {
-            if (HardwareRest.getArchive()) {
-                archiveHardwareRests.add(HardwareRest);
+            if (response.statusCode() != 201) {
+                throw new WebApplicationException(response.statusCode());
             }
+
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    fromJson(reader, HardwareRest.class);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
         }
-        return archiveHardwareRests.size();
     }
 
-    public List<HardwareRest> getAllHardwares() throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/HardwareRests"))
-                .GET()
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+    public boolean isHardwareArchive(UUID id) {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi +"/HardwareRest/id/" + id))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        var reader = response.body();
-        return JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
-                .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
-    }
-
-    public HardwareRest updateHardware(UUID uuid, HardwareRest HardwareRest) throws URISyntaxException, IOException, InterruptedException {
-        var json = JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
-                toJson(HardwareRest);
-
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/HardwareRest/id/" + uuid))
-                .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() != 200) {
-            throw new WebApplicationException(response.statusCode());
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    fromJson(reader, HardwareRest.class).getArchive();
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
         }
-
-        var reader = response.body();
-        return JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
-                fromJson(reader, HardwareRest.class);
     }
 
-    public HardwareTypeRest getHardwareTypeById(UUID uuid) throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/HardwareRests"))
-                .GET()
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+    public HardwareRest get(UUID id) {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi +"/HardwareRest/id/" + id))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        var reader = response.body();
-        List<HardwareRest> allHardwareRests = JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
-                .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
-        for (HardwareRest HardwareRest : allHardwareRests) {
-            if (HardwareRest.getHardwareType().getId() == uuid) {
-                return HardwareRest.getHardwareType();
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    fromJson(reader, HardwareRest.class);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public String getInfo(UUID id) {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi +"/HardwareRest/id/" + id))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    fromJson(reader, HardwareRest.class).toString();
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public void archive(UUID id) {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/HardwareRest/id/" + id))
+                    .DELETE()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new WebApplicationException(response.statusCode());
             }
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
         }
-        return null;
+    }
+    public int getPresentSize() {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/HardwareRest/present"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            List<HardwareRest> presentHardwareRest = JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
+                    .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
+            return presentHardwareRest.size();
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
-    public List<HardwareRest> getAllPresentHardware() throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/HardwareRest/present"))
-                .GET()
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+    public int getArchiveSize() {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/HardwareRests"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        var reader = response.body();
-        return JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
-                .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
+            var reader = response.body();
+            List<HardwareRest> allHardwareRests = JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
+                    .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
+            List<HardwareRest> archiveHardwareRests = new ArrayList<>();
+            for (HardwareRest HardwareRest : allHardwareRests) {
+                if (HardwareRest.getArchive()) {
+                    archiveHardwareRests.add(HardwareRest);
+                }
+            }
+            return archiveHardwareRests.size();
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
-    public List<HardwareRest> getAllPresentHardwareFilter(String substr) throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(repairApi + "/HardwareRest/present/filter/" + substr))
-                .GET()
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+    public List<HardwareRest> getAllHardwares() {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/HardwareRests"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        var reader = response.body();
-        return JsonbBuilder
-                .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
-                .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
+                    .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public HardwareRest updateHardware(UUID uuid, HardwareRest HardwareRest) {
+        try {
+            var json = JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    toJson(HardwareRest);
+
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/HardwareRest/id/" + uuid))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                throw new WebApplicationException(response.statusCode());
+            }
+
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
+                    fromJson(reader, HardwareRest.class);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public HardwareTypeRest getHardwareTypeById(UUID uuid) {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/HardwareRests"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            List<HardwareRest> allHardwareRests = JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
+                    .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
+            for (HardwareRest HardwareRest : allHardwareRests) {
+                if (HardwareRest.getHardwareType().getId() == uuid) {
+                    return HardwareRest.getHardwareType();
+                }
+            }
+            return null;
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public List<HardwareRest> getAllPresentHardware() {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/HardwareRest/present"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
+                    .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public List<HardwareRest> getAllPresentHardwareFilter(String substr) {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(repairApi + "/HardwareRest/present/filter/" + substr))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            var reader = response.body();
+            return JsonbBuilder
+                    .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter()))
+                    .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
