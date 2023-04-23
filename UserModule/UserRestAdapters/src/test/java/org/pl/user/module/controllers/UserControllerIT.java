@@ -89,7 +89,7 @@ public class UserControllerIT {
                         .street("Narutowicza")
                         .build())
                 .archive(false)
-                .userAccessType(UserAccessTypeRest.USERS)
+                .clientAccessType(UserAccessTypeRest.USERS)
                 .firstName("Janusz")
                 .lastName("Kowalski")
                 .phoneNumber("123456789")
@@ -256,7 +256,7 @@ public class UserControllerIT {
 
         @Test
         void createUserMissingClientAccessTypeTest() {
-            testUser.setUserAccessType(null);
+            testUser.setClientAccessType(null);
             given()
                     .contentType(ContentType.JSON)
                     .body(testUser)

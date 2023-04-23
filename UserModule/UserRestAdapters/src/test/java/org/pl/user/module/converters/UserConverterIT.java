@@ -61,7 +61,7 @@ class UserConverterIT {
         UserRest userRest = userConverter.convert(user);
 
         assertInstanceOf(UserRest.class, userRest);
-        assertEquals(UserAccessTypeRest.ADMINISTRATORS, userRest.getUserAccessType());
+        assertEquals(UserAccessTypeRest.ADMINISTRATORS, userRest.getClientAccessType());
         assertEquals(user.getId(), userRest.getId());
         assertEquals(user.getFirstName(), userRest.getFirstName());
         assertEquals(user.getLastName(), userRest.getLastName());
@@ -91,7 +91,7 @@ class UserConverterIT {
                 .archive(false)
                 .phoneNumber("33")
                 .address(addressRest)
-                .userAccessType(UserAccessTypeRest.ADMINISTRATORS)
+                .clientAccessType(UserAccessTypeRest.ADMINISTRATORS)
                 .build();
 
         User user = userConverter.convert(userRest);
