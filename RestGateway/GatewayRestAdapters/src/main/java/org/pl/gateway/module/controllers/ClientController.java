@@ -13,23 +13,19 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.pl.gateway.module.authentication.UserAuthenticator;
-import org.pl.gateway.module.converters.ClientConverter;
-import org.pl.gateway.module.converters.RepairConverter;
-import org.pl.gateway.module.model.Client;
 import org.pl.gateway.module.model.ClientRest;
 import org.pl.gateway.module.model.RepairRest;
 import org.pl.gateway.module.model.UserRestCredentials;
-import org.pl.gateway.module.model.exceptions.ClientException;
-import org.pl.gateway.module.model.exceptions.RepositoryException;
+import org.pl.gateway.module.model.exceptions.ClientRestException;
 import org.pl.gateway.module.model.exceptions.RepositoryRestException;
 import org.pl.gateway.module.model.exceptions.authentication.InvalidCredentialsException;
 import org.pl.gateway.module.model.exceptions.authentication.UserIsArchiveException;
 import org.pl.gateway.module.model.exceptions.authentication.UserNotFoundException;
 import org.pl.gateway.module.providers.ETagProvider;
 import org.pl.gateway.module.providers.TokenProvider;
-import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
-import org.pl.gateway.module.userinterface.client.WriteClientUseCases;
-import org.pl.gateway.module.userinterface.repair.ReadRepairUseCases;
+import org.pl.gateway.module.ports.userinterface.client.ReadClientUseCases;
+import org.pl.gateway.module.ports.userinterface.client.WriteClientUseCases;
+import org.pl.gateway.module.ports.userinterface.repair.ReadRepairUseCases;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,10 +38,6 @@ public class ClientController {
     private WriteClientUseCases writeClientUseCases;
     @Inject
     private ReadRepairUseCases readRepairUseCases;
-    @Inject
-    private ClientConverter clientConverter;
-    @Inject
-    private RepairConverter repairConverter;
     @Inject
     private TokenProvider tokenProvider;
     @Inject
@@ -63,7 +55,7 @@ public class ClientController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            ClientRest client = clientConverter.convert(readClientUseCases.get(uuid));
+            ClientRest client = readClientUseCases.get(uuid);
             if (client == null) {
                 throw new RepositoryRestException("");
             }
@@ -74,7 +66,7 @@ public class ClientController {
         } catch (IllegalArgumentException e) {
             json.add("error", "Given id is invalid");
             return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException | RepositoryRestException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "Client not found");
             return Response.status(404).entity(json.build()).build();
         }
@@ -90,17 +82,16 @@ public class ClientController {
             if (Objects.equals(strict, "false")) {
                 List<ClientRest> clients = readClientUseCases.getClientsByUsername(username)
                         .stream()
-                        .map(clientConverter::convert)
                         .toList();
                 return Response.ok(clients).build();
             } else {
-                ClientRest client = clientConverter.convert(readClientUseCases.getClientByUsername(username));
+                ClientRest client = readClientUseCases.getClientByUsername(username);
                 if (client == null) {
-                    throw new RepositoryException("");
+                    throw new RepositoryRestException("");
                 }
                 return Response.ok(client).build();
             }
-        } catch (RepositoryException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "Client not found");
             return Response.status(404).entity(json.build()).build();
         }
@@ -113,12 +104,12 @@ public class ClientController {
     public Response addClient(@Valid @NotNull ClientRest client) {
         var json = Json.createObjectBuilder();
         try {
-            Client createdClient = writeClientUseCases.add(clientConverter.convert(client));
-            return Response.status(201).entity(clientConverter.convert(createdClient)).build();
-        } catch (RepositoryException e) {
+            ClientRest createdClient = writeClientUseCases.add(client);
+            return Response.status(201).entity(createdClient).build();
+        } catch (RepositoryRestException e) {
             json.add("error", "Client already exists");
             return Response.status(400).entity(json.build()).build();
-        } catch (ClientException e) {
+        } catch (ClientRestException e) {
             json.add("error", "Invalid fields");
             return Response.status(400).entity(json.build()).build();
         }
@@ -137,18 +128,18 @@ public class ClientController {
             }
             UUID uuid = UUID.fromString(id);
 
-            Client existingClient = readClientUseCases.get(uuid);
+            ClientRest existingClient = readClientUseCases.get(uuid);
             if (!eTagProvider.generateETag(existingClient).equals(etag)) {
                 json.add("error", "Invalid If-Match signature");
                 return Response.status(412).entity(json.build()).build();
             }
 
-            Client updatedClient = writeClientUseCases.updateClient(uuid, clientConverter.convert(client));
-            return Response.ok(clientConverter.convert(updatedClient)).build();
+            ClientRest updatedClient = writeClientUseCases.updateClient(uuid, client);
+            return Response.ok(updatedClient).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Invalid data in request");
             return Response.status(400).entity(json.build()).build();
-       } catch (RepositoryException e) {
+       } catch (RepositoryRestException e) {
             json.add("error", "Client does not exist");
             return Response.status(404).entity(json.build()).build();
         }
@@ -162,13 +153,13 @@ public class ClientController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            Client client = writeClientUseCases.archive(uuid);
-            return Response.ok(clientConverter.convert(client)).build();
+            ClientRest client = writeClientUseCases.archive(uuid);
+            return Response.ok(client).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Invalid data in request");
             return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException e) {
-            if (e.getMessage().equals(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION)) {
+        } catch (RepositoryRestException e) {
+            if (e.getMessage().equals(RepositoryRestException.REPOSITORY_ARCHIVE_EXCEPTION)) {
                 json.add("error", "Client is already deactivated");
                 return Response.status(400).entity(json.build()).build();
             } else {
@@ -190,8 +181,8 @@ public class ClientController {
             UUID uuid = UUID.fromString(id);
             if (body.containsKey("newPassword")) {
                 String newPassword = body.getString("newPassword");
-                Client client = writeClientUseCases.updatePassword(uuid, newPassword);
-                return Response.ok(clientConverter.convert(client)).build();
+                ClientRest client = writeClientUseCases.updatePassword(uuid, newPassword);
+                return Response.ok(client).build();
             } else {
                 json.add("error", "Invalid data in request");
                 return Response.status(400).entity(json.build()).build();
@@ -199,7 +190,7 @@ public class ClientController {
         } catch (IllegalArgumentException e) {
             json.add("error", "Invalid data in request");
             return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "Client does not exist");
             return Response.status(404).entity(json.build()).build();
         }
@@ -213,13 +204,13 @@ public class ClientController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            Client client = writeClientUseCases.dearchive(uuid);
-            return Response.ok(clientConverter.convert(client)).build();
+            ClientRest client = writeClientUseCases.dearchive(uuid);
+            return Response.ok(client).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Invalid data in request");
             return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException e) {
-            if (e.getMessage().equals(RepositoryException.REPOSITORY_ARCHIVE_EXCEPTION)) {
+        } catch (RepositoryRestException e) {
+            if (e.getMessage().equals(RepositoryRestException.REPOSITORY_ARCHIVE_EXCEPTION)) {
                 json.add("error", "Client is already active");
                 return Response.status(400).entity(json.build()).build();
             } else {
@@ -238,13 +229,12 @@ public class ClientController {
         try {
             List<RepairRest> repairs = readRepairUseCases.getClientsPastRepairs(UUID.fromString(id))
                     .stream()
-                    .map(repairConverter::convert)
                     .collect(Collectors.toList());
             return Response.ok(repairs).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given client id is invalid");
             return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "User with given id was not found");
             return Response.status(404).entity(json.build()).build();
         }
@@ -259,13 +249,12 @@ public class ClientController {
         try {
             List<RepairRest> repairs = readRepairUseCases.getClientsPresentRepairs(UUID.fromString(id))
                     .stream()
-                    .map(repairConverter::convert)
                     .collect(Collectors.toList());
             return Response.ok(repairs).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given client id is invalid");
             return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "User with given id was not found");
             return Response.status(404).entity(json.build()).build();
         }
@@ -278,32 +267,7 @@ public class ClientController {
     public Response getAllClientsFilter(@PathParam("substr")String substr) {
         List<ClientRest> clients = readClientUseCases.getAllClientsFilter(substr)
                 .stream()
-                .map(clientConverter::convert)
                 .toList();
         return Response.ok(clients).build();
-    }
-
-    @POST
-    @Path("/login")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(@NotNull @Valid UserRestCredentials userCredentials) {
-        var json = Json.createObjectBuilder();
-        try {
-            ClientRest client = userAuthenticator.authenticate(userCredentials);
-
-            String token = tokenProvider.generateToken(client);
-            json.add("token", token);
-            return Response.ok(json.build()).build();
-        } catch (UserNotFoundException e) {
-            json.add("error", e.getMessage());
-            return Response.status(404).entity(json.build()).build();
-        } catch (InvalidCredentialsException e) {
-            json.add("error", e.getMessage());
-            return Response.status(401).entity(json.build()).build();
-        } catch (UserIsArchiveException e) {
-            json.add("error", e.getMessage());
-            return Response.status(400).entity(json.build()).build();
-        }
     }
 }

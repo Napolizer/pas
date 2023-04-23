@@ -1,7 +1,6 @@
 package org.pl.gateway.module.converters;
 
 import org.junit.jupiter.api.Test;
-import org.pl.gateway.module.converters.ClientAccessTypeConverter;
 import org.pl.gateway.module.model.ClientAccessTypeRest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

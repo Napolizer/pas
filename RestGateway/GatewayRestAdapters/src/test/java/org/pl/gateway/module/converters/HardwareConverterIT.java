@@ -8,7 +8,6 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.pl.gateway.module.converters.HardwareConverter;
 import org.pl.gateway.module.model.ComputerRest;
 import org.pl.gateway.module.model.ConditionRest;
 import org.pl.gateway.module.model.HardwareRest;

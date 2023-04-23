@@ -7,9 +7,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.pl.gateway.module.converters.HardwareConverter;
 import org.pl.gateway.module.model.HardwareRest;
-import org.pl.gateway.module.userinterface.hardware.ReadHardwareUseCases;
+import org.pl.gateway.module.ports.userinterface.hardware.ReadHardwareUseCases;
 
 import java.util.List;
 
@@ -18,15 +17,12 @@ import java.util.List;
 public class HardwaresController {
     @Inject
     private ReadHardwareUseCases readHardwareUseCases;
-    @Inject
-    private HardwareConverter hardwareConverter;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllHardware() {
         List<HardwareRest> hardwareList = readHardwareUseCases.getAllHardwares()
                 .stream()
-                .map(hardwareConverter::convert)
                 .toList();
         return Response.ok(hardwareList).build();
     }

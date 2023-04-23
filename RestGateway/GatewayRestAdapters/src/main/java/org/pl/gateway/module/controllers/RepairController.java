@@ -9,12 +9,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.pl.gateway.module.converters.RepairConverter;
 import org.pl.gateway.module.model.RepairRest;
-import org.pl.gateway.module.model.exceptions.RepositoryException;
+import org.pl.gateway.module.model.exceptions.RepositoryRestException;
 import org.pl.gateway.module.providers.ETagProvider;
-import org.pl.gateway.module.userinterface.repair.ReadRepairUseCases;
-import org.pl.gateway.module.userinterface.repair.WriteRepairUseCases;
+import org.pl.gateway.module.ports.userinterface.repair.ReadRepairUseCases;
+import org.pl.gateway.module.ports.userinterface.repair.WriteRepairUseCases;
 
 import java.security.Principal;
 import java.util.UUID;
@@ -29,8 +28,6 @@ public class RepairController {
     private Principal principal;
     @Inject
     private ETagProvider eTagProvider;
-    @Inject
-    private RepairConverter repairConverter;
     @Context
     private SecurityContext securityContext;
     @Context
@@ -44,15 +41,15 @@ public class RepairController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            RepairRest repair = repairConverter.convert(readRepairUseCases.get(uuid));
+            RepairRest repair = readRepairUseCases.get(uuid);
             return Response
                     .ok(repair)
-                    .header("ETag", eTagProvider.generateETag(repairConverter.convert(repair)))
+                    .header("ETag", eTagProvider.generateETag(repair))
                     .build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given id is invalid");
             return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "Repair not found");
             return Response.status(404).entity(json.build()).build();
         }
@@ -70,9 +67,9 @@ public class RepairController {
         }
         var json = Json.createObjectBuilder();
         try {
-            RepairRest createdRepair = repairConverter.convert(writeRepairUseCases.add(repairConverter.convert(repair)));
+            RepairRest createdRepair = writeRepairUseCases.add(repair);
             return Response.status(201).entity(createdRepair).build();
-        } catch (RepositoryException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "Repair already exists");
             return Response.status(400).build();
         }
@@ -91,18 +88,18 @@ public class RepairController {
             }
             UUID uuid = UUID.fromString(id);
 
-            RepairRest existingRepair = repairConverter.convert(readRepairUseCases.get(uuid));
-            if (!eTagProvider.generateETag(repairConverter.convert(existingRepair)).equals(etag)) {
+            RepairRest existingRepair = readRepairUseCases.get(uuid);
+            if (!eTagProvider.generateETag(existingRepair).equals(etag)) {
                 json.add("error", "Invalid If-Match signature");
                 return Response.status(412).entity(json.build()).build();
             }
 
-            RepairRest updatedRepair = repairConverter.convert(writeRepairUseCases.updateRepair(uuid, repairConverter.convert(repair)));
+            RepairRest updatedRepair = writeRepairUseCases.updateRepair(uuid, repair);
             return Response.ok(updatedRepair).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Invalid data in request");
             return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "Repair does not exist");
             return Response.status(404).entity(json.build()).build();
         }
@@ -116,13 +113,13 @@ public class RepairController {
         try {
             UUID uuid = UUID.fromString(id);
             if (!readRepairUseCases.isRepairArchive(uuid)) {
-                RepairRest deletedRepair = repairConverter.convert(writeRepairUseCases.repair(uuid));
+                RepairRest deletedRepair = writeRepairUseCases.repair(uuid);
                 return Response.ok(deletedRepair).build();
             } else {
                 json.add("error", "Repair is already archive");
                 return Response.status(400).entity(json.build()).build();
             }
-        } catch (RepositoryException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "Given request is invalid");
             return Response.status(400).entity(json.build()).build();
         } catch (Exception e) {

@@ -1,7 +1,6 @@
 package org.pl.gateway.module.converters;
 
 import org.junit.jupiter.api.Test;
-import org.pl.gateway.module.converters.AddressConverter;
 import org.pl.gateway.module.model.AddressRest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

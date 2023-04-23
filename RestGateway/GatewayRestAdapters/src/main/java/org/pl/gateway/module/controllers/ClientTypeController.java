@@ -9,10 +9,9 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.pl.gateway.module.converters.ClientTypeConverter;
 import org.pl.gateway.module.model.ClientTypeRest;
-import org.pl.gateway.module.model.exceptions.RepositoryException;
-import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
+import org.pl.gateway.module.model.exceptions.RepositoryRestException;
+import org.pl.gateway.module.ports.userinterface.client.ReadClientUseCases;
 
 import java.util.UUID;
 
@@ -21,8 +20,6 @@ import java.util.UUID;
 public class ClientTypeController {
     @Inject
     private ReadClientUseCases readClientUseCases;
-    @Inject
-    private ClientTypeConverter clientTypeConverter;
 
     @GET
     @Path("/id/{id}")
@@ -31,12 +28,12 @@ public class ClientTypeController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            ClientTypeRest clientType = clientTypeConverter.convert(readClientUseCases.getClientTypeById(uuid));
+            ClientTypeRest clientType = readClientUseCases.getClientTypeById(uuid);
             return Response.ok(clientType).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given id is invalid");
             return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "ClientType not found");
             return Response.status(404).entity(json.build()).build();
         }

@@ -21,16 +21,6 @@ public class TokenProvider {
     @ConfigProperty(name="token_expiration_time", defaultValue = "900000")
     private Long expirationTime;
 
-    public String generateToken(ClientRest client) {
-        long now = System.currentTimeMillis();
-        return Jwts.builder()
-                .setSubject(client.getUsername())
-                .claim("group", client.getClientAccessType())
-                .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + expirationTime)) // 15 minutes expiration time
-                .signWith(SignatureAlgorithm.HS512, secretKey).compact();
-    }
-
     public TokenClaims getTokenClaims(String token) throws ValidationException {
         try {
             Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();

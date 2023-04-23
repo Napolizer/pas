@@ -7,9 +7,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.pl.gateway.module.converters.RepairConverter;
 import org.pl.gateway.module.model.RepairRest;
-import org.pl.gateway.module.userinterface.repair.ReadRepairUseCases;
+import org.pl.gateway.module.ports.userinterface.repair.ReadRepairUseCases;
 
 import java.util.List;
 
@@ -19,14 +18,11 @@ public class RepairsController {
     @Inject
     private ReadRepairUseCases readRepairUseCases;
 
-    @Inject
-    private RepairConverter repairConverter;
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllRepairs() {
         List<RepairRest> repairs = readRepairUseCases.getAllRepairs()
                 .stream()
-                .map(repairConverter::convert)
                 .toList();
         return Response.ok(repairs).build();
     }

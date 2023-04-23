@@ -5,9 +5,8 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 
-import org.pl.gateway.module.converters.ClientConverter;
 import org.pl.gateway.module.model.*;
-import org.pl.gateway.module.userinterface.client.WriteClientUseCases;
+import org.pl.gateway.module.ports.userinterface.client.WriteClientUseCases;
 
 import java.util.logging.Logger;
 
@@ -16,8 +15,6 @@ public class StartupListener implements ServletContextListener {
     private static final Logger LOGGER = Logger.getLogger(StartupListener.class.getName());
     @Inject
     private WriteClientUseCases writeClientUseCases;
-    @Inject
-    private ClientConverter clientConverter;
     @Override
     public void contextInitialized(ServletContextEvent event) {
         ClientRest admin = ClientRest.builder()
@@ -70,19 +67,19 @@ public class StartupListener implements ServletContextListener {
                 .build();
         try {
             LOGGER.info("Creating admin client");
-            writeClientUseCases.add(clientConverter.convert(admin));
+            writeClientUseCases.add(admin);
         } catch (Exception e) {
             LOGGER.warning("Could not create admin account: " + e.getMessage());
         }
         try {
             LOGGER.info("Creating employee account");
-            writeClientUseCases.add(clientConverter.convert(employee));
+            writeClientUseCases.add(employee);
         } catch (Exception e) {
             LOGGER.warning("Could not create employee account: " + e.getMessage());
         }
         try {
             LOGGER.info("Creating user account");
-            writeClientUseCases.add(clientConverter.convert(user));
+            writeClientUseCases.add(user);
         } catch (Exception e) {
             LOGGER.warning("Could not create user account: " + e.getMessage());
         }

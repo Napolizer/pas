@@ -11,13 +11,12 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.pl.gateway.module.converters.HardwareConverter;
 import org.pl.gateway.module.model.HardwareRest;
-import org.pl.gateway.module.model.exceptions.HardwareException;
-import org.pl.gateway.module.model.exceptions.RepositoryException;
+import org.pl.gateway.module.model.exceptions.HardwareRestException;
+import org.pl.gateway.module.model.exceptions.RepositoryRestException;
 import org.pl.gateway.module.providers.ETagProvider;
-import org.pl.gateway.module.userinterface.hardware.ReadHardwareUseCases;
-import org.pl.gateway.module.userinterface.hardware.WriteHardwareUseCases;
+import org.pl.gateway.module.ports.userinterface.hardware.ReadHardwareUseCases;
+import org.pl.gateway.module.ports.userinterface.hardware.WriteHardwareUseCases;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,8 +27,6 @@ public class HardwareController {
     private ReadHardwareUseCases readHardwareUseCases;
     @Inject
     private WriteHardwareUseCases writeHardwareUseCases;
-    @Inject
-    private HardwareConverter hardwareConverter;
     @Inject
     private ETagProvider eTagProvider;
     @Context
@@ -43,7 +40,7 @@ public class HardwareController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            HardwareRest hardware = hardwareConverter.convert(readHardwareUseCases.get(uuid));
+            HardwareRest hardware = readHardwareUseCases.get(uuid);
             if (hardware == null) {
                 json.add("error", "Hardware with given id not found");
                 return Response.status(404).entity(json.build()).build();
@@ -52,7 +49,7 @@ public class HardwareController {
                     .ok(hardware)
                     .header("ETag", eTagProvider.generateETag(hardware))
                     .build();
-        } catch (IllegalArgumentException | RepositoryException e) {
+        } catch (IllegalArgumentException | RepositoryRestException e) {
             json.add("error", e.getMessage());
             return Response.status(400).entity(json.build()).build();
         }
@@ -65,9 +62,9 @@ public class HardwareController {
     public Response addHardware(@Valid @NotNull HardwareRest hardware) {
         var json = Json.createObjectBuilder();
         try {
-            HardwareRest createdHardware = hardwareConverter.convert(writeHardwareUseCases.add(hardwareConverter.convert(hardware)));
+            HardwareRest createdHardware = writeHardwareUseCases.add(hardware);
             return Response.status(201).entity(createdHardware).build();
-        } catch (RepositoryException | HardwareException | JsonbException e) {
+        } catch (RepositoryRestException | HardwareRestException | JsonbException e) {
             json.add("error", e.getMessage());
             return Response.status(400).entity(json).build();
         }
@@ -86,15 +83,15 @@ public class HardwareController {
             }
             UUID uuid = UUID.fromString(id);
 
-            HardwareRest existingHardware = hardwareConverter.convert(readHardwareUseCases.get(uuid));
+            HardwareRest existingHardware = readHardwareUseCases.get(uuid);
             if (!eTagProvider.generateETag(existingHardware).equals(etag)) {
                 json.add("error", "Invalid If-Match signature");
                 return Response.status(412).entity(json.build()).build();
             }
 
-            HardwareRest updatedHardware = hardwareConverter.convert(writeHardwareUseCases.updateHardware(uuid, hardwareConverter.convert(hardware)));
+            HardwareRest updatedHardware = writeHardwareUseCases.updateHardware(uuid, hardware);
             return Response.ok(updatedHardware).build();
-        } catch (IllegalArgumentException | RepositoryException e) {
+        } catch (IllegalArgumentException | RepositoryRestException e) {
             json.add("error", e.getMessage());
             return Response.status(400).entity(json.build()).build();
         }
@@ -115,7 +112,7 @@ public class HardwareController {
             } else
                 json.add("error", "Hardware is in active repair");
             return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "Hardware does not exist");
             return Response.status(404).entity(json.build()).build();
         }
@@ -128,7 +125,6 @@ public class HardwareController {
     public Response getAllPresentHardware() {
         List<HardwareRest> hardware = readHardwareUseCases.getAllPresentHardware()
                 .stream()
-                .map(hardwareConverter::convert)
                 .toList();
         return Response.ok(hardware).build();
     }
@@ -140,7 +136,6 @@ public class HardwareController {
     public Response getAllPresentHardwareFilter(@PathParam("substr")String substr) {
         List<HardwareRest> hardware = readHardwareUseCases.getAllPresentHardwareFilter(substr)
                 .stream()
-                .map(hardwareConverter::convert)
                 .toList();
         return Response.ok(hardware).build();
     }

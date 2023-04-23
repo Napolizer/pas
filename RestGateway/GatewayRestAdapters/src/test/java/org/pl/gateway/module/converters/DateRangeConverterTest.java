@@ -1,7 +1,6 @@
 package org.pl.gateway.module.converters;
 
 import org.junit.jupiter.api.Test;
-import org.pl.gateway.module.converters.DateRangeConverter;
 import org.pl.gateway.module.model.DateRangeRest;
 
 import java.util.Date;

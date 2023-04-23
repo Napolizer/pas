@@ -9,10 +9,9 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.pl.gateway.module.converters.HardwareTypeConverter;
 import org.pl.gateway.module.model.HardwareTypeRest;
-import org.pl.gateway.module.model.exceptions.RepositoryException;
-import org.pl.gateway.module.userinterface.hardware.ReadHardwareUseCases;
+import org.pl.gateway.module.model.exceptions.RepositoryRestException;
+import org.pl.gateway.module.ports.userinterface.hardware.ReadHardwareUseCases;
 
 
 import java.util.UUID;
@@ -22,8 +21,6 @@ import java.util.UUID;
 public class HardwareTypeController {
     @Inject
     private ReadHardwareUseCases readHardwareUseCases;
-    @Inject
-    private HardwareTypeConverter hardwareTypeConverter;
 
     @GET
     @Path("/id/{id}")
@@ -32,12 +29,12 @@ public class HardwareTypeController {
         var json = Json.createObjectBuilder();
         try {
             UUID uuid = UUID.fromString(id);
-            HardwareTypeRest hardwareType = hardwareTypeConverter.convert(readHardwareUseCases.getHardwareTypeById(uuid));
+            HardwareTypeRest hardwareType = readHardwareUseCases.getHardwareTypeById(uuid);
             return Response.ok(hardwareType).build();
         } catch (IllegalArgumentException e) {
             json.add("error", "Given id is invalid");
             return Response.status(400).entity(json.build()).build();
-        } catch (RepositoryException e) {
+        } catch (RepositoryRestException e) {
             json.add("error", "HardwareType not found");
             return Response.status(404).entity(json.build()).build();
         }

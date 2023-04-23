@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
-import org.pl.gateway.module.model.exceptions.ClientException;
 import org.pl.gateway.module.model.exceptions.ClientRestException;
 
 import java.io.Serializable;
@@ -33,7 +32,7 @@ public abstract class ClientTypeRest implements Serializable {
 
     public double calculateDiscount(double price) throws ClientRestException {
         if (price < 0) {
-            throw new ClientRestException(ClientException.CLIENT_TYPE_CALCULATE_DISCOUNT_EXCEPTION);
+            throw new ClientRestException(ClientRestException.CLIENT_TYPE_CALCULATE_DISCOUNT_EXCEPTION);
         }
         return price - (getFactor() * price);
     }

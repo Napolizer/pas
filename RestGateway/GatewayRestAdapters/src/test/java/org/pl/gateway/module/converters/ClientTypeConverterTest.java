@@ -1,7 +1,6 @@
 package org.pl.gateway.module.converters;
 
 import org.junit.jupiter.api.Test;
-import org.pl.gateway.module.converters.ClientTypeConverter;
 import org.pl.gateway.module.model.BasicRest;
 import org.pl.gateway.module.model.ClientTypeRest;
 

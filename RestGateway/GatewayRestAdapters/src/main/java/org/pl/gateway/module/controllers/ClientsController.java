@@ -8,9 +8,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.pl.gateway.module.converters.ClientConverter;
 import org.pl.gateway.module.model.ClientRest;
-import org.pl.gateway.module.userinterface.client.ReadClientUseCases;
+import org.pl.gateway.module.ports.userinterface.client.ReadClientUseCases;
 
 import java.util.List;
 
@@ -19,15 +18,12 @@ import java.util.List;
 public class ClientsController {
     @Inject
     private ReadClientUseCases readClientUseCases;
-    @Inject
-    private ClientConverter clientConverter;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllClients() {
         List<ClientRest> clients = readClientUseCases.getAllClients()
                 .stream()
-                .map(clientConverter::convert)
                 .toList();
         return Response.ok(clients).build();
     }
