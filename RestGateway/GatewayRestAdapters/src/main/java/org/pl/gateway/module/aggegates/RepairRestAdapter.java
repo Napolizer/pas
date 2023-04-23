@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.pl.gateway.module.jsonb.adapters.RepairJsonbAdapter;
 import org.pl.gateway.module.model.RepairRest;
+import org.pl.gateway.module.ports.userinterface.repair.ReadRepairUseCases;
+import org.pl.gateway.module.ports.userinterface.repair.WriteRepairUseCases;
 
 import java.io.IOException;
 import java.net.URI;
@@ -24,7 +26,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApplicationScoped
-public class RepairRestAdapter {
+public class RepairRestAdapter implements ReadRepairUseCases, WriteRepairUseCases {
 
     @Inject
     private HttpClient httpClient;
@@ -79,7 +81,7 @@ public class RepairRestAdapter {
                 .fromJson(reader, RepairRest.class).toString();
     }
 
-    public List<RepairRest> getAllClientRepairRests(UUID clientId) throws URISyntaxException, IOException, InterruptedException {
+    public List<RepairRest> getAllClientRepairs(UUID clientId) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(RepairRestApi + "/RepairRests"))
                 .GET()
@@ -104,7 +106,7 @@ public class RepairRestAdapter {
         return clientsRepairRests;
     }
 
-    public boolean isRepairRestArchive(UUID id) throws URISyntaxException, IOException, InterruptedException {
+    public boolean isRepairArchive(UUID id) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(RepairRestApi + "/RepairRest/id/" + id))
                 .GET()
@@ -132,7 +134,7 @@ public class RepairRestAdapter {
                 .fromJson(reader, RepairRest.class);
     }
 
-    public RepairRest RepairRest(UUID id) throws URISyntaxException, IOException, InterruptedException {
+    public RepairRest repair(UUID id) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(RepairRestApi + "/RepairRest/id/" + id))
                 .GET()
@@ -214,7 +216,7 @@ public class RepairRestAdapter {
         return archiveRepairRests.size();
     }
 
-    public List<RepairRest> getClientsPastRepairRests(UUID uuid) throws URISyntaxException, IOException, InterruptedException {
+    public List<RepairRest> getClientsPastRepairs(UUID uuid) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(RepairRestApi + "/RepairRests"))
                 .GET()
@@ -239,7 +241,7 @@ public class RepairRestAdapter {
         return archiveRepairRests;
     }
 
-    public List<RepairRest> getClientsPresentRepairRests(UUID uuid) throws URISyntaxException, IOException, InterruptedException {
+    public List<RepairRest> getClientsPresentRepairs(UUID uuid) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(RepairRestApi + "/RepairRests"))
                 .GET()
@@ -264,7 +266,7 @@ public class RepairRestAdapter {
         return presentRepairRests;
     }
 
-    public List<RepairRest> getAllRepairRests() throws URISyntaxException, IOException, InterruptedException {
+    public List<RepairRest> getAllRepairs() throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(RepairRestApi + "/RepairRests"))
                 .GET()
@@ -281,7 +283,7 @@ public class RepairRestAdapter {
                 .fromJson(reader, new ArrayList<RepairRest>(){}.getClass().getGenericSuperclass());
     }
 
-    public RepairRest updateRepairRest(UUID uuid, RepairRest RepairRest) throws URISyntaxException, IOException, InterruptedException {
+    public RepairRest updateRepair(UUID uuid, RepairRest RepairRest) throws URISyntaxException, IOException, InterruptedException {
         var json = JsonbBuilder
                 .create(new JsonbConfig().withAdapters(new RepairJsonbAdapter()))
                 .toJson(RepairRest);

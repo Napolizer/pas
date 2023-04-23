@@ -4,13 +4,15 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.NoArgsConstructor;
 import org.pl.gateway.module.model.ClientRest;
 import org.pl.gateway.module.model.ClientTypeRest;
+import org.pl.gateway.module.ports.userinterface.client.ReadClientUseCases;
+import org.pl.gateway.module.ports.userinterface.client.WriteClientUseCases;
 
 import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
 @ApplicationScoped
-public class ClientRestAdapter {
+public class ClientRestAdapter implements ReadClientUseCases, WriteClientUseCases {
 
     public ClientRest add(ClientRest ClientRest) {
         return null;
@@ -24,11 +26,11 @@ public class ClientRestAdapter {
         return null;
     }
 
-    public double getClientRestBalance(UUID id) {
+    public double getClientBalance(UUID id) {
         return 0;
     }
 
-    public boolean isClientRestArchive(UUID id) {
+    public boolean isClientArchive(UUID id) {
         return true;
     }
 
@@ -36,11 +38,11 @@ public class ClientRestAdapter {
         return null;
     }
 
-    public List<ClientRest> getAllClientRests() {
+    public List<ClientRest> getAllClients() {
         return null;
     }
 
-    public ClientRest getClientRestByUsername(String username) {
+    public ClientRest getClientByUsername(String username) {
         return null;
     }
 
@@ -52,15 +54,15 @@ public class ClientRestAdapter {
         return 0;
     }
 
-    public List<ClientRest> getAllClientRestsFilter(String substr) {
+    public List<ClientRest> getAllClientsFilter(String substr) {
         return null;
     }
 
-    public List<ClientRest> getClientRestsByUsername(String username) {
+    public List<ClientRest> getClientsByUsername(String username) {
         return null;
     }
 
-    public ClientRest updateClientRest(UUID uuid, ClientRest ClientRest) {
+    public ClientRest updateClient(UUID uuid, ClientRest ClientRest) {
         return null;
     }
 
@@ -72,7 +74,7 @@ public class ClientRestAdapter {
         return null;
     }
 
-    public ClientTypeRest getClientRestTypeById(UUID uuid) {
+    public ClientTypeRest getClientTypeById(UUID uuid) {
         return null;
     }
 }

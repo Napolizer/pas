@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.pl.gateway.module.jsonb.adapters.HardwareTypeRestJsonbAdapter;
 import org.pl.gateway.module.model.HardwareRest;
 import org.pl.gateway.module.model.HardwareTypeRest;
+import org.pl.gateway.module.ports.userinterface.hardware.ReadHardwareUseCases;
+import org.pl.gateway.module.ports.userinterface.hardware.WriteHardwareUseCases;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,7 +24,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @ApplicationScoped
-public class HardwareTypeRestAdapter {
+public class HardwareRestAdapter implements ReadHardwareUseCases, WriteHardwareUseCases {
     @Inject
     private HttpClient httpClient;
 
@@ -51,7 +53,7 @@ public class HardwareTypeRestAdapter {
                 fromJson(reader, HardwareRest.class);
     }
 
-    public boolean isHardwareRestArchive(UUID id) throws URISyntaxException, IOException, InterruptedException {
+    public boolean isHardwareArchive(UUID id) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(repairApi +"/HardwareRest/id/" + id))
                 .GET()
@@ -134,7 +136,7 @@ public class HardwareTypeRestAdapter {
         return archiveHardwareRests.size();
     }
 
-    public List<HardwareRest> getAllHardwareRests() throws URISyntaxException, IOException, InterruptedException {
+    public List<HardwareRest> getAllHardwares() throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(repairApi + "/HardwareRests"))
                 .GET()
@@ -147,7 +149,7 @@ public class HardwareTypeRestAdapter {
                 .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
     }
 
-    public HardwareRest updateHardwareRest(UUID uuid, HardwareRest HardwareRest) throws URISyntaxException, IOException, InterruptedException {
+    public HardwareRest updateHardware(UUID uuid, HardwareRest HardwareRest) throws URISyntaxException, IOException, InterruptedException {
         var json = JsonbBuilder
                 .create(new JsonbConfig().withAdapters(new HardwareTypeRestJsonbAdapter())).
                 toJson(HardwareRest);
@@ -169,7 +171,7 @@ public class HardwareTypeRestAdapter {
                 fromJson(reader, HardwareRest.class);
     }
 
-    public HardwareTypeRest getHardwareRestTypeById(UUID uuid) throws URISyntaxException, IOException, InterruptedException {
+    public HardwareTypeRest getHardwareTypeById(UUID uuid) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(repairApi + "/HardwareRests"))
                 .GET()
@@ -188,7 +190,7 @@ public class HardwareTypeRestAdapter {
         return null;
     }
 
-    public List<HardwareRest> getAllPresentHardwareRest() throws URISyntaxException, IOException, InterruptedException {
+    public List<HardwareRest> getAllPresentHardware() throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(repairApi + "/HardwareRest/present"))
                 .GET()
@@ -201,7 +203,7 @@ public class HardwareTypeRestAdapter {
                 .fromJson(reader, new ArrayList<HardwareRest>(){}.getClass().getGenericSuperclass());
     }
 
-    public List<HardwareRest> getAllPresentHardwareRestFilter(String substr) throws URISyntaxException, IOException, InterruptedException {
+    public List<HardwareRest> getAllPresentHardwareFilter(String substr) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(repairApi + "/HardwareRest/present/filter/" + substr))
                 .GET()
