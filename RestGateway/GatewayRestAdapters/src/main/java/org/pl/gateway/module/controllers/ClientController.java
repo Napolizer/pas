@@ -270,4 +270,20 @@ public class ClientController {
                 .toList();
         return Response.ok(clients).build();
     }
+
+    @POST
+    @Path("/login")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(@NotNull @Valid UserRestCredentials userCredentials) {
+        var json = Json.createObjectBuilder();
+        try {
+            String token = readClientUseCases.login(userCredentials);
+            json.add("token", token);
+            return Response.ok(json.build()).build();
+        } catch (InvalidCredentialsException e) {
+            json.add("error", e.getMessage());
+            return Response.status(400).entity(json.build()).build();
+        }
+    }
 }
